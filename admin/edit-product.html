@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Edit Product | Shosta Bazar BD Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+  <div class="admin-layout">
+    <aside class="admin-sidebar">
+      <div class="sidebar-header"><b>Shosta Bazar Admin</b></div>
+      <ul class="sidebar-menu">
+        <li><a href="dashboard.html">Dashboard</a></li>
+        <li class="active"><a href="products.html">Products</a></li>
+        <li><a href="categories.html">Categories</a></li>
+        <li><a href="hero.html">Hero Slider</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="orders.html">Orders</a></li>
+        <li><a href="customers.html">Customers</a></li>
+        <li><a href="reviews.html">Reviews</a></li>
+        <li><a href="offers.html">Offers</a></li>
+        <li><a href="coupons.html">Coupons</a></li>
+        <li><a href="content.html">Website Content</a></li>
+        <li><a href="image-history.html">Image History</a></li>
+        <li><a href="settings.html">Settings</a></li>
+      </ul>
+      <div class="sidebar-footer">
+        <ul class="sidebar-menu">
+          <li><a href="profile.html">Admin Profile</a></li>
+          <li><a href="#" onclick="logout()">Logout</a></li>
+        </ul>
+      </div>
+    </aside>
+
+    <div class="admin-main">
+      <header class="admin-navbar">
+        <h2>Edit Product</h2>
+        <a href="products.html" class="btn-admin-secondary">Back</a>
+      </header>
+
+      <main class="content-body">
+        <div class="card" style="max-width:700px; margin:0 auto;">
+          <form onsubmit="event.preventDefault(); showToast('Changes saved to mock state.'); setTimeout(()=>window.location.href='products.html', 1000);">
+            <div class="form-group">
+              <label>Product Name</label>
+              <input type="text" class="form-control" value="Meena Zari Saree" required>
+            </div>
+            <div class="form-group">
+              <label>Category</label>
+              <select class="form-control">
+                <option selected>Sarees</option>
+                <option>Lehenga</option>
+                <option>Gowns</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Price (BDT)</label>
+              <input type="number" class="form-control" value="8500" required>
+            </div>
+            <div class="form-group">
+              <label>Replace Image</label>
+              <input type="file" id="productImageInput" class="form-control">
+              <div style="margin-top:10px;">
+                <img id="imagePreview" style="max-width:120px; border-radius:4px;" src="" alt="">
+                <div id="imageFileInfo" style="font-size:0.75rem; color:#666;">Current: meena-zari-v3.jpg</div>
+              </div>
+            </div>
+            <button type="submit" class="btn-admin">Update Product</button>
+          </form>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  
+  <script src="js/auth.js"></script>
+<script src="js/api.js"></script>
+  
+</body>
+</html>

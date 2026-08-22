@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Coupons | Shosta Bazar BD Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+  <div class="admin-layout">
+    <aside class="admin-sidebar">
+      <div class="sidebar-header"><b>Shosta Bazar Admin</b></div>
+      <ul class="sidebar-menu">
+        <li><a href="dashboard.html">Dashboard</a></li>
+        <li><a href="products.html">Products</a></li>
+        <li><a href="categories.html">Categories</a></li>
+        <li><a href="hero.html">Hero Slider</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="orders.html">Orders</a></li>
+        <li><a href="customers.html">Customers</a></li>
+        <li><a href="reviews.html">Reviews</a></li>
+        <li><a href="offers.html">Offers</a></li>
+        <li class="active"><a href="coupons.html">Coupons</a></li>
+        <li><a href="content.html">Website Content</a></li>
+        <li><a href="image-history.html">Image History</a></li>
+        <li><a href="settings.html">Settings</a></li>
+      </ul>
+      <div class="sidebar-footer">
+        <ul class="sidebar-menu">
+          <li><a href="profile.html">Admin Profile</a></li>
+          <li><a href="#" onclick="logout()">Logout</a></li>
+        </ul>
+      </div>
+    </aside>
+
+    <div class="admin-main">
+      <header class="admin-navbar">
+        <h2>Discount Coupons</h2>
+        <button class="btn-admin" onclick="showToast('New Coupon Form')">+ Add Coupon</button>
+      </header>
+
+      <main class="content-body">
+        <div class="card">
+          <div class="table-responsive">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Code</th>
+                  <th>Type</th>
+                  <th>Amount</th>
+                  <th>Min Order</th>
+                  <th>Expiry</th>
+                  <th>Limit</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><b>BRIDAL2026</b></td>
+                  <td>Percentage</td>
+                  <td>10%</td>
+                  <td>৳ 50,000</td>
+                  <td>2026-12-31</td>
+                  <td>100</td>
+                  <td><span class="badge badge-success">Active</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="js/mock-data.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>
