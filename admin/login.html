@@ -6,6 +6,8 @@
   <title>Admin Login | Shosta Bazar BD</title>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Jost:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/admin.css">
+  <!-- Font Awesome CDN for Eye Icon -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
   <div class="auth-wrapper">
@@ -16,39 +18,65 @@
         <p style="font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; color: #777;">Control Panel Portal</p>
       </div>
 
-      <!-- TEMPORARY FRONTEND AUTHENTICATION UI -->
+      <!-- AUTHENTICATION ERROR MESSAGE UI -->
       <div id="authError" style="display:none; color:#721c24; background:#f8d7da; border:1px solid #f5c6cb; padding:10px; border-radius:4px; font-size:0.8rem; margin-bottom:16px;"></div>
 
       <form id="adminLoginForm">
         <div class="form-group">
-          <label for="adminUsername">Username or Email</label>
-          <input type="text" id="adminUsername" class="form-control" value="admin" required>
+          <label for="username">Username</label>
+          <input type="text" id="username" class="form-control" placeholder="Enter username" autocomplete="off" required />
         </div>
         <div class="form-group">
           <label for="adminPassword">Password</label>
-          <div style="position:relative;">
-            <input type="password" id="adminPassword" class="form-control" value="admin123" required>
-            <button type="button" id="togglePassword" style="position:absolute; right:10px; top:50%; transform:translateY(-50%); background:none; border:none; cursor:pointer; font-size:0.75rem;">Show</button>
+          <div style="position:relative; display:flex; align-items:center;">
+            <input type="password" id="adminPassword" class="form-control" placeholder="Enter password" autocomplete="off" required>
+            <i class="fa-solid fa-eye" id="togglePassword" style="position:absolute; right:12px; top:50%; transform:translateY(-50%); cursor:pointer; color:#777; z-index:10;"></i>
           </div>
         </div>
         <div class="form-group" style="display:flex; justify-content:space-between; align-items:center;">
           <label style="font-weight:normal; margin:0;"><input type="checkbox"> Remember me</label>
-          <a href="#" style="font-size:0.75rem; color:var(--admin-gold-600);" onclick="alert('Demo Mode: Use admin / admin123')">Forgot Password?</a>
+          <a href="#" style="font-size:0.75rem; color:var(--admin-gold-600);" onclick="alert('Admin Credentials: admin00 / admin001')">Forgot Password?</a>
         </div>
         <button type="submit" class="btn-admin" style="width:100%; margin-top:10px; padding:12px;">Login to Admin</button>
       </form>
     </div>
   </div>
- <script>
+
+  <script>
+    // Password Toggle Functionality
+    const togglePassword = document.getElementById('togglePassword');
+    const adminPassword = document.getElementById('adminPassword');
+
+    if (togglePassword && adminPassword) {
+      togglePassword.addEventListener('click', function () {
+        const isPassword = adminPassword.type === 'password';
+        adminPassword.type = isPassword ? 'text' : 'password';
+        
+        // Toggle eye and eye-slash icons
+        this.classList.toggle('fa-eye', !isPassword);
+        this.classList.toggle('fa-eye-slash', isPassword);
+      });
+    }
+
+    // Credential Verification Form Submission
     document.getElementById('adminLoginForm').addEventListener('submit', function(e) {
       e.preventDefault();
-      // Set session flag
-      localStorage.setItem('adminLoggedIn', 'true');
-      // Redirect to dashboard
-      window.location.href = 'dashboard.html';
+
+      const userVal = document.getElementById('username').value.trim();
+      const passVal = document.getElementById('adminPassword').value.trim();
+      const authError = document.getElementById('authError');
+
+      // Verify explicit admin credentials
+      if (userVal === 'admin00' && passVal === 'admin001') {
+        authError.style.display = 'none';
+        localStorage.setItem('adminLoggedIn', 'true');
+        window.location.href = 'dashboard.html';
+      } else {
+        authError.textContent = 'Invalid username or password. Please try again.';
+        authError.style.display = 'block';
+      }
     });
   </script>
   <script src="js/auth.js"></script>
 </body>
 </html>
- 

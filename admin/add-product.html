@@ -20,7 +20,6 @@
         <li><a href="customers.html">Customers</a></li>
         <li><a href="reviews.html">Reviews</a></li>
         <li><a href="offers.html">Offers</a></li>
-        <li><a href="coupons.html">Coupons</a></li>
         <li><a href="content.html">Website Content</a></li>
         <li><a href="image-history.html">Image History</a></li>
         <li><a href="settings.html">Settings</a></li>
@@ -41,48 +40,64 @@
 
       <main class="content-body">
         <div class="card" style="max-width:700px; margin:0 auto;">
-          <form id="addProductForm" onsubmit="event.preventDefault(); showToast('Product added (Mock State)'); setTimeout(()=>window.location.href='products.html', 1000);">
+          <form id="addProductForm">
             <div class="form-group">
-              <label>Product Name</label>
-              <input type="text" class="form-control" required>
+              <label for="productName">Product Name</label>
+              <input type="text" id="productName" class="form-control" placeholder="Enter product name" required>
             </div>
+            
             <div class="form-group">
-              <label>Category</label>
-              <select class="form-control">
-                <option>Sarees</option>
-                <option>Lehenga</option>
-                <option>Gowns</option>
-                <option>Salwar Kameez</option>
-                <option>Bridal</option>
-                <option>Accessories</option>
+              <label for="productCategory">Category</label>
+              <select id="productCategory" class="form-control">
+                <option value="Sarees">Sarees</option>
+                <option value="Lehenga">Lehenga</option>
+                <option value="Gowns">Gowns</option>
+                <option value="Salwar Kameez">Salwar Kameez</option>
+                <option value="Bridal">Bridal</option>
+                <option value="Accessories">Accessories</option>
               </select>
             </div>
+            
             <div class="form-group">
-              <label>Price (BDT)</label>
-              <input type="number" class="form-control" required>
+              <label for="productPrice">Price (BDT)</label>
+              <input type="number" id="productPrice" class="form-control" placeholder="e.g. 6837" required>
             </div>
+            
             <div class="form-group">
-              <label>Old Price (BDT)</label>
-              <input type="number" class="form-control">
+              <label for="productOldPrice">Old Price (BDT)</label>
+              <input type="number" id="productOldPrice" class="form-control" placeholder="e.g. 893">
             </div>
+            
             <div class="form-group">
-              <label>Product Tag</label>
-              <select class="form-control">
+              <label for="productImage">Image URL</label>
+              <input type="text" id="productImage" class="form-control" placeholder="https://example.com/image.jpg">
+            </div>
+
+            <div class="form-group">
+              <label for="productTag">Product Tag</label>
+              <select id="productTag" class="form-control">
                 <option value="">None</option>
-                <option>New</option>
-                <option>Sale</option>
-                <option>Featured</option>
-                <option>Bridal</option>
+                <option value="New">New</option>
+                <option value="Sale">Sale</option>
+                <option value="Featured">Featured</option>
+                <option value="Bridal">Bridal</option>
               </select>
             </div>
+
             <div class="form-group">
-              <label>Main Product Image</label>
+              <label for="productDescription">Description</label>
+              <textarea id="productDescription" class="form-control" rows="3" placeholder="Enter product details"></textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="productImageInput">Upload Image File (Optional)</label>
               <input type="file" id="productImageInput" class="form-control" accept="image/*">
               <div style="margin-top:10px;">
-                <img id="imagePreview" style="max-width:120px; border-radius:4px;" src="" alt="">
+                <img id="imagePreview" style="max-width:120px; border-radius:4px; display:none;" src="" alt="Preview">
                 <div id="imageFileInfo" style="font-size:0.75rem; color:#666; margin-top:4px;"></div>
               </div>
             </div>
+
             <button type="submit" class="btn-admin" style="margin-top:10px;">Save Product</button>
           </form>
         </div>
@@ -90,7 +105,43 @@
     </div>
   </div>
 
- <script src="js/auth.js"></script>
-<script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/api.js"></script>
+
+  <script>
+    // Live Image URL Preview Logic
+    const imageUrlInput = document.getElementById('productImage');
+    const imageFileInput = document.getElementById('productImageInput');
+    const preview = document.getElementById('imagePreview');
+
+    if (imageUrlInput) {
+      imageUrlInput.addEventListener('input', (e) => {
+        const url = e.target.value.trim();
+        if (url) {
+          preview.src = url;
+          preview.style.display = 'block';
+        } else {
+          preview.style.display = 'none';
+        }
+      });
+    }
+
+    if (imageFileInput) {
+      imageFileInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (event) => {
+            preview.src = event.target.result;
+            preview.style.display = 'block';
+            // Save base64 string directly to image URL field
+            if (imageUrlInput) imageUrlInput.value = event.target.result;
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+    }
+  </script>
 </body>
 </html>

@@ -93,9 +93,7 @@
     width:100%;
     aspect-ratio: var(--ar, 4/5);
     overflow:hidden;
-    background:
-      radial-gradient(circle at 30% 20%, rgba(255,255,255,.10), transparent 45%),
-      linear-gradient(155deg, var(--c1,#6d2032), var(--c2,#320e17));
+    background-color: #eee;
   }
   .swatch::before{
     content:'';
@@ -103,11 +101,13 @@
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='none' stroke='rgba(255,255,255,0.16)' stroke-width='1'%3E%3Cpath d='M0 40 C 20 10, 60 10, 80 40 C 60 70, 20 70, 0 40 Z'/%3E%3Ccircle cx='40' cy='40' r='6'/%3E%3C/g%3E%3C/svg%3E");
     background-size:80px 80px;
     mix-blend-mode:overlay;
+    z-index: 1;
   }
   .swatch .swatch-label{
     position:absolute; left:50%; bottom:18px; transform:translateX(-50%);
     font-size:.62rem; letter-spacing:.25em; text-transform:uppercase;
     color:rgba(255,255,255,.55); white-space:nowrap;
+    z-index: 2;
   }
 
   /* ================= TOPBAR ================= */
@@ -168,9 +168,14 @@
     background:var(--gold-500); transition:width .3s var(--ease);
   }
   nav.primary a:hover::after{ width:100%; }
+  
+  /* WhatsApp Nav Icon Styles */
+  .wa-nav-icon svg { width: 24px; height: 24px; stroke: var(--charcoal); transition: stroke 0.3s; }
+  .wa-nav-icon:hover svg { stroke: #25D366; }
+
   .nav-icons{ display:flex; align-items:center; gap:20px; }
-  .nav-icons button{ background:none; border:none; color:var(--charcoal); position:relative; }
-  .nav-icons svg{ width:20px; height:20px; }
+  .nav-icons button, .nav-icons a{ background:none; border:none; color:var(--charcoal); position:relative; cursor: pointer; display: flex; align-items: center; }
+  .nav-icons svg{ width:22px; height:22px; }
   .cart-count{
     position:absolute; top:-8px; right:-9px;
     background:var(--maroon-800); color:var(--ivory-50);
@@ -179,6 +184,25 @@
   }
   .burger{ display:none; background:none; border:none; }
   .burger span{ display:block; width:24px; height:1px; background:var(--charcoal); margin:6px 0; transition:.3s; }
+
+  /* Floating WhatsApp Styles */
+  .floating-wa {
+    position: fixed;
+    bottom: 26px;
+    left: 26px;
+    width: 60px;
+    height: 60px;
+    background-color: #25D366;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    z-index: 999;
+    transition: transform 0.3s;
+  }
+  .floating-wa:hover { transform: scale(1.1); }
+  .floating-wa svg { width: 34px; height: 34px; fill: white; }
 
   /* mobile nav */
   .mobile-nav{
@@ -261,7 +285,6 @@
     z-index:4;
   }
   .scroll-cue .line{ width:1px; height:34px; background:linear-gradient(var(--gold-300),transparent); animation:pulse 2s infinite; }
-  @keyframes pulse{ 0%,100%{opacity:.3} 50%{opacity:1} }
 
   /* marquee */
   .marquee{
@@ -343,12 +366,14 @@
   .tag{
     position:absolute; top:14px; left:14px; background:var(--maroon-800); color:var(--gold-300);
     font-size:.62rem; letter-spacing:.12em; text-transform:uppercase; padding:5px 11px;
+    z-index: 2;
   }
   .quick-add{
     position:absolute; left:0; right:0; bottom:0; padding:12px;
     background:rgba(248,241,229,.94); text-align:center;
     font-size:.68rem; letter-spacing:.16em; text-transform:uppercase; color:var(--maroon-900);
     transform:translateY(100%); transition:transform .35s var(--ease);
+    z-index: 2;
   }
   .product-card:hover .quick-add{ transform:translateY(0); }
   .product-info{ padding-top:16px; text-align:center; }
@@ -377,7 +402,7 @@
   /* ================= TESTIMONIALS ================= */
   .testimonials{ background:var(--blush); }
   .t-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:36px; }
-  .t-grid .t-card{ background:var(--ivory-50); padding:36px 30px; position:relative; }
+  .t-card{ background:var(--ivory-50); padding:36px 30px; position:relative; }
   .t-card .quote-mark{ font-family:'Cormorant Garamond',serif; font-size:3rem; color:var(--gold-500); line-height:1; }
   .t-card p{ line-height:1.85; color:#5a473f; margin:14px 0 22px; font-size:.96rem; }
   .t-name{ font-family:'Cormorant Garamond',serif; font-style:italic; font-size:1.15rem; color:var(--maroon-800); }
@@ -486,11 +511,44 @@
     .logo-word b{ font-size:1.08rem; }
     .logo-word em{ letter-spacing:.3em; font-size:.5rem; }
   }
+
+  /* Loading spinner */
+  .loading-spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 0;
+    grid-column: 1 / -1;
+  }
+  .spinner {
+    border: 3px solid var(--ivory-100);
+    border-top: 3px solid var(--gold-500);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+  }
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  .no-products {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 40px 0;
+    color: #6b574d;
+  }
+  .no-products h3 { font-size: 1.4rem; margin-bottom: 8px; }
 </style>
 </head>
 <body>
 
 <div class="topbar">Complimentary shipping across Bangladesh &nbsp;•&nbsp; Handcrafted, made to order</div>
+
+<!-- Floating WhatsApp Button -->
+<a href="https://wa.me/" target="_blank" class="floating-wa" aria-label="WhatsApp">
+  <svg viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.539 2.016 2.126-.54c1.029.59 1.967.931 3.162.931 3.176 0 5.765-2.587 5.765-5.766 0-3.178-2.587-5.764-5.765-5.764m4.411 8.24c-.171.474-.985.869-1.353.921-.368.053-.715.111-2.221-.464-1.507-.575-2.457-2.096-2.533-2.196-.076-.101-.617-.819-.617-1.562 0-.742.389-1.108.528-1.258.139-.15.305-.188.406-.188.101 0 .202.001.291.005.093.004.22-.034.343.265.124.3.424 1.034.461 1.108.037.075.061.161.011.261-.05.1-.075.162-.15.25-.075.088-.158.176-.226.237-.075.068-.154.141-.065.276.089.135.397.654.851 1.107.583.583 1.075.764 1.21.84.135.075.214.062.294-.037.08-.1.343-.399.435-.537.092-.137.185-.115.31-.069.124.047.789.373.926.441.137.069.227.103.261.153.035.049.035.286-.136.76z"/></svg>
+</a>
 
 <header class="site" id="siteHeader">
   <div class="nav-row">
@@ -500,9 +558,6 @@
     <a href="#top" class="logo" aria-label="Shosta Bazar BD — home">
       <svg class="logo-mark" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
         <circle cx="32" cy="32" r="30" fill="var(--maroon-900)" stroke="var(--gold-500)" stroke-width="1.4"/>
-        <circle cx="32" cy="32" r="24.5" fill="none" stroke="var(--gold-300)" stroke-width=".6" opacity=".55"/>
-        <path d="M13 22 C 20 10, 44 10, 51 22" fill="none" stroke="var(--gold-300)" stroke-width="1" opacity=".8"/>
-        <path d="M13 42 C 20 54, 44 54, 51 42" fill="none" stroke="var(--gold-300)" stroke-width="1" opacity=".8"/>
         <text x="32" y="40" text-anchor="middle" font-family="'Cormorant Garamond', serif" font-style="italic" font-weight="600" font-size="23" fill="var(--gold-300)">SB</text>
       </svg>
       <span class="logo-word"><b>Shosta Bazar</b><em>BD</em></span>
@@ -516,12 +571,10 @@
       <a href="#about">About</a>
     </nav>
     <div class="nav-icons">
-      <button aria-label="Search" id="searchBtn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      </button>
-      <button aria-label="Account">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>
-      </button>
+      <!-- WhatsApp Navbar Icon -->
+      <a href="https://wa.me/" target="_blank" class="wa-nav-icon" aria-label="WhatsApp">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 1 1-7.6-14.7 8.38 8.38 0 0 1 3.8.9L21 3.5Z"/></svg>
+      </a>
       <button aria-label="Bag" id="bagBtn">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M6 8h12l-1 12H7L6 8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
         <span class="cart-count" id="cartCount">0</span>
@@ -544,7 +597,7 @@
 
 <main id="top">
 
-  <!-- HERO (SLIDING PHOTOS) -->
+  <!-- HERO (FULL SCREEN SLIDER) -->
   <section class="hero" style="padding:0;">
     <div class="hero-nav">
       <button id="heroPrev" aria-label="Previous image"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
@@ -584,8 +637,8 @@
   <section class="about" id="about">
     <div class="wrap about-grid">
       <div class="about-media reveal">
-        <div class="swatch" style="--ar:4/5; background: url('images/img2.png') center/cover no-repeat;">
-          <span class="swatch-label">Dhaka</span>
+        <div class="swatch" style="--ar:4/5; background: url('https://images.unsplash.com/photo-1631233839294-f06077977469?q=80&w=1200') center/cover no-repeat;">
+          <span class="swatch-label">Atelier — Banani, Dhaka</span>
         </div>
         <div class="frame"></div>
       </div>
@@ -605,44 +658,25 @@
 
   <div class="jaali on-ivory"></div>
 
-  <!-- CATEGORIES (PICTURES APPLIED) -->
-  <section class="categories" id="categories">
-    <div class="wrap">
-      <div class="section-head reveal">
-        <span class="eyebrow">Shop by Category</span>
-        <h2>Find your elegance</h2>
-        <p>From bridal grandeur to everyday designer wear — six houses of craft, one philosophy.</p>
-      </div>
+  <!-- CATEGORIES -->
+<section class="categories" id="categories">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Shop by Category</span>
+      <h2>Find your elegance</h2>
+      <p>From bridal grandeur to everyday designer wear — six houses of craft, one philosophy.</p>
     </div>
-    <div class="cat-grid">
-      <div class="cat-card reveal" data-cat="Bridal">
-        <div class="swatch" style="--ar:3/4; background: url('https://images.unsplash.com/photo-1596462502278-27bfdc4033c8?q=80&w=1200') center/cover no-repeat;"></div>
-        <div class="overlay"><h3>Bridal Wear</h3><span class="count">42 Designs</span></div>
-      </div>
-      <div class="cat-card reveal" data-cat="Sarees">
-        <div class="swatch" style="--ar:3/4; background: url('https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=1200') center/cover no-repeat;"></div>
-        <div class="overlay"><h3>Sarees</h3><span class="count">86 Designs</span></div>
-      </div>
-      <div class="cat-card reveal" data-cat="Lehenga">
-        <div class="swatch" style="--ar:3/4; background: url('https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=1200') center/cover no-repeat;"></div>
-        <div class="overlay"><h3>Lehenga</h3><span class="count">58 Designs</span></div>
-      </div>
-      <div class="cat-card reveal" data-cat="Gowns">
-        <div class="swatch" style="--ar:3/4; background: url('https://images.unsplash.com/photo-1566174053879-31528523f8ae?q=80&w=1200') center/cover no-repeat;"></div>
-        <div class="overlay"><h3>Designer Gowns</h3><span class="count">37 Designs</span></div>
-      </div>
-      <div class="cat-card reveal" data-cat="Salwar Kameez">
-        <div class="swatch" style="--ar:3/4; background: url('https://images.unsplash.com/photo-1631233839294-f06077977469?q=80&w=1200') center/cover no-repeat;"></div>
-        <div class="overlay"><h3>Salwar Kameez</h3><span class="count">64 Designs</span></div>
-      </div>
-      <div class="cat-card reveal" data-cat="Accessories">
-        <div class="swatch" style="--ar:3/4; background: url('https://images.unsplash.com/photo-1617146053554-e991129b015b?q=80&w=1200') center/cover no-repeat;"></div>
-        <div class="overlay"><h3>Accessories</h3><span class="count">29 Designs</span></div>
-      </div>
+  </div>
+  <div class="cat-grid" id="categoryGrid">
+    <!-- Categories will be loaded dynamically from database -->
+    <div class="loading-spinner" style="grid-column: 1 / -1; padding: 40px 0;">
+      <div class="spinner"></div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- SHOP / PRODUCTS -->
+
+  <!-- SHOP / PRODUCTS (NEW THIS SEASON) -->
   <section class="shop" id="shop">
     <div class="wrap">
       <div class="section-head reveal">
@@ -657,7 +691,10 @@
         <button data-filter="Gowns">Gowns</button>
         <button data-filter="Bridal">Bridal</button>
       </div>
-      <div class="product-grid" id="productGrid"><!-- injected by JS --></div>
+      <div class="product-grid" id="productGrid">
+        <!-- Loading spinner -->
+        <div class="loading-spinner"><div class="spinner"></div></div>
+      </div>
       <div class="grid-cta reveal"><a href="#" class="btn">View Full Collection</a></div>
     </div>
   </section>
@@ -749,14 +786,11 @@
         <div class="foot-logo">
           <svg class="logo-mark" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
             <circle cx="32" cy="32" r="30" fill="var(--maroon-900)" stroke="var(--gold-500)" stroke-width="1.4"/>
-            <circle cx="32" cy="32" r="24.5" fill="none" stroke="var(--gold-300)" stroke-width=".6" opacity=".55"/>
-            <path d="M13 22 C 20 10, 44 10, 51 22" fill="none" stroke="var(--gold-300)" stroke-width="1" opacity=".8"/>
-            <path d="M13 42 C 20 54, 44 54, 51 42" fill="none" stroke="var(--gold-300)" stroke-width="1" opacity=".8"/>
             <text x="32" y="40" text-anchor="middle" font-family="'Cormorant Garamond', serif" font-style="italic" font-weight="600" font-size="23" fill="var(--gold-300)">SB</text>
           </svg>
           <span class="logo-word"><b>Shosta Bazar</b><em>BD</em></span>
         </div>
-        <p>Luxurious and exclusive designer wear in Bangladesh. Bridal wear, party dresses, sarees, lehengas, gowns and accessories — order online or visit our  showroom.</p>
+        <p>Luxurious and exclusive designer wear in Bangladesh. Bridal wear, party dresses, sarees, lehengas, gowns and accessories — order online or visit our showroom.</p>
         <div class="foot-social">
           <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.4"><path d="M14 9h3V6h-3c-1.7 0-3 1.3-3 3v2H9v3h2v6h3v-6h3l1-3h-4V9c0-.5.5-1 1-1Z"/></svg></a>
           <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.4"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></a>
@@ -801,8 +835,6 @@
       <span><a href="#">Privacy Policy</a><a href="#">Terms of Use</a></span>
     </div>
   </div>
-  <p>&copy; 2026 Shosta Bazar BD. All rights reserved.</p>
-  <p><a href="admin/login.html" class="footer-admin-link">Admin Access</a></p>
 </footer>
 
 <button class="to-top" id="toTop" aria-label="Back to top">
@@ -810,87 +842,223 @@
 </button>
 
 <script>
-  // ---------- data ----------
-  const PRODUCTS = [
-    { name:"Meena Zari Saree", cat:"Sarees", price:8500, old:null, tag:"New" },
-    { name:"Rani Sequin Lehenga", cat:"Lehenga", price:24500, old:29000, tag:"Sale" },
-    { name:"Noor Trail Gown", cat:"Gowns", price:16200, old:null, tag:null },
-    { name:"Suhana Bridal Lehenga", cat:"Bridal", price:65000, old:null, tag:"Bridal" },
-    { name:"Ivory Mirror-Work Saree", cat:"Sarees", price:9800, old:11500, tag:"Sale" },
-    { name:"Zoya Embroidered Kameez", cat:"Sarees", price:6200, old:null, tag:null },
-    { name:"Anaya Layered Gown", cat:"Gowns", price:14800, old:null, tag:"New" },
-    { name:"Mehr Bridal Saree", cat:"Bridal", price:38500, old:null, tag:"Bridal" }
-  ];
-  const swatchColors = ["#6d2032,#210a10","#511824,#320e17","#7a2a3a,#3a1119","#4d1420,#210a10","#8a3a44,#4d1420","#5c1a28,#210a10"];
-  const fmt = n => "৳ " + n.toLocaleString("en-IN");
-
-  function renderProducts(filter){
-    const grid = document.getElementById("productGrid");
-    grid.innerHTML = "";
-    PRODUCTS.forEach((p,i)=>{
-      const show = filter === "All" || p.cat === filter;
-      const [c1,c2] = swatchColors[i % swatchColors.length].split(",");
-      const card = document.createElement("div");
-      card.className = "product-card reveal in" + (show ? "" : " hide");
-      card.dataset.cat = p.cat;
-      card.innerHTML = `
-        <div class="product-media">
-          <div class="swatch" style="--c1:${c1};--c2:${c2};"></div>
-          ${p.tag ? `<span class="tag">${p.tag}</span>` : ""}
-          <div class="quick-add" data-idx="${i}">Add to Bag</div>
-        </div>
-        <div class="product-info">
-          <div class="p-cat">${p.cat}</div>
-          <h3>${p.name}</h3>
-          <div class="price">${p.old ? `<span class="old">${fmt(p.old)}</span>` : ""}${fmt(p.price)}</div>
-        </div>`;
-      grid.appendChild(card);
-    });
-  }
-  renderProducts("All");
-
-  document.getElementById("filterTabs").addEventListener("click", e=>{
-    const btn = e.target.closest("button");
-    if(!btn) return;
-    document.querySelectorAll("#filterTabs button").forEach(b=>b.classList.remove("active"));
-    btn.classList.add("active");
-    renderProducts(btn.dataset.filter);
-  });
-
-  // cart
+  // ---------- FETCH PRODUCTS FROM DATABASE ----------
+  let allProducts = [];
   let cartCount = 0;
   const cartCountEl = document.getElementById("cartCount");
-  document.getElementById("productGrid").addEventListener("click", e=>{
-    if(e.target.classList.contains("quick-add")){
-      cartCount++;
-      cartCountEl.textContent = cartCount;
-      e.target.textContent = "Added ✓";
-      setTimeout(()=> e.target.textContent = "Add to Bag", 1200);
+  const productGrid = document.getElementById("productGrid");
+
+  // Format currency
+  const fmt = n => "৳ " + Number(n).toLocaleString("en-IN");
+
+  // Render products function
+  function renderProducts(filter = "All") {
+    const filtered = filter === "All" 
+      ? allProducts 
+      : allProducts.filter(p => p.category === filter);
+
+    if (filtered.length === 0) {
+      productGrid.innerHTML = `
+        <div class="no-products">
+          <h3>No products found</h3>
+          <p>Check back later for new arrivals in this category.</p>
+        </div>
+      `;
+      return;
+    }
+
+    productGrid.innerHTML = filtered.map((p, i) => {
+      const tag = p.status === 'ACTIVE' ? 'New' : '';
+      return `
+        <div class="product-card reveal in" data-cat="${p.category || 'General'}">
+          <div class="product-media">
+            <div class="swatch" style="--ar:3/4; background: url('${p.image || 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=800'}') center/cover no-repeat;"></div>
+            ${tag ? `<span class="tag">${tag}</span>` : ""}
+            ${p.oldPrice ? `<span class="tag" style="left:auto;right:14px;background:var(--maroon-800);color:var(--gold-300);">Sale</span>` : ""}
+            <div class="quick-add" data-id="${p._id}">Add to Bag</div>
+          </div>
+          <div class="product-info">
+            <div class="p-cat">${p.category || 'General'}</div>
+            <h3>${p.name}</h3>
+            <div class="price">${p.oldPrice ? `<span class="old">${fmt(p.oldPrice)}</span>` : ""}${fmt(p.price)}</div>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    // Re-attach cart event listeners
+    document.querySelectorAll('.quick-add').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        cartCount++;
+        cartCountEl.textContent = cartCount;
+        this.textContent = "Added ✓";
+        setTimeout(() => this.textContent = "Add to Bag", 1200);
+      });
+    });
+  }
+
+  // Fetch products from server
+  async function fetchProducts() {
+    try {
+      productGrid.innerHTML = `<div class="loading-spinner"><div class="spinner"></div></div>`;
+      
+      const response = await fetch('/api/products', {
+        cache: 'no-store',
+        headers: {
+          'Cache-Control': 'no-cache'
+        }
+      });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      allProducts = await response.json();
+      console.log('✅ Products loaded:', allProducts.length);
+      
+      // Get current filter
+      const activeFilter = document.querySelector('#filterTabs .active');
+      const filter = activeFilter ? activeFilter.dataset.filter : 'All';
+      renderProducts(filter);
+      
+    } catch (error) {
+      console.error('❌ Error fetching products:', error);
+      productGrid.innerHTML = `
+        <div class="no-products">
+          <h3>⚠️ Could not load products</h3>
+          <p>Please check your connection or try again later.</p>
+          <button onclick="fetchProducts()" style="margin-top:16px;padding:10px 24px;background:var(--maroon-800);color:var(--ivory-50);border:none;cursor:pointer;">Retry</button>
+        </div>
+      `;
+    }
+  }
+  // ==========================================
+// FETCH AND DISPLAY CATEGORIES
+// ==========================================
+
+async function fetchCategories() {
+  const categoryGrid = document.getElementById('categoryGrid');
+  
+  try {
+    // Show loading
+    categoryGrid.innerHTML = `<div class="loading-spinner" style="grid-column: 1 / -1;"><div class="spinner"></div></div>`;
+    
+    const response = await fetch('/api/categories', {
+      cache: 'no-store',
+      headers: {
+        'Cache-Control': 'no-cache'
+      }
+    });
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const categories = await response.json();
+    console.log('✅ Categories loaded:', categories.length);
+    
+    if (!categories || categories.length === 0) {
+      categoryGrid.innerHTML = `
+        <div class="no-products" style="grid-column: 1 / -1; padding:40px 0;">
+          <h3>No categories available</h3>
+          <p>Check back later for our collection categories.</p>
+        </div>
+      `;
+      return;
+    }
+    
+    // Default image for categories
+    const defaultImages = [
+      'https://images.unsplash.com/photo-1596462502278-27bfdc4033c8?q=80&w=1200',
+      'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=1200',
+      'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=1200',
+      'https://images.unsplash.com/photo-1566174053879-31528523f8ae?q=80&w=1200',
+      'https://images.unsplash.com/photo-1631233839294-f06077977469?q=80&w=1200',
+      'https://images.unsplash.com/photo-1617146053554-e991129b015b?q=80&w=1200'
+    ];
+    
+    // Render categories
+    categoryGrid.innerHTML = categories.map((cat, index) => {
+      const imageUrl = cat.image || defaultImages[index % defaultImages.length];
+      const designCount = cat.designsCount || '0 Designs';
+      
+      return `
+        <div class="cat-card reveal" data-cat="${cat.name}">
+          <div class="swatch" style="--ar:3/4; background: url('${imageUrl}') center/cover no-repeat;"></div>
+          <div class="overlay">
+            <h3>${cat.name}</h3>
+            <span class="count">${designCount}</span>
+          </div>
+        </div>
+      `;
+    }).join('');
+    
+    // Re-initialize scroll reveal for new elements
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(en => {
+        if (en.isIntersecting) {
+          en.target.classList.add('in');
+          io.unobserve(en.target);
+        }
+      });
+    }, { threshold: .15 });
+    
+    document.querySelectorAll('#categoryGrid .reveal').forEach(el => io.observe(el));
+    
+  } catch (error) {
+    console.error('❌ Error fetching categories:', error);
+    categoryGrid.innerHTML = `
+      <div class="no-products" style="grid-column: 1 / -1; padding:40px 0;">
+        <h3>⚠️ Could not load categories</h3>
+        <p>Please check your connection or try again later.</p>
+        <button onclick="fetchCategories()" style="margin-top:16px;padding:10px 24px;background:var(--maroon-800);color:var(--ivory-50);border:none;cursor:pointer;border-radius:4px;">Retry</button>
+      </div>
+    `;
+  }
+}
+
+// Call fetchCategories when page loads
+document.addEventListener('DOMContentLoaded', () => {
+  fetchProducts();
+  fetchCategories(); // Add this line
+});
+
+  // ---------- FILTER TABS ----------
+  document.getElementById("filterTabs").addEventListener("click", e => {
+    const btn = e.target.closest("button");
+    if (!btn) return;
+    
+    document.querySelectorAll("#filterTabs button").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    
+    if (allProducts.length > 0) {
+      renderProducts(btn.dataset.filter);
     }
   });
 
-  // header scroll state
+  // ---------- HEADER SCROLL ----------
   const header = document.getElementById("siteHeader");
   const toTop = document.getElementById("toTop");
-  window.addEventListener("scroll", ()=>{
+  window.addEventListener("scroll", () => {
     const y = window.scrollY;
     header.classList.toggle("scrolled", y > 40);
     toTop.classList.toggle("show", y > 600);
   });
-  toTop.addEventListener("click", ()=> window.scrollTo({top:0, behavior:"smooth"}));
+  toTop.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
 
-  // mobile nav
+  // ---------- MOBILE NAV ----------
   const mobileNav = document.getElementById("mobileNav");
   const scrim = document.getElementById("scrim");
-  function openMn(){ mobileNav.classList.add("open"); scrim.classList.add("show"); }
-  function closeMn(){ mobileNav.classList.remove("open"); scrim.classList.remove("show"); }
+  function openMn() { mobileNav.classList.add("open"); scrim.classList.add("show"); }
+  function closeMn() { mobileNav.classList.remove("open"); scrim.classList.remove("show"); }
   document.getElementById("burgerBtn").addEventListener("click", openMn);
   document.getElementById("closeMn").addEventListener("click", closeMn);
   scrim.addEventListener("click", closeMn);
-  mobileNav.querySelectorAll("a").forEach(a=> a.addEventListener("click", closeMn));
+  mobileNav.querySelectorAll("a").forEach(a => a.addEventListener("click", closeMn));
 
-  // newsletter
-  document.getElementById("nlForm").addEventListener("submit", e=>{
+  // ---------- NEWSLETTER ----------
+  document.getElementById("nlForm").addEventListener("submit", e => {
     e.preventDefault();
     const email = document.getElementById("nlEmail").value;
     const note = document.getElementById("nlNote");
@@ -898,16 +1066,21 @@
     e.target.reset();
   });
 
-  // scroll reveal
-  const io = new IntersectionObserver(entries=>{
-    entries.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add("in"); io.unobserve(en.target); } });
-  }, { threshold:.15 });
-  document.querySelectorAll(".reveal").forEach(el=> io.observe(el));
+  // ---------- SCROLL REVEAL ----------
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(en => {
+      if (en.isIntersecting) {
+        en.target.classList.add("in");
+        io.unobserve(en.target);
+      }
+    });
+  }, { threshold: .15 });
+  document.querySelectorAll(".reveal").forEach(el => io.observe(el));
 
-  // year
+  // ---------- YEAR ----------
   document.getElementById("year").textContent = new Date().getFullYear();
 
-  // ---------- HERO SLIDER LOGIC (5 SLIDES, AUTO & MANUAL) ----------
+  // ---------- HERO SLIDER ----------
   let currentHeroIdx = 0;
   const heroTrack = document.getElementById('heroTrack');
   const slideCount = 5;
@@ -934,6 +1107,105 @@
   });
 
   startHeroTimer();
+
+  // ---------- LOAD PRODUCTS ON PAGE LOAD ----------
+document.addEventListener('DOMContentLoaded', () => {
+  fetchProducts();
+  fetchCategories(); // Add this line to load categories
+});
+
+  // Auto-refresh products every 30 seconds (to show new additions)
+  setInterval(fetchProducts, 30000);
+// ==========================================
+// FETCH AND DISPLAY CATEGORIES FROM DATABASE
+// ==========================================
+
+async function fetchCategories() {
+  const categoryGrid = document.getElementById('categoryGrid');
+  
+  try {
+    // Show loading
+    categoryGrid.innerHTML = `
+      <div class="loading-spinner" style="grid-column: 1 / -1; padding: 40px 0;">
+        <div class="spinner"></div>
+      </div>
+    `;
+    
+    const response = await fetch('/api/categories', {
+      cache: 'no-store',
+      headers: {
+        'Cache-Control': 'no-cache'
+      }
+    });
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const categories = await response.json();
+    console.log('✅ Categories loaded from database:', categories.length);
+    
+    // If no categories, show message
+    if (!categories || categories.length === 0) {
+      categoryGrid.innerHTML = `
+        <div class="no-products" style="grid-column: 1 / -1; padding: 40px 0;">
+          <h3>No categories available</h3>
+          <p>Check back later for our collection categories.</p>
+        </div>
+      `;
+      return;
+    }
+    
+    // Default images for categories (fallback if no image provided)
+    const defaultImages = [
+      'https://images.unsplash.com/photo-1596462502278-27bfdc4033c8?q=80&w=1200',
+      'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=1200',
+      'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=1200',
+      'https://images.unsplash.com/photo-1566174053879-31528523f8ae?q=80&w=1200',
+      'https://images.unsplash.com/photo-1631233839294-f06077977469?q=80&w=1200',
+      'https://images.unsplash.com/photo-1617146053554-e991129b015b?q=80&w=1200'
+    ];
+    
+    // Render categories dynamically
+    categoryGrid.innerHTML = categories.map((cat, index) => {
+      const imageUrl = cat.image || defaultImages[index % defaultImages.length];
+      const designCount = cat.designsCount || '0 Designs';
+      const categoryName = cat.name || 'Category';
+      
+      return `
+        <div class="cat-card reveal" data-cat="${categoryName}">
+          <div class="swatch" style="--ar:3/4; background: url('${imageUrl}') center/cover no-repeat;"></div>
+          <div class="overlay">
+            <h3>${categoryName}</h3>
+            <span class="count">${designCount}</span>
+          </div>
+        </div>
+      `;
+    }).join('');
+    
+    // Re-initialize scroll reveal for new category cards
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(en => {
+        if (en.isIntersecting) {
+          en.target.classList.add('in');
+          observer.unobserve(en.target);
+        }
+      });
+    }, { threshold: .15 });
+    
+    document.querySelectorAll('#categoryGrid .reveal').forEach(el => observer.observe(el));
+    
+  } catch (error) {
+    console.error('❌ Error fetching categories:', error);
+    categoryGrid.innerHTML = `
+      <div class="no-products" style="grid-column: 1 / -1; padding: 40px 0;">
+        <h3>⚠️ Could not load categories</h3>
+        <p>Please check your connection or try again later.</p>
+        <button onclick="fetchCategories()" style="margin-top:16px;padding:10px 24px;background:var(--maroon-800);color:var(--ivory-50);border:none;cursor:pointer;border-radius:4px;">Retry</button>
+      </div>
+    `;
+  }
+}
 </script>
 </body>
 </html>

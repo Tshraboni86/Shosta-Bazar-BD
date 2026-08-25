@@ -20,7 +20,6 @@
         <li><a href="customers.html">Customers</a></li>
         <li><a href="reviews.html">Reviews</a></li>
         <li><a href="offers.html">Offers</a></li>
-        <li><a href="coupons.html">Coupons</a></li>
         <li><a href="content.html">Website Content</a></li>
         <li><a href="image-history.html">Image History</a></li>
         <li><a href="settings.html">Settings</a></li>
@@ -35,28 +34,64 @@
 
     <div class="admin-main">
       <header class="content-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-  <h2>Category Management</h2>
-  <button id="addCategoryBtn" class="btn" style="background: #201315; color: #fff; padding: 10px 20px; border: none; cursor: pointer;">+ ADD CATEGORY</button>
-</header>
+        <h2>Category Management</h2>
+        <button id="addCategoryBtn" class="btn" style="background: #201315; color: #fff; padding: 10px 20px; border: none; cursor: pointer;">+ ADD CATEGORY</button>
+      </header>
 
-<main class="content-body">
-  <div class="card">
-    <div class="table-responsive">
-      <table class="admin-table">
-        <thead>
-          <tr>
-            <th>Image</th>
-            <th>Category Name</th>
-            <th>Design Count</th>
-            <th>Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody id="categoriesTableBody"></tbody>
-      </table>
+      <main class="content-body">
+        <div class="card">
+          <div class="table-responsive">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Image</th>
+                  <th>Category Name</th>
+                  <th>Design Count</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="categoriesTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </main>
     </div>
   </div>
-</main>
+
+  <!-- Add Category Modal -->
+  <div class="modal-overlay" id="addCategoryModal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); z-index: 9999; justify-content: center; align-items: center;">
+    <div class="modal-container" style="background: #fff; padding: 24px; border-radius: 8px; width: 100%; max-width: 450px; box-sizing: border-box;">
+      <h3 style="margin-top: 0; color: #320e17;">Add New Category</h3>
+      <form id="addCategoryForm">
+        <div style="margin-bottom: 12px;">
+          <label style="display: block; margin-bottom: 4px; font-weight: 500;">Category Name</label>
+          <input type="text" id="catNameInput" placeholder="e.g. Sarees" required style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+        </div>
+        <div style="margin-bottom: 12px;">
+          <label style="display: block; margin-bottom: 4px; font-weight: 500;">Design Count (Optional)</label>
+          <input type="text" id="catDesignsInput" placeholder="e.g. 50 Designs" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+        </div>
+        <div style="margin-bottom: 12px;">
+          <label style="display: block; margin-bottom: 4px; font-weight: 500;">Image URL (Optional)</label>
+          <input type="text" id="catImageInput" placeholder="https://example.com/image.jpg" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+        </div>
+        <div style="margin-bottom: 16px;">
+          <label style="display: block; margin-bottom: 4px; font-weight: 500;">Status</label>
+          <select id="catStatusInput" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+            <option value="ACTIVE">ACTIVE</option>
+            <option value="INACTIVE">INACTIVE</option>
+          </select>
+        </div>
+        <div class="modal-footer" style="display: flex; justify-content: flex-end; gap: 10px;">
+          <button type="button" class="btn-admin-secondary" id="closeCategoryModalBtn" style="padding: 8px 16px; cursor: pointer;">Cancel</button>
+          <button type="submit" class="btn-admin" style="padding: 8px 16px; background: #320e17; color: #fff; border: none; cursor: pointer;">Save Category</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Delete Confirmation Modal -->
   <div class="modal-overlay" id="confirmModal">
     <div class="modal-container">
       <h3>Confirm Delete</h3>
@@ -72,6 +107,6 @@
   <script src="js/auth.js"></script>
   <script src="js/admin.js"></script>
   <script src="js/categories.js"></script>
-<script src="js/api.js"></script>
+  <script src="js/api.js"></script>
 </body>
 </html>

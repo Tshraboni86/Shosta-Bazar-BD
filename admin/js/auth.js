@@ -30,3 +30,24 @@ document.addEventListener('DOMContentLoaded', () => {
     window.location.href = 'login.html';
   }
 });
+document.addEventListener('DOMContentLoaded', () => {
+  const usernameInput = document.getElementById('username');
+  const passwordInput = document.getElementById('password');
+  const togglePassword = document.getElementById('togglePassword');
+
+  // Clear pre-filled credentials on load
+  if (usernameInput) usernameInput.value = '';
+  if (passwordInput) passwordInput.value = '';
+
+  // Toggle Password Visibility
+  if (togglePassword && passwordInput) {
+    togglePassword.addEventListener('click', () => {
+      const isPassword = passwordInput.type === 'password';
+      passwordInput.type = isPassword ? 'text' : 'password';
+
+      // Switch icon classes
+      togglePassword.classList.toggle('fa-eye', !isPassword);
+      togglePassword.classList.toggle('fa-eye-slash', isPassword);
+    });
+  }
+});
