@@ -1,4 +1,5 @@
-const ORDERS_API_URL = 'http://localhost:5000/api/orders';
+const API_BASE = window.API_BASE || 'http://localhost:5000/api';
+const ORDERS_API_URL = `${API_BASE}/orders`;
 let currentOrderId = null;
 
 // ==========================================
