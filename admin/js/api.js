@@ -2,7 +2,11 @@
 // ==========================================
 // API CONFIGURATION - RENDER BACKEND
 // ==========================================
-const API_BASE = 'https://shosta-bazar-bd.onrender.com/api';
+// Replace this line:
+// const API_BASE = 'https://shosta-bazar-bd.onrender.com/api';
+
+// With this:
+var API_BASE = window.API_BASE || 'https://shosta-bazar-bd.onrender.com/api';
 
 console.log('🔗 API_BASE:', API_BASE);
 
