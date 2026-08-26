@@ -1216,11 +1216,39 @@ function initHeroSlider() {
 function updateHeroContent(index) {
   const slide = heroSlides[index % heroSlides.length];
   if (!slide) return;
+  
   document.getElementById('heroTitle').innerHTML = slide.title || 'Feel the joy of<br>presenting yourself';
   document.getElementById('heroSubtitle').textContent = slide.subtitle || 'Welcome to Shosta Bazar BD.';
   document.getElementById('heroEyebrow').textContent = slide.eyebrow || 'Designer Wear';
-  document.getElementById('heroBtn1').textContent = slide.buttonText || 'Shop Now';
-  document.getElementById('heroBtn1').href = slide.buttonLink || '#categories';
+  
+  // Shop Now button
+  const btn1 = document.getElementById('heroBtn1');
+  if (btn1) {
+    btn1.textContent = slide.buttonText || 'Shop Now';
+    btn1.href = slide.buttonLink || '#categories';
+    // Remove any existing onclick and use click event
+    btn1.onclick = function(e) {
+      e.preventDefault();
+      const target = document.querySelector('#categories');
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth' });
+      }
+    };
+  }
+  
+  // Bridal Collection button
+  const btn2 = document.getElementById('heroBtn2');
+  if (btn2) {
+    btn2.textContent = slide.buttonText2 || 'Bridal Collection';
+    btn2.href = slide.buttonLink2 || '#bridal';
+    btn2.onclick = function(e) {
+      e.preventDefault();
+      const target = document.querySelector('#bridal');
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth' });
+      }
+    };
+  }
 }
 
 function moveHeroSlide(direction) {
@@ -1243,9 +1271,9 @@ function restartHeroTimer() {
   if (heroSlides.length > 1) heroTimer = setInterval(() => moveHeroSlide(1), 4000);
 }
 
+// Hero navigation buttons
 document.getElementById('heroNext')?.addEventListener('click', () => moveHeroSlide(1));
 document.getElementById('heroPrev')?.addEventListener('click', () => moveHeroSlide(-1));
-
 // ==========================================
 // FETCH GALLERY
 // ==========================================
@@ -1403,6 +1431,24 @@ document.addEventListener('DOMContentLoaded', () => {
   fetchCategories();
   fetchHeroSlides();
   fetchGallery();
+});
+  // ==========================================
+// SMOOTH SCROLL FOR ALL NAVIGATION LINKS
+// ==========================================
+document.addEventListener('DOMContentLoaded', function() {
+  // Handle all links that start with #
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      const targetId = this.getAttribute('href');
+      if (targetId === '#') return;
+      
+      const targetElement = document.querySelector(targetId);
+      if (targetElement) {
+        e.preventDefault();
+        targetElement.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  });
 });
 </script>
 </body>
