@@ -34,8 +34,8 @@
 
     <div class="admin-main">
       <header class="content-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-        <h2>Category Management</h2>
-        <a href="#" id="addCategoryLink" style="background: #201315; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 4px; display: inline-block;">+ ADD CATEGORY</a>
+        <h2>📂 Category Management</h2>
+        <button id="addCategoryBtn" class="btn" style="background: #201315; color: #fff; padding: 10px 20px; border: none; cursor: pointer;">+ ADD CATEGORY</button>
       </header>
 
       <main class="content-body">
@@ -51,7 +51,9 @@
                   <th>Actions</th>
                 </tr>
               </thead>
-              <tbody id="categoriesTableBody"></tbody>
+              <tbody id="categoriesTableBody">
+                <!-- Categories will load here -->
+              </tbody>
             </table>
           </div>
         </div>
@@ -63,7 +65,7 @@
   <div id="categoryModal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); z-index: 9999; justify-content: center; align-items: center;">
     <div style="background: #fff; padding: 24px; border-radius: 8px; width: 100%; max-width: 450px; box-sizing: border-box; margin: 20px;">
       <h3 style="margin-top: 0; color: #320e17;" id="modalTitle">Add New Category</h3>
-      <form id="categoryForm" data-form-type="category">
+      <form id="categoryForm">
         <div style="margin-bottom: 12px;">
           <label style="display: block; margin-bottom: 4px; font-weight: 500;">Category Name *</label>
           <input type="text" id="catName" placeholder="e.g. Sarees" required style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
@@ -73,14 +75,9 @@
           <input type="text" id="catDesigns" placeholder="e.g. 50 Designs" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
         </div>
         <div style="margin-bottom: 12px;">
-          <label style="display: block; margin-bottom: 4px; font-weight: 500;">Category Image</label>
-          <div style="display: flex; gap: 8px; align-items: center;">
-            <input type="text" id="catImage" placeholder="/images/categories/your-image.jpg" style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
-            <button type="button" onclick="document.getElementById('catImageFile').click();" style="padding: 8px 12px; background: #320e17; color: #fff; border: none; border-radius: 4px; cursor: pointer; white-space: nowrap;">Browse</button>
-          </div>
-          <input type="file" id="catImageFile" accept="image/*" style="display: none;" onchange="handleImageUpload(this)">
-          <small style="color: #888; font-size: 0.8rem; display: block; margin-top: 4px;">Enter image path OR click Browse to upload</small>
-          <div style="margin-top: 8px; width: 100px; height: 100px; border: 2px dashed #ccc; border-radius: 4px; display: flex; align-items: center; justify-content: center; overflow: hidden; background: #f9f9f9;" id="imagePreview">
+          <label style="display: block; margin-bottom: 4px; font-weight: 500;">Image URL (Optional)</label>
+          <input type="text" id="catImage" placeholder="/images/categories/your-image.jpg" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+          <div style="margin-top: 8px; width: 80px; height: 80px; border: 1px dashed #ccc; border-radius: 4px; display: flex; align-items: center; justify-content: center; overflow: hidden; background: #f9f9f9;" id="imagePreview">
             <span style="color: #aaa; font-size: 0.75rem;">No image</span>
           </div>
         </div>
@@ -111,10 +108,10 @@
     </div>
   </div>
 
+  <script src="js/config.js"></script>
   <script src="js/mock-data.js"></script>
   <script src="js/auth.js"></script>
   <script src="js/admin.js"></script>
   <script src="js/categories.js"></script>
-  <script src="js/api.js"></script>
 </body>
 </html>
