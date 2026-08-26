@@ -1,9 +1,7 @@
 // admin/js/categories.js
 // ==========================================
-// CATEGORIES API
+// CATEGORIES API - Uses API_BASE from config.js
 // ==========================================
-
-// API_BASE is defined in config.js - DO NOT redefine it here!
 
 const CATEGORY_API_URL = `${API_BASE}/categories`;
 
