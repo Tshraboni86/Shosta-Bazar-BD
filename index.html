@@ -906,7 +906,11 @@
 </button>
 
 <script src="config.js"></script>
-  <script>
+<script>
+// ==========================================
+// API CONFIGURATION
+// ==========================================
+const API_BASE = window.API_BASE || 'https://shosta-bazar-bd.onrender.com/api';
 // ==========================================
 // CART SYSTEM - DEFINED FIRST
 // ==========================================
@@ -1143,7 +1147,7 @@ async function fetchProducts() {
   try {
     productGrid.innerHTML = `<div class="loading-spinner"><div class="spinner"></div></div>`;
     
-    const response = await fetch('/api/products', {
+    const response = await fetch(`${API_BASE}/products`, {
       cache: 'no-store',
       headers: { 'Cache-Control': 'no-cache' }
     });
@@ -1178,7 +1182,7 @@ async function fetchCategories() {
   try {
     categoryGrid.innerHTML = `<div class="loading-spinner"><div class="spinner"></div></div>`;
     
-    const response = await fetch('/api/categories', {
+    const response = await fetch(`${API_BASE}/categories`, {
       cache: 'no-store',
       headers: { 'Cache-Control': 'no-cache' }
     });
@@ -1255,7 +1259,7 @@ async function fetchHeroSlides() {
   try {
     console.log('📦 Fetching hero slides...');
     
-    const response = await fetch('/api/slides', {
+    const response = await fetch(`${API_BASE}/slides`, {
       cache: 'no-store',
       headers: { 'Cache-Control': 'no-cache' }
     });
@@ -1529,7 +1533,7 @@ async function fetchGallery() {
   try {
     galleryGrid.innerHTML = `<div class="loading-spinner" style="grid-column: 1 / -1;"><div class="spinner"></div></div>`;
 
-    const response = await fetch('/api/gallery', {
+    const response = await fetch(`${API_BASE}/gallery`, {
       cache: 'no-store',
       headers: { 'Cache-Control': 'no-cache' }
     });
@@ -1635,7 +1639,7 @@ document.addEventListener('DOMContentLoaded', function() {
       submitBtn.disabled = true;
       
       try {
-        const response = await fetch('/api/orders', {
+        const response = await fetch(`${API_BASE}/orders`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(orderData)
@@ -1668,7 +1672,7 @@ document.addEventListener('DOMContentLoaded', function() {
           const encodedMessage = encodeURIComponent(message);
           
           // Update WhatsApp sent status
-          await fetch(`/api/orders/${order._id}/whatsapp`, { method: 'PUT' });
+          await fetch(`${API_BASE}/orders/${order._id}/whatsapp`, { method: 'PUT' });
           
           // Open WhatsApp - Change the number to your actual WhatsApp number
           const whatsappUrl = `https://wa.me/8801234567890?text=${encodedMessage}`;
