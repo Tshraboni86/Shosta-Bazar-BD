@@ -908,9 +908,10 @@
 <script src="config.js"></script>
 <script>
 // ==========================================
-// API CONFIGURATION - DO NOT CHANGE
+// API CONFIGURATION - DIRECT HARDCODE
 // ==========================================
-const API_BASE = window.API_BASE || 'https://shosta-bazar-bd.onrender.com/api';
+const API_BASE = 'https://shosta-bazar-bd.onrender.com/api';
+console.log('🔗 API_BASE:', API_BASE);
 
 // ==========================================
 // CART SYSTEM
@@ -1016,10 +1017,7 @@ function toggleCart() {
   const sidebar = document.getElementById('cartSidebar');
   const overlay = document.getElementById('cartOverlay');
   
-  if (!sidebar) {
-    console.error('Cart sidebar not found!');
-    return;
-  }
+  if (!sidebar) return;
   
   if (sidebar.style.right === '0px') {
     sidebar.style.right = '-420px';
@@ -1037,33 +1035,21 @@ function openCheckout() {
   }
   
   const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0) + DELIVERY_CHARGE;
-  const checkoutTotal = document.getElementById('checkoutTotal');
-  if (checkoutTotal) checkoutTotal.textContent = `৳${total.toLocaleString()}`;
-  
-  const modal = document.getElementById('checkoutModal');
-  if (modal) modal.style.display = 'flex';
-  
+  document.getElementById('checkoutTotal').textContent = `৳${total.toLocaleString()}`;
+  document.getElementById('checkoutModal').style.display = 'flex';
   toggleCart();
 }
 
 function closeCheckout() {
-  const modal = document.getElementById('checkoutModal');
-  if (modal) modal.style.display = 'none';
+  document.getElementById('checkoutModal').style.display = 'none';
 }
 
 function showToast(message) {
   const toast = document.createElement('div');
-  toast.style.cssText = `
-    position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%);
-    background: #333; color: #fff; padding: 12px 24px; border-radius: 8px;
-    font-size: 14px; z-index: 9999; animation: fadeIn 0.3s ease;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-  `;
+  toast.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#333;color:#fff;padding:12px 24px;border-radius:8px;font-size:14px;z-index:9999;animation:fadeIn 0.3s ease;box-shadow:0 4px 12px rgba(0,0,0,0.2);';
   toast.textContent = message;
   document.body.appendChild(toast);
-  setTimeout(() => {
-    toast.remove();
-  }, 3000);
+  setTimeout(() => toast.remove(), 3000);
 }
 
 window.toggleCart = toggleCart;
@@ -1074,20 +1060,15 @@ window.removeFromCart = removeFromCart;
 window.updateQuantity = updateQuantity;
 
 // ==========================================
-// FETCH FUNCTIONS - USING API_BASE
-// ==========================================
-
 // FETCH PRODUCTS
+// ==========================================
 let allProducts = [];
 const productGrid = document.getElementById("productGrid");
-const cartCountEl = document.getElementById("cartCount");
-
-const fmt = n => "৳ " + Number(n).toLocaleString("en-IN");
 
 function renderProducts(filter = "All") {
   const filtered = filter === "All" ? allProducts : allProducts.filter(p => p.category === filter);
   if (filtered.length === 0) {
-    productGrid.innerHTML = `<div class="no-products"><h3>No products found</h3><p>Check back later for new arrivals.</p></div>`;
+    productGrid.innerHTML = `<div class="no-products"><h3>No products found</h3><p>Check back later.</p></div>`;
     return;
   }
   productGrid.innerHTML = filtered.map((p, i) => {
@@ -1127,36 +1108,31 @@ function renderProducts(filter = "All") {
 async function fetchProducts() {
   try {
     productGrid.innerHTML = `<div class="loading-spinner"><div class="spinner"></div></div>`;
-    const response = await fetch(`${API_BASE}/products`, {
-      cache: 'no-store',
-      headers: { 'Cache-Control': 'no-cache' }
-    });
+    const response = await fetch(`${API_BASE}/products`);
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
     allProducts = await response.json();
     console.log('✅ Products loaded:', allProducts.length);
     const activeFilter = document.querySelector('#filterTabs .active');
-    const filter = activeFilter ? activeFilter.dataset.filter : 'All';
-    renderProducts(filter);
+    renderProducts(activeFilter ? activeFilter.dataset.filter : 'All');
   } catch (error) {
     console.error('❌ Error fetching products:', error);
-    productGrid.innerHTML = `<div class="no-products"><h3>⚠️ Could not load products</h3><p>Please check your connection.</p><button onclick="fetchProducts()" style="margin-top:16px;padding:10px 24px;background:var(--maroon-800);color:var(--ivory-50);border:none;cursor:pointer;border-radius:4px;">Retry</button></div>`;
+    productGrid.innerHTML = `<div class="no-products"><h3>⚠️ Could not load products</h3><p>Make sure backend is running.</p><button onclick="fetchProducts()" style="margin-top:16px;padding:10px 24px;background:var(--maroon-800);color:var(--ivory-50);border:none;cursor:pointer;border-radius:4px;">Retry</button></div>`;
   }
 }
 
+// ==========================================
 // FETCH CATEGORIES
+// ==========================================
 async function fetchCategories() {
   const categoryGrid = document.getElementById('categoryGrid');
   try {
     categoryGrid.innerHTML = `<div class="loading-spinner"><div class="spinner"></div></div>`;
-    const response = await fetch(`${API_BASE}/categories`, {
-      cache: 'no-store',
-      headers: { 'Cache-Control': 'no-cache' }
-    });
+    const response = await fetch(`${API_BASE}/categories`);
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
     const categories = await response.json();
     console.log('✅ Categories loaded:', categories.length);
     if (!categories || categories.length === 0) {
-      categoryGrid.innerHTML = `<div class="no-products"><h3>No categories available</h3><p>Check back later.</p></div>`;
+      categoryGrid.innerHTML = `<div class="no-products"><h3>No categories available</h3></div>`;
       return;
     }
     const defaultImages = [
@@ -1169,11 +1145,10 @@ async function fetchCategories() {
     ];
     categoryGrid.innerHTML = categories.map((cat, index) => {
       const imageUrl = cat.image || defaultImages[index % defaultImages.length];
-      const designCount = cat.designsCount || '0 Designs';
       return `
         <div class="cat-card reveal" data-cat="${cat.name}">
           <div class="swatch" style="--ar:3/4; background: url('${imageUrl}') center/cover no-repeat;"></div>
-          <div class="overlay"><h3>${cat.name}</h3><span class="count">${designCount}</span></div>
+          <div class="overlay"><h3>${cat.name}</h3><span class="count">${cat.designsCount || '0 Designs'}</span></div>
         </div>
       `;
     }).join('');
@@ -1187,22 +1162,21 @@ async function fetchCategories() {
   }
 }
 
+// ==========================================
 // FETCH HERO SLIDES
+// ==========================================
 let heroSlides = [];
 let currentHeroIdx = 0;
 let heroTimer = null;
 
 async function fetchHeroSlides() {
   try {
-    const response = await fetch(`${API_BASE}/slides`, {
-      cache: 'no-store',
-      headers: { 'Cache-Control': 'no-cache' }
-    });
+    const response = await fetch(`${API_BASE}/slides`);
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
     const slides = await response.json();
     console.log('✅ Hero slides loaded:', slides.length);
-    const activeSlides = slides.filter(s => s.status === 'ACTIVE');
-    heroSlides = activeSlides.length > 0 ? activeSlides : getDefaultSlides();
+    heroSlides = slides.filter(s => s.status === 'ACTIVE');
+    if (heroSlides.length === 0) heroSlides = getDefaultSlides();
     initHeroSlider();
   } catch (error) {
     console.error('❌ Error fetching hero slides:', error);
@@ -1213,9 +1187,9 @@ async function fetchHeroSlides() {
 
 function getDefaultSlides() {
   return [
-    { image: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=1920', title: 'Feel the joy of<br>presenting yourself', subtitle: 'Welcome to Shosta Bazar BD, your ultimate destination for exclusive luxury dresses.', buttonText: 'Shop Now', buttonLink: '#categories', eyebrow: 'Designer Wear' },
-    { image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=1920', title: 'Luxurious &<br>Exclusive Designer Wear', subtitle: 'Discover our latest collection of handcrafted bridal wear and designer dresses.', buttonText: 'View Collection', buttonLink: '#shop', eyebrow: 'New Collection' },
-    { image: 'https://images.unsplash.com/photo-1594465911080-dd025b7e0744?q=80&w=1920', title: 'Bridal Collection<br>2026', subtitle: 'Hand-embroidered lehengas and sarees for your special day.', buttonText: 'Explore Bridal', buttonLink: '#bridal', eyebrow: 'Bridal Wear' }
+    { image: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=1920', title: 'Feel the joy of<br>presenting yourself', subtitle: 'Welcome to Shosta Bazar BD.', buttonText: 'Shop Now', buttonLink: '#categories', eyebrow: 'Designer Wear' },
+    { image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=1920', title: 'Luxurious &<br>Exclusive Designer Wear', subtitle: 'Discover our latest collection.', buttonText: 'View Collection', buttonLink: '#shop', eyebrow: 'New Collection' },
+    { image: 'https://images.unsplash.com/photo-1594465911080-dd025b7e0744?q=80&w=1920', title: 'Bridal Collection<br>2026', subtitle: 'Hand-embroidered lehengas.', buttonText: 'Explore Bridal', buttonLink: '#bridal', eyebrow: 'Bridal Wear' }
   ];
 }
 
@@ -1226,8 +1200,7 @@ function initHeroSlider() {
   heroSlides.forEach((slide, index) => {
     const slideDiv = document.createElement('div');
     slideDiv.className = 'hero-slide';
-    const imageUrl = slide.image || 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=1920';
-    slideDiv.style.backgroundImage = `url('${imageUrl}')`;
+    slideDiv.style.backgroundImage = `url('${slide.image || 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=1920'}')`;
     slideDiv.style.backgroundSize = 'cover';
     slideDiv.style.backgroundPosition = 'center';
     slideDiv.style.width = `${100 / heroSlides.length}%`;
@@ -1235,7 +1208,6 @@ function initHeroSlider() {
     track.appendChild(slideDiv);
   });
   track.style.width = `${heroSlides.length * 100}%`;
-  track.style.display = 'flex';
   currentHeroIdx = 0;
   updateHeroContent(0);
   if (heroSlides.length > 1) startHeroTimer();
@@ -1256,45 +1228,38 @@ function moveHeroSlide(direction) {
   const slideCount = heroSlides.length;
   currentHeroIdx = (currentHeroIdx + direction + slideCount) % slideCount;
   const track = document.getElementById('heroTrack');
-  if (track) {
-    track.style.transform = `translateX(-${currentHeroIdx * (100 / slideCount)}%)`;
-  }
+  if (track) track.style.transform = `translateX(-${currentHeroIdx * (100 / slideCount)}%)`;
   updateHeroContent(currentHeroIdx);
   restartHeroTimer();
 }
 
 function startHeroTimer() {
   clearInterval(heroTimer);
-  if (heroSlides.length > 1) {
-    heroTimer = setInterval(() => moveHeroSlide(1), 4000);
-  }
+  if (heroSlides.length > 1) heroTimer = setInterval(() => moveHeroSlide(1), 4000);
 }
 
 function restartHeroTimer() {
   clearInterval(heroTimer);
-  if (heroSlides.length > 1) {
-    heroTimer = setInterval(() => moveHeroSlide(1), 4000);
-  }
+  if (heroSlides.length > 1) heroTimer = setInterval(() => moveHeroSlide(1), 4000);
 }
 
 document.getElementById('heroNext')?.addEventListener('click', () => moveHeroSlide(1));
 document.getElementById('heroPrev')?.addEventListener('click', () => moveHeroSlide(-1));
 
+// ==========================================
 // FETCH GALLERY
+// ==========================================
 async function fetchGallery() {
   const galleryGrid = document.getElementById('galleryGrid');
   if (!galleryGrid) return;
   try {
     galleryGrid.innerHTML = `<div class="loading-spinner" style="grid-column: 1 / -1;"><div class="spinner"></div></div>`;
-    const response = await fetch(`${API_BASE}/gallery`, {
-      cache: 'no-store',
-      headers: { 'Cache-Control': 'no-cache' }
-    });
+    const response = await fetch(`${API_BASE}/gallery`);
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
     const images = await response.json();
     console.log('✅ Gallery images loaded:', images.length);
     if (!images || images.length === 0) {
-      galleryGrid.innerHTML = `<div class="no-products" style="grid-column: 1 / -1; padding: 40px 0;"><h3>No gallery images yet</h3><p>Check back soon.</p></div>`;
+      galleryGrid.innerHTML = `<div class="no-products" style="grid-column: 1 / -1; padding: 40px 0;"><h3>No gallery images yet</h3></div>`;
       return;
     }
     galleryGrid.innerHTML = images.map(img => `
@@ -1353,8 +1318,7 @@ mobileNav.querySelectorAll("a").forEach(a => a.addEventListener("click", closeMn
 // ==========================================
 document.getElementById("nlForm").addEventListener("submit", e => {
   e.preventDefault();
-  const email = document.getElementById("nlEmail").value;
-  document.getElementById("nlNote").textContent = `Thank you — ${email} has been added to our list.`;
+  document.getElementById("nlNote").textContent = `Thank you — ${document.getElementById("nlEmail").value} has been added to our list.`;
   e.target.reset();
 });
 
@@ -1372,74 +1336,66 @@ document.querySelectorAll(".reveal").forEach(el => io.observe(el));
 document.getElementById("year").textContent = new Date().getFullYear();
 
 // ==========================================
-// HANDLE CHECKOUT FORM SUBMIT
+// CHECKOUT FORM
 // ==========================================
-document.addEventListener('DOMContentLoaded', function() {
-  const checkoutForm = document.getElementById('checkoutForm');
-  if (checkoutForm) {
-    checkoutForm.addEventListener('submit', async function(e) {
-      e.preventDefault();
-      const customerName = document.getElementById('checkoutName').value.trim();
-      const customerPhone = document.getElementById('checkoutPhone').value.trim();
-      const customerEmail = document.getElementById('checkoutEmail').value.trim();
-      const customerAddress = document.getElementById('checkoutAddress').value.trim();
-      const paymentMethod = document.getElementById('checkoutPayment').value;
-      const notes = document.getElementById('checkoutNotes').value.trim();
-      if (!customerName || !customerPhone || !customerAddress) {
-        alert('Please fill in all required fields.');
-        return;
-      }
-      const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-      const total = subtotal + DELIVERY_CHARGE;
-      const orderData = { customerName, customerPhone, customerEmail, customerAddress, items: cart.map(item => ({ productId: item.id || '', name: item.name, price: item.price, quantity: item.quantity, image: item.image || '' })), subtotal, deliveryCharge: DELIVERY_CHARGE, total, paymentMethod, notes };
-      const submitBtn = this.querySelector('button[type="submit"]');
-      const originalText = submitBtn.textContent;
-      submitBtn.textContent = 'Placing Order...';
-      submitBtn.disabled = true;
-      try {
-        const response = await fetch(`${API_BASE}/orders`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(orderData)
-        });
-        if (response.ok) {
-          const result = await response.json();
-          const order = result.order;
-          const itemsList = order.items.map(item => `  • ${item.name} x${item.quantity} = ৳${(item.price * item.quantity).toLocaleString()}`).join('\n');
-          const message = `🛍️ *NEW ORDER*\n\n📋 *Order ID:* ${order.orderId}\n👤 *Name:* ${order.customerName}\n📞 *Phone:* ${order.customerPhone}\n📧 *Email:* ${order.customerEmail || 'N/A'}\n📍 *Address:* ${order.customerAddress}\n📦 *Items:*\n${itemsList}\n💰 *Subtotal:* ৳${order.subtotal.toLocaleString()}\n🚚 *Delivery:* ৳${order.deliveryCharge.toLocaleString()}\n💵 *Total:* ৳${order.total.toLocaleString()}\n💳 *Payment:* ${order.paymentMethod}\n${order.notes ? `📝 *Notes:* ${order.notes}` : ''}\n\n✅ Order placed successfully! We will confirm shortly.`;
-          const encodedMessage = encodeURIComponent(message);
-          await fetch(`${API_BASE}/orders/${order._id}/whatsapp`, { method: 'PUT' });
-          window.open(`https://wa.me/8801234567890?text=${encodedMessage}`, '_blank');
-          alert('✅ Order placed successfully! WhatsApp will open for confirmation.');
-          cart = [];
-          saveCart();
-          updateCartUI();
-          closeCheckout();
-        } else {
-          const err = await response.json();
-          alert(`❌ Error: ${err.error || 'Failed to place order'}`);
-        }
-      } catch (err) {
-        console.error('Order error:', err);
-        alert('❌ Failed to place order. Please try again.');
-      } finally {
-        submitBtn.textContent = originalText;
-        submitBtn.disabled = false;
-      }
-    });
+document.getElementById('checkoutForm')?.addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const customerName = document.getElementById('checkoutName').value.trim();
+  const customerPhone = document.getElementById('checkoutPhone').value.trim();
+  const customerEmail = document.getElementById('checkoutEmail').value.trim();
+  const customerAddress = document.getElementById('checkoutAddress').value.trim();
+  const paymentMethod = document.getElementById('checkoutPayment').value;
+  const notes = document.getElementById('checkoutNotes').value.trim();
+  if (!customerName || !customerPhone || !customerAddress) {
+    alert('Please fill in all required fields.');
+    return;
   }
-  const checkoutModal = document.getElementById('checkoutModal');
-  if (checkoutModal) {
-    checkoutModal.addEventListener('click', function(e) {
-      if (e.target === this) closeCheckout();
+  const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  const total = subtotal + DELIVERY_CHARGE;
+  const orderData = { customerName, customerPhone, customerEmail, customerAddress, items: cart.map(item => ({ productId: item.id || '', name: item.name, price: item.price, quantity: item.quantity, image: item.image || '' })), subtotal, deliveryCharge: DELIVERY_CHARGE, total, paymentMethod, notes };
+  const submitBtn = this.querySelector('button[type="submit"]');
+  const originalText = submitBtn.textContent;
+  submitBtn.textContent = 'Placing Order...';
+  submitBtn.disabled = true;
+  try {
+    const response = await fetch(`${API_BASE}/orders`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(orderData)
     });
+    if (response.ok) {
+      const order = (await response.json()).order;
+      const itemsList = order.items.map(item => `  • ${item.name} x${item.quantity} = ৳${(item.price * item.quantity).toLocaleString()}`).join('\n');
+      const message = `🛍️ *NEW ORDER*\n\n📋 *Order ID:* ${order.orderId}\n👤 *Name:* ${order.customerName}\n📞 *Phone:* ${order.customerPhone}\n📧 *Email:* ${order.customerEmail || 'N/A'}\n📍 *Address:* ${order.customerAddress}\n📦 *Items:*\n${itemsList}\n💰 *Subtotal:* ৳${order.subtotal.toLocaleString()}\n🚚 *Delivery:* ৳${order.deliveryCharge.toLocaleString()}\n💵 *Total:* ৳${order.total.toLocaleString()}\n💳 *Payment:* ${order.paymentMethod}\n${order.notes ? `📝 *Notes:* ${order.notes}` : ''}\n\n✅ Order placed successfully!`;
+      await fetch(`${API_BASE}/orders/${order._id}/whatsapp`, { method: 'PUT' });
+      window.open(`https://wa.me/8801234567890?text=${encodeURIComponent(message)}`, '_blank');
+      alert('✅ Order placed successfully! WhatsApp will open for confirmation.');
+      cart = [];
+      saveCart();
+      updateCartUI();
+      closeCheckout();
+    } else {
+      const err = await response.json();
+      alert(`❌ Error: ${err.error || 'Failed to place order'}`);
+    }
+  } catch (err) {
+    console.error('Order error:', err);
+    alert('❌ Failed to place order. Please try again.');
+  } finally {
+    submitBtn.textContent = originalText;
+    submitBtn.disabled = false;
   }
-  loadCart();
+});
+
+document.getElementById('checkoutModal')?.addEventListener('click', function(e) {
+  if (e.target === this) closeCheckout();
 });
 
 // ==========================================
-// INITIALIZE ALL ON PAGE LOAD
+// LOAD CART & INITIALIZE
 // ==========================================
+loadCart();
+
 document.addEventListener('DOMContentLoaded', () => {
   console.log('🚀 Initializing website...');
   console.log('🔗 API_BASE:', API_BASE);
