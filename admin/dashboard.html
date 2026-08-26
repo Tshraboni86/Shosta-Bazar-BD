@@ -336,6 +336,38 @@
         window.location.href = 'login.html';
       }
     }
+    <script>
+// ==========================================
+// MOBILE SIDEBAR TOGGLE
+// ==========================================
+document.addEventListener('DOMContentLoaded', function() {
+  const toggleBtn = document.getElementById('sidebarToggle');
+  const sidebar = document.getElementById('adminSidebar');
+  const overlay = document.getElementById('sidebarOverlay');
+
+  if (toggleBtn && sidebar) {
+    toggleBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      sidebar.classList.toggle('show');
+      if (overlay) overlay.classList.toggle('show');
+    });
+  }
+
+  if (overlay) {
+    overlay.addEventListener('click', function() {
+      sidebar.classList.remove('show');
+      overlay.classList.remove('show');
+    });
+  }
+
+  window.addEventListener('resize', function() {
+    if (window.innerWidth > 768 && sidebar) {
+      sidebar.classList.remove('show');
+      if (overlay) overlay.classList.remove('show');
+    }
+  });
+});
+</script>
   </script>
 
   <script src="js/mock-data.js"></script>
