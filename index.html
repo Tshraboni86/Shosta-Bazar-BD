@@ -1064,6 +1064,7 @@ window.updateQuantity = updateQuantity;
 // ==========================================
 let allProducts = [];
 const productGrid = document.getElementById("productGrid");
+const fmt = n => "৳ " + Number(n).toLocaleString("en-IN");
 
 function renderProducts(filter = "All") {
   const filtered = filter === "All" ? allProducts : allProducts.filter(p => p.category === filter);
@@ -1119,7 +1120,6 @@ async function fetchProducts() {
     productGrid.innerHTML = `<div class="no-products"><h3>⚠️ Could not load products</h3><p>Make sure backend is running.</p><button onclick="fetchProducts()" style="margin-top:16px;padding:10px 24px;background:var(--maroon-800);color:var(--ivory-50);border:none;cursor:pointer;border-radius:4px;">Retry</button></div>`;
   }
 }
-
 // ==========================================
 // FETCH CATEGORIES
 // ==========================================
