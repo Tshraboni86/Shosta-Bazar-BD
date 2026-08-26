@@ -1,4 +1,8 @@
-const API_BASE = 'https://shosta-bazar-bd.onrender.com/api';
+// admin/js/gallery.js
+// ==========================================
+// GALLERY API - Uses API_BASE from config.js
+// ==========================================
+
 const GALLERY_API_URL = `${API_BASE}/gallery`;
 
 // ==========================================
@@ -109,6 +113,9 @@ async function deleteGalleryImage(id) {
 // INITIALIZE
 // ==========================================
 document.addEventListener('DOMContentLoaded', function() {
+  console.log('🚀 Gallery.js initialized');
+  console.log('🔗 GALLERY_API_URL:', GALLERY_API_URL);
+  
   loadGallery();
 
   // Add Image Button
@@ -138,25 +145,11 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  // ==========================================
-  // GALLERY FORM SUBMIT - FIXED
-  // ==========================================
+  // Submit Form
   const form = document.getElementById('galleryForm');
   if (form) {
-    // Remove any existing submit listeners
-    const newForm = form.cloneNode(true);
-    form.parentNode.replaceChild(newForm, form);
-    
-    newForm.addEventListener('submit', async function(e) {
+    form.addEventListener('submit', async function(e) {
       e.preventDefault();
-      e.stopPropagation();
-      
-      // Stop event from bubbling to products.js
-      if (e.stopImmediatePropagation) {
-        e.stopImmediatePropagation();
-      }
-      
-      console.log('Gallery form submitted');
 
       const title = document.getElementById('galleryTitle').value.trim();
       const imageUrl = document.getElementById('galleryImageUrl').value.trim();
