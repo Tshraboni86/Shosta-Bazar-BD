@@ -1,4 +1,5 @@
-const HERO_API_URL = 'http://localhost:5000/api/slides';
+const API_BASE = window.API_BASE || 'http://localhost:5000/api';
+const HERO_API_URL = `${API_BASE}/slides`;
 
 document.addEventListener('DOMContentLoaded', () => {
   loadSlides();
