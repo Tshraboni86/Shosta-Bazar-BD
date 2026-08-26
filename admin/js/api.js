@@ -92,6 +92,13 @@ function setupProductForm() {
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
+    // Check if form is currently in edit mode
+    const editId = form.dataset.editId;
+    if (editId) {
+      await updateProduct(editId);
+      return;
+    }
+
     const nameEl = document.getElementById('productName') || document.querySelector('input[type="text"]');
     const priceEl = document.getElementById('productPrice') || document.querySelector('input[type="number"]');
     const categoryEl = document.getElementById('productCategory') || document.querySelector('select');
@@ -149,8 +156,8 @@ function setupProductForm() {
         }
         
         // Reload products table if visible
-        if (typeof loadProducts === 'function') {
-          loadProducts();
+        if (typeof loadProductsTable === 'function') {
+          loadProductsTable();
         }
       } else {
         const errData = await response.json();
@@ -317,6 +324,7 @@ async function updateProduct(id) {
     return;
   }
 
+  const form = document.getElementById('addProductForm') || document.querySelector('form');
   const submitBtn = document.querySelector('button[type="submit"]');
   const originalText = submitBtn ? submitBtn.textContent : 'Update';
   if (submitBtn) {
@@ -341,7 +349,23 @@ async function updateProduct(id) {
 
     if (response.ok) {
       alert('✅ Product updated successfully!');
-      window.location.href = 'products.html';
+      
+      if (form && form.dataset) {
+        delete form.dataset.editId;
+      }
+      
+      if (form && (form.id === 'addProductForm' || !form.id)) {
+        form.reset();
+        const formTitle = document.querySelector('h2, h3');
+        if (formTitle) formTitle.textContent = '➕ Add New Product';
+        if (submitBtn) submitBtn.textContent = 'Save Product';
+        
+        if (typeof loadProductsTable === 'function') {
+          loadProductsTable();
+        }
+      } else {
+        window.location.href = 'products.html';
+      }
     } else {
       const errData = await response.json();
       alert(`❌ Error: ${errData.error || 'Failed to update product.'}`);
