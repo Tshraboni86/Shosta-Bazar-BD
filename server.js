@@ -1,3 +1,11 @@
+// Add this after the requires
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Cache-Control'],
+  credentials: true
+}));
+
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
