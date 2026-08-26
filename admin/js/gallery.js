@@ -15,6 +15,13 @@ function handleGalleryImageUpload(input) {
   const file = input.files[0];
   if (!file) return;
 
+  // Check file size (limit to 2MB)
+  if (file.size > 2 * 1024 * 1024) {
+    alert('Image is too large! Please choose an image under 2MB.');
+    input.value = '';
+    return;
+  }
+
   const reader = new FileReader();
   reader.onload = function(e) {
     const preview = document.getElementById('galleryPreview');
@@ -34,6 +41,7 @@ function openGalleryModal() {
     document.getElementById('galleryForm').reset();
     document.getElementById('galleryPreview').innerHTML = '<span class="placeholder">No image selected</span>';
     document.getElementById('galleryImageUrl').value = '';
+    document.getElementById('galleryFileInput').value = '';
   }
 }
 
