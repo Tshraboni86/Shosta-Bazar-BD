@@ -67,25 +67,3 @@ function showConfirmModal(message, onConfirm) {
   };
   cancelBtn.onclick = close;
 }
-// Generic function to save data into localStorage
-function saveItem(key, newData) {
-  const existing = JSON.parse(localStorage.getItem(key)) || [];
-  existing.push(newData);
-  localStorage.setItem(key, JSON.stringify(existing));
-}
-
-// 1. ADD CATEGORY
-const categoryForm = document.getElementById('addCategoryForm');
-if (categoryForm) {
-  categoryForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const name = document.getElementById('categoryName').value;
-    saveItem('categories', { id: Date.now(), name });
-    alert('Category Added Successfully!');
-    location.reload(); // Refreshes to display new item
-  });
-}
-
-// 2. ADD HERO SLIDER / GALLERY / OFFERS / PRODUCTS
-// Apply the same pattern to your other forms:
-// Use e.preventDefault(), gather input values, and save to localStorage!

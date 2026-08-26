@@ -5,6 +5,104 @@
   <title>Orders | Shosta Bazar BD Admin</title>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/admin.css">
+  <style>
+    .order-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .stat-card {
+      background: #fff;
+      padding: 16px;
+      border-radius: 8px;
+      text-align: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .stat-card .number {
+      font-size: 28px;
+      font-weight: 700;
+      color: #320e17;
+    }
+    .stat-card .label {
+      font-size: 12px;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .stat-card.pending .number { color: #ffc107; }
+    .stat-card.confirmed .number { color: #17a2b8; }
+    .stat-card.shipped .number { color: #007bff; }
+    .stat-card.delivered .number { color: #28a745; }
+    .stat-card.cancelled .number { color: #dc3545; }
+    
+    .order-row {
+      transition: background 0.2s;
+    }
+    .order-row:hover {
+      background: #f8f9fa;
+    }
+    .order-row .status-badge {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      display: inline-block;
+    }
+    .status-badge.pending { background: #fff3cd; color: #856404; }
+    .status-badge.confirmed { background: #d1ecf1; color: #0c5460; }
+    .status-badge.processing { background: #cce5ff; color: #004085; }
+    .status-badge.shipped { background: #b8d4e3; color: #1a3a5c; }
+    .status-badge.delivered { background: #d4edda; color: #155724; }
+    .status-badge.cancelled { background: #f8d7da; color: #721c24; }
+    
+    .order-details {
+      display: none;
+      padding: 16px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      margin-top: 8px;
+    }
+    .order-details.show {
+      display: block;
+    }
+    .order-details table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .order-details table th,
+    .order-details table td {
+      padding: 8px 12px;
+      border-bottom: 1px solid #e9ecef;
+      text-align: left;
+    }
+    .order-details table th {
+      background: #e9ecef;
+      font-weight: 600;
+    }
+    .status-select {
+      padding: 4px 8px;
+      border-radius: 4px;
+      border: 1px solid #ddd;
+      font-size: 13px;
+    }
+    .whatsapp-btn {
+      background: #25D366;
+      color: white;
+      border: none;
+      padding: 4px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+    .whatsapp-btn:hover {
+      background: #1da851;
+    }
+    .whatsapp-btn.sent {
+      background: #6c757d;
+      cursor: default;
+    }
+  </style>
 </head>
 <body>
   <div class="admin-layout">
@@ -33,11 +131,22 @@
     </aside>
 
     <div class="admin-main">
-      <header class="admin-navbar">
-        <h2>Order Management</h2>
+      <header class="content-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h2>📦 Order Management</h2>
+        <button onclick="loadOrders()" style="background: #201315; color: #fff; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer;">🔄 Refresh</button>
       </header>
 
       <main class="content-body">
+        <!-- Statistics -->
+        <div class="order-stats" id="orderStats">
+          <div class="stat-card pending"><div class="number" id="pendingCount">0</div><div class="label">Pending</div></div>
+          <div class="stat-card confirmed"><div class="number" id="confirmedCount">0</div><div class="label">Confirmed</div></div>
+          <div class="stat-card shipped"><div class="number" id="shippedCount">0</div><div class="label">Shipped</div></div>
+          <div class="stat-card delivered"><div class="number" id="deliveredCount">0</div><div class="label">Delivered</div></div>
+          <div class="stat-card cancelled"><div class="number" id="cancelledCount">0</div><div class="label">Cancelled</div></div>
+        </div>
+
+        <!-- Orders Table -->
         <div class="card">
           <div class="table-responsive">
             <table class="admin-table">
@@ -46,26 +155,15 @@
                   <th>Order ID</th>
                   <th>Customer</th>
                   <th>Phone</th>
-                  <th>Products</th>
-                  <th>Amount</th>
-                  <th>Payment</th>
+                  <th>Items</th>
+                  <th>Total</th>
                   <th>Status</th>
                   <th>Date</th>
-                  <th>Action</th>
+                  <th>Actions</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr>
-                  <td>#ORD-9921</td>
-                  <td>Farzana R.</td>
-                  <td>01711002233</td>
-                  <td>Suhana Bridal Lehenga</td>
-                  <td>৳ 65,000</td>
-                  <td><span class="badge badge-success">Paid</span></td>
-                  <td><span class="badge badge-success">Delivered</span></td>
-                  <td>2026-08-20</td>
-                  <td><button class="btn-admin-secondary" onclick="showToast('Viewing Order details')">View</button></td>
-                </tr>
+              <tbody id="ordersTableBody">
+                <tr><td colspan="8" style="text-align:center; padding:30px;">Loading orders...</td></tr>
               </tbody>
             </table>
           </div>
@@ -74,8 +172,21 @@
     </div>
   </div>
 
+  <!-- Order Details Modal -->
+  <div id="orderDetailModal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); z-index: 9999; justify-content: center; align-items: center;">
+    <div style="background: #fff; padding: 24px; border-radius: 8px; width: 100%; max-width: 700px; box-sizing: border-box; margin: 20px; max-height: 90vh; overflow-y: auto;">
+      <h3 style="margin-top: 0; color: #320e17;" id="detailOrderId">Order Details</h3>
+      <div id="orderDetailContent"></div>
+      <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
+        <button onclick="closeOrderDetail()" style="padding: 8px 16px; cursor: pointer; background: #6c757d; color: #fff; border: none; border-radius: 4px;">Close</button>
+      </div>
+    </div>
+  </div>
+
   <script src="js/mock-data.js"></script>
   <script src="js/auth.js"></script>
   <script src="js/admin.js"></script>
+  <script src="js/orders.js"></script>
+  <script src="js/api.js"></script>
 </body>
 </html>

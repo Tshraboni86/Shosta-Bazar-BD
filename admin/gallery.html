@@ -5,6 +5,119 @@
   <title>Gallery | Shosta Bazar BD Admin</title>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/admin.css">
+  <style>
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 16px;
+      margin-top: 20px;
+    }
+    .gallery-item {
+      position: relative;
+      aspect-ratio: 1/1;
+      border-radius: 8px;
+      overflow: hidden;
+      background: #f0f0f0;
+      border: 2px solid #eee;
+      transition: transform 0.3s;
+    }
+    .gallery-item:hover {
+      transform: scale(1.02);
+    }
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .gallery-item .delete-btn {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: rgba(220, 53, 69, 0.9);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .gallery-item:hover .delete-btn {
+      opacity: 1;
+    }
+    .gallery-item .delete-btn:hover {
+      background: #dc3545;
+      transform: scale(1.1);
+    }
+    .gallery-item .title {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 8px;
+      background: rgba(0,0,0,0.6);
+      color: white;
+      font-size: 0.75rem;
+      text-align: center;
+    }
+    .empty-gallery {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 40px;
+      color: #888;
+    }
+    .preview-container {
+      margin-top: 10px;
+      width: 120px;
+      height: 120px;
+      border: 2px dashed #ccc;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: #f9f9f9;
+    }
+    .preview-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .preview-container .placeholder {
+      color: #aaa;
+      font-size: 0.75rem;
+    }
+    .upload-area {
+      border: 2px dashed #ccc;
+      padding: 30px;
+      text-align: center;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: border-color 0.3s;
+      margin-bottom: 10px;
+    }
+    .upload-area:hover {
+      border-color: #320e17;
+    }
+    .upload-area .icon {
+      font-size: 40px;
+      color: #ccc;
+    }
+    .modal-body {
+      padding: 20px 0;
+    }
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 20px;
+    }
+  </style>
 </head>
 <body>
   <div class="admin-layout">
@@ -33,25 +146,47 @@
     </aside>
 
     <div class="admin-main">
-      <header class="admin-navbar">
-        <h2>Gallery Items</h2>
-        <button class="btn-admin" onclick="showToast('Upload Gallery Image')">+ Add Image</button>
+      <header class="content-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h2>Gallery Management</h2>
+        <button id="addGalleryBtn" style="background: #201315; color: #fff; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">+ ADD IMAGE</button>
       </header>
 
       <main class="content-body">
-        <div id="galleryGrid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap:20px;"></div>
+        <div class="card">
+          <div id="galleryGrid" class="gallery-grid">
+            <!-- Images will be loaded here -->
+          </div>
+        </div>
       </main>
     </div>
   </div>
 
-  <div class="modal-overlay" id="confirmModal">
-    <div class="modal-container">
-      <h3>Confirm Delete</h3>
-      <p id="modalMessage">Are you sure?</p>
-      <div class="modal-footer">
-        <button class="btn-admin-secondary" id="modalCancelBtn">Cancel</button>
-        <button class="btn-admin" id="modalConfirmBtn">Delete</button>
-      </div>
+  <!-- Add Image Modal -->
+  <div id="galleryModal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); z-index: 9999; justify-content: center; align-items: center;">
+    <div style="background: #fff; padding: 24px; border-radius: 8px; width: 100%; max-width: 500px; box-sizing: border-box; margin: 20px;">
+      <h3 style="margin-top: 0; color: #320e17;">Add Gallery Image</h3>
+      <form id="galleryForm" data-form-type="gallery">
+        <div style="margin-bottom: 12px;">
+          <label style="display: block; margin-bottom: 4px; font-weight: 500;">Image Title (Optional)</label>
+          <input type="text" id="galleryTitle" placeholder="e.g. Bridal Collection 2026" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+        </div>
+        <div style="margin-bottom: 12px;">
+          <label style="display: block; margin-bottom: 4px; font-weight: 500;">Image URL *</label>
+          <div style="display: flex; gap: 8px; align-items: center;">
+            <input type="text" id="galleryImageUrl" placeholder="/images/gallery/your-image.jpg" required style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+            <button type="button" onclick="document.getElementById('galleryFileInput').click();" style="padding: 8px 12px; background: #320e17; color: #fff; border: none; border-radius: 4px; cursor: pointer; white-space: nowrap;">Browse</button>
+          </div>
+          <input type="file" id="galleryFileInput" accept="image/*" style="display: none;" onchange="handleGalleryImageUpload(this)">
+          <small style="color: #888; font-size: 0.8rem; display: block; margin-top: 4px;">Enter image path OR click Browse to upload from your computer</small>
+          <div class="preview-container" id="galleryPreview">
+            <span class="placeholder">No image selected</span>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="closeGalleryModalBtn" style="padding: 8px 16px; cursor: pointer; background: #6c757d; color: #fff; border: none; border-radius: 4px;">Cancel</button>
+          <button type="submit" id="saveGalleryBtn" style="padding: 8px 16px; background: #320e17; color: #fff; border: none; border-radius: 4px; cursor: pointer;">Add Image</button>
+        </div>
+      </form>
     </div>
   </div>
 
@@ -59,34 +194,6 @@
   <script src="js/auth.js"></script>
   <script src="js/admin.js"></script>
   <script src="js/gallery.js"></script>
-<script src="js/api.js"></script>
-<!-- Properly Positioned Upload Gallery Modal -->
-<div id="galleryModal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.6); z-index: 99999; justify-content: center; align-items: center;">
-  <div style="background: #ffffff; padding: 24px; border-radius: 8px; width: 100%; max-width: 450px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); box-sizing: border-box;">
-    
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-      <h3 style="margin: 0; color: #320e17; font-family: serif;">Upload Gallery Image</h3>
-      <span id="closeGalleryModal" style="cursor: pointer; font-size: 20px; font-weight: bold; color: #888;">&times;</span>
-    </div>
-
-    <form id="uploadGalleryForm">
-      <div style="margin-bottom: 15px;">
-        <label style="display: block; font-size: 14px; font-weight: 500; margin-bottom: 5px; color: #333;">Image Title (Optional)</label>
-        <input type="text" id="galleryTitle" placeholder="e.g. Wedding Silk Saree" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" />
-      </div>
-
-      <div style="margin-bottom: 20px;">
-        <label style="display: block; font-size: 14px; font-weight: 500; margin-bottom: 5px; color: #333;">Paste Image URL</label>
-        <input type="url" id="galleryImageUrl" placeholder="https://example.com/image.jpg" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" />
-      </div>
-
-      <div style="display: flex; justify-content: flex-end; gap: 10px;">
-        <button type="button" id="cancelGalleryModal" style="padding: 10px 18px; background: #eee; color: #333; border: none; border-radius: 4px; cursor: pointer;">Cancel</button>
-        <button type="submit" style="padding: 10px 18px; background: #320e17; color: #e6cd93; border: none; border-radius: 4px; cursor: pointer; font-weight: 500;">Upload Gallery Image</button>
-      </div>
-    </form>
-
-  </div>
-</div>
+  <script src="js/api.js"></script>
 </body>
 </html>

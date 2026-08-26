@@ -7,6 +7,20 @@ document.addEventListener('DOMContentLoaded', () => {
   // Handle Form Submission
   const form = document.getElementById('addProductForm') || document.querySelector('form');
 
+  // ==========================================
+  // SKIP PRODUCT VALIDATION FOR OTHER FORMS
+  // ==========================================
+  if (form) {
+    // Check if this is a category or gallery form
+    if (form.id === 'categoryForm' || form.id === 'galleryForm') {
+      return; // Skip product validation
+    }
+    // Also check data attribute
+    if (form.dataset && (form.dataset.formType === 'category' || form.dataset.formType === 'gallery')) {
+      return; // Skip product validation
+    }
+  }
+
   if (form) {
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
