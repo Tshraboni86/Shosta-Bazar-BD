@@ -1,4 +1,4 @@
-const API_BASE = window.API_BASE || 'http://localhost:5000/api';
+const API_BASE = 'https://shosta-bazar-bd.onrender.com/api';
 const HERO_API_URL = `${API_BASE}/slides`;
 
 document.addEventListener('DOMContentLoaded', () => {
