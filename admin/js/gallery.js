@@ -1,9 +1,12 @@
 // admin/js/gallery.js
 // ==========================================
-// GALLERY API - Uses API_BASE from config.js
+// GALLERY API
 // ==========================================
 
+// API_BASE comes from config.js
 const GALLERY_API_URL = `${API_BASE}/gallery`;
+
+console.log('🔗 GALLERY_API_URL:', GALLERY_API_URL);
 
 // ==========================================
 // HANDLE IMAGE UPLOAD
@@ -25,18 +28,24 @@ function handleGalleryImageUpload(input) {
 // OPEN MODAL
 // ==========================================
 function openGalleryModal() {
-  document.getElementById('galleryModal').style.display = 'flex';
-  document.getElementById('galleryForm').reset();
-  document.getElementById('galleryPreview').innerHTML = '<span class="placeholder">No image selected</span>';
-  document.getElementById('galleryImageUrl').value = '';
+  const modal = document.getElementById('galleryModal');
+  if (modal) {
+    modal.style.display = 'flex';
+    document.getElementById('galleryForm').reset();
+    document.getElementById('galleryPreview').innerHTML = '<span class="placeholder">No image selected</span>';
+    document.getElementById('galleryImageUrl').value = '';
+  }
 }
 
 // ==========================================
 // CLOSE MODAL
 // ==========================================
 function closeGalleryModal() {
-  document.getElementById('galleryModal').style.display = 'none';
-  document.getElementById('galleryForm').reset();
+  const modal = document.getElementById('galleryModal');
+  if (modal) {
+    modal.style.display = 'none';
+    document.getElementById('galleryForm').reset();
+  }
 }
 
 // ==========================================
@@ -49,6 +58,8 @@ async function loadGallery() {
   try {
     grid.innerHTML = '<div class="empty-gallery">Loading images...</div>';
 
+    console.log('📡 Fetching from:', GALLERY_API_URL);
+    
     const res = await fetch(GALLERY_API_URL, {
       headers: { 'Cache-Control': 'no-cache' }
     });
@@ -56,6 +67,7 @@ async function loadGallery() {
     if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
     
     const images = await res.json();
+    console.log('✅ Gallery images loaded:', images.length);
 
     if (!Array.isArray(images) || images.length === 0) {
       grid.innerHTML = `
@@ -77,7 +89,7 @@ async function loadGallery() {
     `).join('');
 
   } catch (err) {
-    console.error('Error loading gallery:', err);
+    console.error('❌ Error loading gallery:', err);
     grid.innerHTML = `
       <div class="empty-gallery" style="color:#dc3545;">
         ⚠️ Failed to load gallery images.
@@ -123,6 +135,7 @@ document.addEventListener('DOMContentLoaded', function() {
   if (addBtn) {
     addBtn.addEventListener('click', function(e) {
       e.preventDefault();
+      console.log('➕ Add Image button clicked');
       openGalleryModal();
     });
   }
@@ -165,6 +178,8 @@ document.addEventListener('DOMContentLoaded', function() {
       submitBtn.disabled = true;
 
       try {
+        console.log('📡 Sending to:', GALLERY_API_URL);
+        
         const response = await fetch(GALLERY_API_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -180,7 +195,7 @@ document.addEventListener('DOMContentLoaded', function() {
           alert(`❌ Error: ${errData.error || 'Failed to save image.'}`);
         }
       } catch (err) {
-        console.error('Save error:', err);
+        console.error('❌ Save error:', err);
         alert('❌ Server unreachable. Make sure "node server.js" is running!');
       } finally {
         submitBtn.textContent = originalText;
