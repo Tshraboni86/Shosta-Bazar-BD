@@ -1,5 +1,5 @@
 // admin/js/products.js
-// Use the Render API URL
+// Use Render API
 const API_BASE = 'https://shosta-bazar-bd.onrender.com/api';
 const PRODUCT_API_URL = `${API_BASE}/products`;
 
@@ -51,6 +51,9 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       try {
+        console.log('📤 Sending to:', PRODUCT_API_URL);
+        console.log('📦 Data:', { name, category, price, oldPrice, image, description });
+
         const response = await fetch(PRODUCT_API_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -68,7 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (response.ok) {
           const savedProduct = await response.json();
           console.log('✅ Product saved:', savedProduct);
-          alert('✅ Product saved successfully to MongoDB!');
+          alert('✅ Product saved successfully!');
           
           if (form.id === 'addProductForm' || !form.id) {
             form.reset();
@@ -84,8 +87,8 @@ document.addEventListener('DOMContentLoaded', () => {
           alert(`❌ Error: ${errData.error || 'Failed to save product.'}`);
         }
       } catch (err) {
-        console.error('Save Product Error:', err);
-        alert('❌ Cannot connect to backend server. Make sure "node server.js" is running!');
+        console.error('❌ Save Product Error:', err);
+        alert('❌ Cannot connect to backend server. Make sure your Render server is running!');
       } finally {
         if (submitBtn) {
           submitBtn.textContent = originalText;
@@ -275,7 +278,7 @@ async function updateProduct(id) {
     }
   } catch (err) {
     console.error('Update Product Error:', err);
-    alert('❌ Cannot connect to backend server. Make sure "node server.js" is running!');
+    alert('❌ Cannot connect to backend server. Make sure your Render server is running!');
   } finally {
     if (submitBtn) {
       submitBtn.textContent = originalText;
