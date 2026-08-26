@@ -2,7 +2,7 @@
 
 document.addEventListener("DOMContentLoaded", () => {
   // Check auth on secure pages
-  if (!window.location.pathname.includes("login.html")) {
+ // if (!window.location.pathname.includes("login.html")) {
     checkAuth();
   }
 
