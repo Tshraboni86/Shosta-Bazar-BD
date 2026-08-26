@@ -1,11 +1,3 @@
-// Add this after the requires
-app.use(cors({
-  origin: '*',
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'Cache-Control'],
-  credentials: true
-}));
-
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -14,7 +6,7 @@ const path = require('path');
 const app = express();
 
 // ==========================================
-// FIXED CORS CONFIGURATION
+// CORS CONFIGURATION
 // ==========================================
 app.use(cors({
   origin: '*',
@@ -36,7 +28,7 @@ app.use('/images', express.static(path.join(__dirname, 'images')));
 // ==========================================
 // 1. DATABASE CONNECTION
 // ==========================================
-const dbURI = 'mongodb+srv://testuser:TestPassword123@cluster0.fdrt8rk.mongodb.net/?appName=Cluster0';
+const dbURI = process.env.MONGODB_URI || 'mongodb+srv://testuser:TestPassword123@cluster0.fdrt8rk.mongodb.net/?appName=Cluster0';
 
 mongoose.connect(dbURI)
   .then(() => console.log('✅ Successfully connected to MongoDB Cloud Database!'))
@@ -119,6 +111,56 @@ const gallerySchema = new mongoose.Schema({
 });
 
 const Gallery = mongoose.models.Gallery || mongoose.model('Gallery', gallerySchema, 'gallery');
+
+// -------- ORDER SCHEMA --------
+const orderSchema = new mongoose.Schema({
+  orderId: { type: String, required: true, unique: true },
+  customerName: { type: String, required: true },
+  customerPhone: { type: String, required: true },
+  customerEmail: { type: String, default: '' },
+  customerAddress: { type: String, required: true },
+  items: [{
+    productId: { type: String, default: '' },
+    name: { type: String, required: true },
+    price: { type: Number, required: true },
+    quantity: { type: Number, required: true, default: 1 },
+    image: { type: String, default: '' }
+  }],
+  subtotal: { type: Number, required: true },
+  deliveryCharge: { type: Number, default: 0 },
+  total: { type: Number, required: true },
+  status: { 
+    type: String, 
+    enum: ['PENDING', 'CONFIRMED', 'PROCESSING', 'SHIPPED', 'DELIVERED', 'CANCELLED'],
+    default: 'PENDING'
+  },
+  paymentMethod: { type: String, default: 'Cash on Delivery' },
+  paymentStatus: { type: String, default: 'PENDING' },
+  notes: { type: String, default: '' },
+  whatsappSent: { type: Boolean, default: false },
+  createdAt: { type: Date, default: Date.now },
+  updatedAt: { type: Date, default: Date.now }
+});
+
+const Order = mongoose.models.Order || mongoose.model('Order', orderSchema, 'orders');
+
+// -------- CUSTOMER SCHEMA --------
+const customerSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  phone: { type: String, required: true, unique: true },
+  email: { type: String, default: '' },
+  address: { type: String, default: '' },
+  totalOrders: { type: Number, default: 0 },
+  totalSpent: { type: Number, default: 0 },
+  lastOrderDate: { type: Date, default: null },
+  firstOrderDate: { type: Date, default: null },
+  status: { type: String, enum: ['NEW', 'REGULAR', 'VIP'], default: 'NEW' },
+  notes: { type: String, default: '' },
+  createdAt: { type: Date, default: Date.now },
+  updatedAt: { type: Date, default: Date.now }
+});
+
+const Customer = mongoose.models.Customer || mongoose.model('Customer', customerSchema, 'customers');
 
 // ==========================================
 // 3. API ROUTES - PRODUCTS
@@ -644,37 +686,7 @@ app.delete('/api/gallery/:id', async (req, res) => {
 // 8. API ROUTES - ORDERS
 // ==========================================
 
-const orderSchema = new mongoose.Schema({
-  orderId: { type: String, required: true, unique: true },
-  customerName: { type: String, required: true },
-  customerPhone: { type: String, required: true },
-  customerEmail: { type: String, default: '' },
-  customerAddress: { type: String, required: true },
-  items: [{
-    productId: { type: String, default: '' },
-    name: { type: String, required: true },
-    price: { type: Number, required: true },
-    quantity: { type: Number, required: true, default: 1 },
-    image: { type: String, default: '' }
-  }],
-  subtotal: { type: Number, required: true },
-  deliveryCharge: { type: Number, default: 0 },
-  total: { type: Number, required: true },
-  status: { 
-    type: String, 
-    enum: ['PENDING', 'CONFIRMED', 'PROCESSING', 'SHIPPED', 'DELIVERED', 'CANCELLED'],
-    default: 'PENDING'
-  },
-  paymentMethod: { type: String, default: 'Cash on Delivery' },
-  paymentStatus: { type: String, default: 'PENDING' },
-  notes: { type: String, default: '' },
-  whatsappSent: { type: Boolean, default: false },
-  createdAt: { type: Date, default: Date.now },
-  updatedAt: { type: Date, default: Date.now }
-});
-
-const Order = mongoose.models.Order || mongoose.model('Order', orderSchema, 'orders');
-
+// GET all orders
 app.get('/api/orders', async (req, res) => {
   try {
     console.log('📦 Fetching all orders...');
@@ -687,6 +699,7 @@ app.get('/api/orders', async (req, res) => {
   }
 });
 
+// GET single order
 app.get('/api/orders/:id', async (req, res) => {
   try {
     const order = await Order.findById(req.params.id);
@@ -700,123 +713,7 @@ app.get('/api/orders/:id', async (req, res) => {
   }
 });
 
-app.post('/api/orders', async (req, res) => {
-  try {
-    console.log('📝 Received order data:', req.body);
-    
-    const { 
-      customerName, 
-      customerPhone, 
-      customerEmail, 
-      customerAddress, 
-      items, 
-      subtotal, 
-      deliveryCharge, 
-      total,
-      paymentMethod,
-      notes 
-    } = req.body;
-
-    if (!customerName || !customerPhone || !customerAddress || !items || items.length === 0) {
-      return res.status(400).json({ error: 'Please fill in all required fields.' });
-    }
-
-    const orderId = 'ORD-' + Date.now().toString().slice(-8) + Math.floor(Math.random() * 1000).toString().padStart(3, '0');
-
-    const newOrder = new Order({
-      orderId,
-      customerName: customerName.trim(),
-      customerPhone: customerPhone.trim(),
-      customerEmail: customerEmail ? customerEmail.trim() : '',
-      customerAddress: customerAddress.trim(),
-      items: items.map(item => ({
-        productId: item.productId || '',
-        name: item.name,
-        price: Number(item.price),
-        quantity: Number(item.quantity) || 1,
-        image: item.image || ''
-      })),
-      subtotal: Number(subtotal),
-      deliveryCharge: Number(deliveryCharge) || 0,
-      total: Number(total),
-      paymentMethod: paymentMethod || 'Cash on Delivery',
-      notes: notes ? notes.trim() : '',
-      status: 'PENDING',
-      whatsappSent: false
-    });
-
-    await newOrder.save();
-    console.log('✅ Order saved successfully:', newOrder.orderId);
-    
-    res.status(201).json({
-      success: true,
-      order: newOrder,
-      message: 'Order placed successfully!'
-    });
-  } catch (err) {
-    console.error('Error saving order:', err);
-    res.status(500).json({ error: 'Failed to save order to database.' });
-  }
-});
-
-app.put('/api/orders/:id', async (req, res) => {
-  try {
-    const { status, paymentStatus, notes } = req.body;
-    const updated = await Order.findByIdAndUpdate(
-      req.params.id,
-      { 
-        status, 
-        paymentStatus, 
-        notes,
-        updatedAt: new Date()
-      },
-      { new: true }
-    );
-    
-    if (!updated) {
-      return res.status(404).json({ error: 'Order not found' });
-    }
-    
-    console.log('✏️ Order updated:', updated.orderId, 'Status:', status);
-    res.json(updated);
-  } catch (err) {
-    console.error('Error updating order:', err);
-    res.status(500).json({ error: 'Failed to update order' });
-  }
-});
-
-app.delete('/api/orders/:id', async (req, res) => {
-  try {
-    const deleted = await Order.findByIdAndDelete(req.params.id);
-    if (!deleted) {
-      return res.status(404).json({ error: 'Order not found' });
-    }
-    console.log('🗑️ Order deleted:', deleted.orderId);
-    res.json({ success: true, message: 'Order deleted successfully' });
-  } catch (err) {
-    console.error('Error deleting order:', err);
-    res.status(500).json({ error: 'Failed to delete order' });
-  }
-});
-
-app.put('/api/orders/:id/whatsapp', async (req, res) => {
-  try {
-    const updated = await Order.findByIdAndUpdate(
-      req.params.id,
-      { whatsappSent: true, updatedAt: new Date() },
-      { new: true }
-    );
-    
-    if (!updated) {
-      return res.status(404).json({ error: 'Order not found' });
-    }
-    
-    res.json({ success: true, message: 'WhatsApp status updated' });
-  } catch (err) {
-    console.error('Error updating WhatsApp status:', err);
-    res.status(500).json({ error: 'Failed to update WhatsApp status' });
-  }
-});
+// POST new order (with auto-customer creation)
 app.post('/api/orders', async (req, res) => {
   try {
     console.log('📝 Received order data:', req.body);
@@ -869,11 +766,9 @@ app.post('/api/orders', async (req, res) => {
     // AUTO-CREATE/UPDATE CUSTOMER
     // ==========================================
     try {
-      // Find existing customer
       let customer = await Customer.findOne({ phone: customerPhone });
       
       if (customer) {
-        // Update existing customer
         customer.totalOrders += 1;
         customer.totalSpent += Number(total);
         customer.lastOrderDate = new Date();
@@ -881,7 +776,6 @@ app.post('/api/orders', async (req, res) => {
         if (customerEmail) customer.email = customerEmail.trim();
         if (customerAddress) customer.address = customerAddress.trim();
         
-        // Update status based on order count
         if (customer.totalOrders >= 5) {
           customer.status = 'VIP';
         } else if (customer.totalOrders >= 2) {
@@ -894,7 +788,6 @@ app.post('/api/orders', async (req, res) => {
         await customer.save();
         console.log('✅ Customer updated:', customer.phone, 'Orders:', customer.totalOrders);
       } else {
-        // Create new customer
         const newCustomer = new Customer({
           name: customerName.trim(),
           phone: customerPhone.trim(),
@@ -912,7 +805,6 @@ app.post('/api/orders', async (req, res) => {
       }
     } catch (customerErr) {
       console.error('Error updating customer:', customerErr);
-      // Don't fail the order if customer update fails
     }
     
     res.status(201).json({
@@ -925,67 +817,78 @@ app.post('/api/orders', async (req, res) => {
     res.status(500).json({ error: 'Failed to save order to database.' });
   }
 });
-// ==========================================
-// 9. DEFAULT ROUTE - Serve index.html
-// ==========================================
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
+
+// UPDATE order status
+app.put('/api/orders/:id', async (req, res) => {
+  try {
+    const { status, paymentStatus, notes } = req.body;
+    const updated = await Order.findByIdAndUpdate(
+      req.params.id,
+      { 
+        status, 
+        paymentStatus, 
+        notes,
+        updatedAt: new Date()
+      },
+      { new: true }
+    );
+    
+    if (!updated) {
+      return res.status(404).json({ error: 'Order not found' });
+    }
+    
+    console.log('✏️ Order updated:', updated.orderId, 'Status:', status);
+    res.json(updated);
+  } catch (err) {
+    console.error('Error updating order:', err);
+    res.status(500).json({ error: 'Failed to update order' });
+  }
 });
 
-// ==========================================
-// 10. START SERVER
-// ==========================================
-const PORT = 5000;
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
-  console.log(`📦 Admin Panel: http://localhost:${PORT}/admin/dashboard.html`);
-  console.log(`🌐 Website: http://localhost:${PORT}`);
-  console.log(`📡 API: http://localhost:${PORT}/api/products`);
+// DELETE order
+app.delete('/api/orders/:id', async (req, res) => {
+  try {
+    const deleted = await Order.findByIdAndDelete(req.params.id);
+    if (!deleted) {
+      return res.status(404).json({ error: 'Order not found' });
+    }
+    console.log('🗑️ Order deleted:', deleted.orderId);
+    res.json({ success: true, message: 'Order deleted successfully' });
+  } catch (err) {
+    console.error('Error deleting order:', err);
+    res.status(500).json({ error: 'Failed to delete order' });
+  }
+});
+
+// UPDATE whatsapp sent status
+app.put('/api/orders/:id/whatsapp', async (req, res) => {
+  try {
+    const updated = await Order.findByIdAndUpdate(
+      req.params.id,
+      { whatsappSent: true, updatedAt: new Date() },
+      { new: true }
+    );
+    
+    if (!updated) {
+      return res.status(404).json({ error: 'Order not found' });
+    }
+    
+    res.json({ success: true, message: 'WhatsApp status updated' });
+  } catch (err) {
+    console.error('Error updating WhatsApp status:', err);
+    res.status(500).json({ error: 'Failed to update WhatsApp status' });
+  }
 });
 
 // ==========================================
 // 9. API ROUTES - CUSTOMERS
 // ==========================================
 
-// GET all customers (from orders)
+// GET all customers
 app.get('/api/customers', async (req, res) => {
   try {
     console.log('📦 Fetching all customers...');
-    
-    const customers = await Order.aggregate([
-      {
-        $group: {
-          _id: { 
-            phone: "$customerPhone",
-            name: "$customerName"
-          },
-          customerName: { $first: "$customerName" },
-          customerPhone: { $first: "$customerPhone" },
-          customerEmail: { $first: "$customerEmail" },
-          customerAddress: { $first: "$customerAddress" },
-          orders: { $sum: 1 },
-          totalSpent: { $sum: "$total" },
-          lastOrder: { $max: "$createdAt" },
-          firstOrder: { $min: "$createdAt" }
-        }
-      },
-      {
-        $project: {
-          _id: 0,
-          id: "$_id.phone",
-          name: "$customerName",
-          phone: "$customerPhone",
-          email: "$customerEmail",
-          address: "$customerAddress",
-          orders: 1,
-          totalSpent: 1,
-          lastOrder: 1,
-          firstOrder: 1
-        }
-      },
-      { $sort: { orders: -1 } }
-    ]);
-    
+    const customers = await Customer.find().sort({ totalOrders: -1 });
     console.log(`✅ Found ${customers.length} customers`);
     res.json(customers);
   } catch (err) {
@@ -994,16 +897,74 @@ app.get('/api/customers', async (req, res) => {
   }
 });
 
-// GET customer orders by phone
+// GET single customer by phone
+app.get('/api/customers/:phone', async (req, res) => {
+  try {
+    const customer = await Customer.findOne({ phone: req.params.phone });
+    if (!customer) {
+      return res.status(404).json({ error: 'Customer not found' });
+    }
+    res.json(customer);
+  } catch (err) {
+    console.error('Error fetching customer:', err);
+    res.status(500).json({ error: 'Failed to fetch customer' });
+  }
+});
+
+// GET customer orders
 app.get('/api/customers/:phone/orders', async (req, res) => {
   try {
     const orders = await Order.find({ customerPhone: req.params.phone }).sort({ createdAt: -1 });
     if (orders.length === 0) {
-      return res.status(404).json({ error: 'Customer not found' });
+      return res.status(404).json({ error: 'No orders found for this customer' });
     }
     res.json(orders);
   } catch (err) {
     console.error('Error fetching customer orders:', err);
     res.status(500).json({ error: 'Failed to fetch customer orders' });
   }
+});
+
+// UPDATE customer
+app.put('/api/customers/:phone', async (req, res) => {
+  try {
+    const { status, notes } = req.body;
+    const updated = await Customer.findOneAndUpdate(
+      { phone: req.params.phone },
+      { 
+        status, 
+        notes,
+        updatedAt: new Date()
+      },
+      { new: true }
+    );
+    
+    if (!updated) {
+      return res.status(404).json({ error: 'Customer not found' });
+    }
+    
+    console.log('✏️ Customer updated:', updated.phone);
+    res.json(updated);
+  } catch (err) {
+    console.error('Error updating customer:', err);
+    res.status(500).json({ error: 'Failed to update customer' });
+  }
+});
+
+// ==========================================
+// 10. DEFAULT ROUTE - Serve index.html
+// ==========================================
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+// ==========================================
+// 11. START SERVER
+// ==========================================
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`📦 Admin Panel: http://localhost:${PORT}/admin/dashboard.html`);
+  console.log(`🌐 Website: http://localhost:${PORT}`);
+  console.log(`📡 API: http://localhost:${PORT}/api/products`);
 });
