@@ -1,9 +1,7 @@
 // admin/js/products.js
 // ==========================================
-// PRODUCTS API
+// PRODUCTS API - Uses API_BASE from config.js
 // ==========================================
-
-// API_BASE is defined in config.js - DO NOT redefine it here!
 
 const PRODUCT_API_URL = `${API_BASE}/products`;
 
