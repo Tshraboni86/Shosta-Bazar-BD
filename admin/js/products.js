@@ -1,5 +1,8 @@
-const API_BASE = window.API_BASE || 'http://localhost:5000/api';
+// admin/js/products.js
+// Use the Render API URL
+const API_BASE = 'https://shosta-bazar-bd.onrender.com/api';
 const PRODUCT_API_URL = `${API_BASE}/products`;
+
 document.addEventListener('DOMContentLoaded', () => {
   // Load products table if present
   loadProducts();
@@ -7,17 +10,13 @@ document.addEventListener('DOMContentLoaded', () => {
   // Handle Form Submission
   const form = document.getElementById('addProductForm') || document.querySelector('form');
 
-  // ==========================================
-  // SKIP PRODUCT VALIDATION FOR OTHER FORMS
-  // ==========================================
+  // Skip product validation for other forms
   if (form) {
-    // Check if this is a category or gallery form
     if (form.id === 'categoryForm' || form.id === 'galleryForm') {
-      return; // Skip product validation
+      return;
     }
-    // Also check data attribute
     if (form.dataset && (form.dataset.formType === 'category' || form.dataset.formType === 'gallery')) {
-      return; // Skip product validation
+      return;
     }
   }
 
@@ -25,7 +24,6 @@ document.addEventListener('DOMContentLoaded', () => {
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
 
-      // Read values with fallbacks to avoid validation failures
       const nameEl = document.getElementById('productName') || document.querySelector('input[type="text"]');
       const priceEl = document.getElementById('productPrice') || document.querySelector('input[type="number"]');
       const categoryEl = document.getElementById('productCategory') || document.querySelector('select');
@@ -40,13 +38,11 @@ document.addEventListener('DOMContentLoaded', () => {
       const image = imageEl ? imageEl.value.trim() : '';
       const description = descEl ? descEl.value.trim() : '';
 
-      // Check if values exist
       if (!name || !price) {
         alert('Please fill out Product Name and Price.');
         return;
       }
 
-      // Show loading state
       const submitBtn = form.querySelector('button[type="submit"]');
       const originalText = submitBtn ? submitBtn.textContent : 'Save';
       if (submitBtn) {
@@ -74,18 +70,14 @@ document.addEventListener('DOMContentLoaded', () => {
           console.log('✅ Product saved:', savedProduct);
           alert('✅ Product saved successfully to MongoDB!');
           
-          // Clear form if it's an add form
           if (form.id === 'addProductForm' || !form.id) {
             form.reset();
-            // Reset image preview if exists
             const previewEl = document.getElementById('imagePreview');
             if (previewEl) previewEl.innerHTML = '';
           } else {
-            // If it's an edit form, redirect to products list
             window.location.href = 'products.html';
           }
           
-          // Reload products table if visible
           loadProducts();
         } else {
           const errData = await response.json();
@@ -93,9 +85,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       } catch (err) {
         console.error('Save Product Error:', err);
-        alert('❌ Cannot reach server. Make sure "node server.js" is running on port 5000!');
+        alert('❌ Cannot connect to backend server. Make sure "node server.js" is running!');
       } finally {
-        // Restore button state
         if (submitBtn) {
           submitBtn.textContent = originalText;
           submitBtn.disabled = false;
@@ -105,19 +96,16 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-// Fetch & Display Products on products.html Table
+// Fetch & Display Products
 async function loadProducts() {
   const tableBody = document.getElementById('productsTableBody') || document.querySelector('tbody');
   if (!tableBody) return;
 
   try {
-    // Add loading state
     tableBody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:20px;">Loading products...</td></tr>';
 
     const res = await fetch(PRODUCT_API_URL, {
-      headers: {
-        'Cache-Control': 'no-cache'
-      }
+      headers: { 'Cache-Control': 'no-cache' }
     });
     
     if (!res.ok) {
@@ -127,7 +115,7 @@ async function loadProducts() {
     const products = await res.json();
 
     if (!Array.isArray(products) || products.length === 0) {
-      tableBody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:20px; color:#888;">No products found in database. Add your first product above!</td></tr>';
+      tableBody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:20px; color:#888;">No products found.</td></tr>';
       return;
     }
 
@@ -143,17 +131,11 @@ async function loadProducts() {
         <td>৳${prod.price} ${prod.oldPrice ? `<del style="color:#888; font-size:0.85em; margin-left:4px;">৳${prod.oldPrice}</del>` : ''}</td>
         <td><span style="color:${prod.status === 'ACTIVE' ? '#28a745' : '#dc3545'}; font-weight:bold;">${prod.status || 'ACTIVE'}</span></td>
         <td>
-          <button onclick="deleteProduct('${prod._id}')" style="color:#dc3545; background:none; border:none; cursor:pointer; font-weight:500; padding:4px 8px; transition:0.2s;" onmouseover="this.style.color='#ff0000'" onmouseout="this.style.color='#dc3545'">Delete</button>
-          <button onclick="editProduct('${prod._id}')" style="color:#007bff; background:none; border:none; cursor:pointer; font-weight:500; padding:4px 8px; transition:0.2s;" onmouseover="this.style.color='#0056b3'" onmouseout="this.style.color='#007bff'">Edit</button>
+          <button onclick="deleteProduct('${prod._id}')" style="color:#dc3545; background:none; border:none; cursor:pointer; font-weight:500; padding:4px 8px;">Delete</button>
+          <button onclick="editProduct('${prod._id}')" style="color:#007bff; background:none; border:none; cursor:pointer; font-weight:500; padding:4px 8px;">Edit</button>
         </td>
       </tr>
     `).join('');
-
-    // Update product count if element exists
-    const countEl = document.getElementById('productCount');
-    if (countEl) {
-      countEl.textContent = `${products.length} products`;
-    }
 
   } catch (err) {
     console.error('Error loading products:', err);
@@ -175,30 +157,27 @@ async function deleteProduct(id) {
 
   try {
     const res = await fetch(`${PRODUCT_API_URL}/${id}`, { method: 'DELETE' });
-    
     if (res.ok) {
       alert('✅ Product deleted successfully!');
-      loadProducts(); // Reload the table
+      loadProducts();
     } else {
       const err = await res.json();
-      alert(`❌ Error deleting product: ${err.error || 'Unknown error'}`);
+      alert(`❌ Error: ${err.error || 'Unknown error'}`);
     }
   } catch (err) {
     console.error('Delete error:', err);
-    alert('❌ Failed to delete product. Make sure server is running.');
+    alert('❌ Failed to delete product.');
   }
 }
 
 // Edit Product Handler
 async function editProduct(id) {
   try {
-    // Fetch product details
     const res = await fetch(`${PRODUCT_API_URL}/${id}`);
     if (!res.ok) throw new Error('Product not found');
     
     const product = await res.json();
     
-    // Populate form fields if on edit page
     const nameEl = document.getElementById('productName');
     const priceEl = document.getElementById('productPrice');
     const categoryEl = document.getElementById('productCategory');
@@ -213,41 +192,28 @@ async function editProduct(id) {
     if (imageEl) imageEl.value = product.image || '';
     if (descEl) descEl.value = product.description || '';
     
-    // Update form action to edit mode
     const form = document.getElementById('addProductForm') || document.querySelector('form');
     if (form) {
-      // Change form title
       const formTitle = document.querySelector('h2, h3');
-      if (formTitle) {
-        formTitle.textContent = '✏️ Edit Product';
-      }
+      if (formTitle) formTitle.textContent = '✏️ Edit Product';
       
-      // Change submit button text
       const submitBtn = form.querySelector('button[type="submit"]');
-      if (submitBtn) {
-        submitBtn.textContent = 'Update Product';
-      }
+      if (submitBtn) submitBtn.textContent = 'Update Product';
       
-      // Store product ID for update
       form.dataset.editId = id;
       
-      // Change form action to update
       form.addEventListener('submit', async function(e) {
         e.preventDefault();
         const editId = this.dataset.editId;
-        if (editId) {
-          await updateProduct(editId);
-        }
+        if (editId) await updateProduct(editId);
       }, { once: true });
       
-      // Show product ID in UI
       const idDisplay = document.getElementById('productIdDisplay');
       if (idDisplay) {
         idDisplay.textContent = `Editing: ${product.name}`;
         idDisplay.style.display = 'block';
       }
       
-      // Scroll to form
       form.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
     
@@ -309,7 +275,7 @@ async function updateProduct(id) {
     }
   } catch (err) {
     console.error('Update Product Error:', err);
-    alert('❌ Cannot reach server. Make sure "node server.js" is running!');
+    alert('❌ Cannot connect to backend server. Make sure "node server.js" is running!');
   } finally {
     if (submitBtn) {
       submitBtn.textContent = originalText;
