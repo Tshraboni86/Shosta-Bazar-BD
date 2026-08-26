@@ -1,5 +1,5 @@
-const PRODUCT_API_URL = 'http://localhost:5000/api/products';
-
+const API_BASE = window.API_BASE || 'http://localhost:5000/api';
+const PRODUCT_API_URL = `${API_BASE}/products`;
 document.addEventListener('DOMContentLoaded', () => {
   // Load products table if present
   loadProducts();
