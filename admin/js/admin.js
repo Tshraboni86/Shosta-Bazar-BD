@@ -1,6 +1,6 @@
 // admin/js/admin.js
 // ==========================================
-// ADMIN UI COMPONENTS - NO AUTH REQUIRED
+// ADMIN UI COMPONENTS - WITH MOBILE TOGGLE
 // ==========================================
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -9,14 +9,42 @@ document.addEventListener("DOMContentLoaded", () => {
   //   checkAuth();
   // }
 
-  // Sidebar toggle
-  const toggleBtn = document.getElementById("sidebarToggle");
-  const sidebar = document.querySelector(".admin-sidebar");
+  // ==========================================
+  // MOBILE SIDEBAR TOGGLE (3-dot menu)
+  // ==========================================
+  const toggleBtn = document.getElementById('sidebarToggle');
+  const sidebar = document.querySelector('.admin-sidebar');
+  const mainContent = document.querySelector('.admin-main');
+  
   if (toggleBtn && sidebar) {
-    toggleBtn.addEventListener("click", () => {
-      sidebar.classList.toggle("show");
+    toggleBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      sidebar.classList.toggle('show');
+      // Also toggle a class on body for overlay
+      document.body.classList.toggle('sidebar-open');
     });
   }
+
+  // Close sidebar when clicking outside on mobile
+  document.addEventListener('click', function(e) {
+    if (window.innerWidth <= 768) {
+      const isClickInsideSidebar = sidebar && sidebar.contains(e.target);
+      const isClickOnToggle = toggleBtn && toggleBtn.contains(e.target);
+      
+      if (!isClickInsideSidebar && !isClickOnToggle && sidebar && sidebar.classList.contains('show')) {
+        sidebar.classList.remove('show');
+        document.body.classList.remove('sidebar-open');
+      }
+    }
+  });
+
+  // Close sidebar when window is resized to desktop
+  window.addEventListener('resize', function() {
+    if (window.innerWidth > 768 && sidebar) {
+      sidebar.classList.remove('show');
+      document.body.classList.remove('sidebar-open');
+    }
+  });
 
   // Dropdown UI
   const profileDropdown = document.getElementById("profileDropdownToggle");
