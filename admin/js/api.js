@@ -1,5 +1,5 @@
 // admin/js/api.js
-// Use Render API
+// Use Render API - NO localhost
 const API_BASE = 'https://shosta-bazar-bd.onrender.com/api';
 
 // ==========================================
@@ -10,6 +10,7 @@ async function populateCategoryDropdown() {
   if (!dropdown) return;
 
   try {
+    console.log('📡 Fetching categories from:', `${API_BASE}/categories`);
     const response = await fetch(`${API_BASE}/categories`, {
       headers: { 'Cache-Control': 'no-cache' }
     });
@@ -17,8 +18,9 @@ async function populateCategoryDropdown() {
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
     
     const categories = await response.json();
+    console.log('✅ Categories loaded:', categories.length);
     
-    // Clear existing options (keep first option if it's a placeholder)
+    // Clear existing options
     while (dropdown.options.length > 0) {
       dropdown.remove(0);
     }
@@ -30,17 +32,17 @@ async function populateCategoryDropdown() {
     dropdown.appendChild(defaultOption);
     
     // Add categories from database
-    categories.forEach(cat => {
-      const option = document.createElement('option');
-      option.value = cat.name;
-      option.textContent = cat.name;
-      dropdown.appendChild(option);
-    });
-    
-    console.log('✅ Categories loaded for dropdown:', categories.length);
+    if (Array.isArray(categories) && categories.length > 0) {
+      categories.forEach(cat => {
+        const option = document.createElement('option');
+        option.value = cat.name || cat;
+        option.textContent = cat.name || cat;
+        dropdown.appendChild(option);
+      });
+    }
     
   } catch (error) {
-    console.error('❌ Error fetching categories for dropdown:', error);
+    console.error('❌ Error fetching categories:', error);
     // Add fallback options if API fails
     if (dropdown.options.length === 0) {
       const fallback = ['General', 'Sarees', 'Lehenga', 'Gowns', 'Bridal', 'Salwar Kameez', 'Accessories'];
@@ -95,6 +97,7 @@ function setupProductForm() {
     }
 
     try {
+      console.log('📡 Sending to:', `${API_BASE}/products`);
       const response = await fetch(`${API_BASE}/products`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -146,6 +149,8 @@ function setupProductForm() {
 // INITIALIZE
 // ==========================================
 document.addEventListener('DOMContentLoaded', () => {
+  console.log('🚀 API.js initialized with API_BASE:', API_BASE);
+  
   // Populate category dropdown if it exists
   if (document.getElementById('productCategory')) {
     populateCategoryDropdown();
