@@ -1,10 +1,13 @@
-// Base UI Components, Modal Handlers, Sidebars & Toast System
+// admin/js/admin.js
+// ==========================================
+// ADMIN UI COMPONENTS - NO AUTH REQUIRED
+// ==========================================
 
 document.addEventListener("DOMContentLoaded", () => {
-  // Check auth on secure pages
- // if (!window.location.pathname.includes("login.html")) {
-    checkAuth();
-  }
+  // Auth check - DISABLED (no login system)
+  // if (!window.location.pathname.includes("login.html")) {
+  //   checkAuth();
+  // }
 
   // Sidebar toggle
   const toggleBtn = document.getElementById("sidebarToggle");
@@ -66,4 +69,10 @@ function showConfirmModal(message, onConfirm) {
     close();
   };
   cancelBtn.onclick = close;
+}
+
+function saveItem(key, newData) {
+  const existing = JSON.parse(localStorage.getItem(key)) || [];
+  existing.push(newData);
+  localStorage.setItem(key, JSON.stringify(existing));
 }
