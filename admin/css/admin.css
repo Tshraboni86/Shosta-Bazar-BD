@@ -114,3 +114,51 @@
     padding: 6px 8px;
   }
 }
+/* ==========================================
+   MOBILE SIDEBAR TOGGLE - ADDED
+   ========================================== */
+
+/* Mobile styles */
+@media (max-width: 768px) {
+  .admin-sidebar {
+    position: fixed;
+    top: 0;
+    left: -280px;
+    width: 280px;
+    height: 100vh;
+    z-index: 1000;
+    transition: left 0.3s ease;
+    overflow-y: auto;
+  }
+
+  .admin-sidebar.show {
+    left: 0;
+  }
+
+  /* Overlay when sidebar is open */
+  .sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 999;
+  }
+
+  .sidebar-overlay.show {
+    display: block;
+  }
+
+  /* Fix for admin-main when sidebar is open */
+  .admin-main {
+    width: 100%;
+  }
+}
+
+@media (min-width: 769px) {
+  .toggle-sidebar-btn {
+    display: none !important;
+  }
+}
