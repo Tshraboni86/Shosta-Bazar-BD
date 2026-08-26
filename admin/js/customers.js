@@ -1,4 +1,5 @@
-const CUSTOMERS_API_URL = 'http://localhost:5000/api/customers';
+const API_BASE = window.API_BASE || 'http://localhost:5000/api';
+const CUSTOMERS_API_URL = `${API_BASE}/customers`;
 let allCustomers = [];
 
 // ==========================================
