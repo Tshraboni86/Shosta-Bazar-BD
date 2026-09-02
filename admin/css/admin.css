@@ -170,6 +170,8 @@ a {
   cursor: pointer;
   display: none;
   color: var(--admin-charcoal);
+  font-size: 24px;
+  padding: 4px 8px;
 }
 
 .nav-right {
@@ -435,18 +437,132 @@ a {
   to { transform: translateX(0); }
 }
 
-/* Responsive */
-@media (max-width: 992px) {
+/* ==========================================
+   MOBILE SIDEBAR TOGGLE - ADDED ONLY
+   ========================================== */
+
+/* Hide toggle button on desktop */
+@media (min-width: 769px) {
+  .toggle-sidebar-btn {
+    display: none !important;
+  }
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
   .admin-sidebar {
-    transform: translateX(-100%);
+    position: fixed;
+    top: 0;
+    left: -280px;
+    width: 280px;
+    height: 100vh;
+    z-index: 1000;
+    transition: left 0.3s ease;
+    overflow-y: auto;
   }
+
   .admin-sidebar.show {
-    transform: translateX(0);
+    left: 0;
   }
+
+  /* Overlay when sidebar is open */
+  .sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 999;
+  }
+
+  .sidebar-overlay.show {
+    display: block;
+  }
+
   .admin-main {
     margin-left: 0;
+    width: 100%;
   }
+
   .toggle-sidebar-btn {
-    display: block;
+    display: block !important;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 4px 8px;
+    color: var(--admin-charcoal);
+  }
+
+  .admin-navbar {
+    padding: 0 15px;
+  }
+
+  .nav-left h2 {
+    font-size: 1rem;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .stat-card {
+    padding: 12px;
+  }
+
+  .stat-card .value {
+    font-size: 1.2rem;
+  }
+
+  .admin-table th,
+  .admin-table td {
+    padding: 8px 10px;
+    font-size: 0.75rem;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-main {
+    padding: 10px;
+  }
+
+  .content-body {
+    padding: 12px;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .stat-card {
+    padding: 10px;
+  }
+
+  .stat-card .value {
+    font-size: 1rem;
+  }
+
+  .stat-card .label {
+    font-size: 0.6rem;
+  }
+
+  .admin-navbar h2 {
+    font-size: 0.85rem;
+  }
+
+  .admin-table th,
+  .admin-table td {
+    padding: 4px 6px;
+    font-size: 0.65rem;
+  }
+
+  .modal-container {
+    margin: 10px;
+    padding: 15px;
   }
 }

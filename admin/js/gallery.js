@@ -1,37 +1,110 @@
-const GALLERY_API_URL = 'http://localhost:5000/api/gallery';
+// admin/js/gallery.js
+// ==========================================
+// GALLERY API
+// ==========================================
+
+// API_BASE comes from config.js
+const GALLERY_API_URL = `${API_BASE}/gallery`;
+
+console.log('🔗 GALLERY_API_URL:', GALLERY_API_URL);
 
 // ==========================================
-// HANDLE IMAGE UPLOAD
+// COMPRESS IMAGE BEFORE UPLOAD
 // ==========================================
-function handleGalleryImageUpload(input) {
+function compressImage(file, maxWidth = 800, maxHeight = 800, quality = 0.7) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = function(e) {
+      const img = new Image();
+      img.src = e.target.result;
+      img.onload = function() {
+        let width = img.width;
+        let height = img.height;
+        
+        // Calculate new dimensions
+        if (width > maxWidth) {
+          height = (height * maxWidth) / width;
+          width = maxWidth;
+        }
+        if (height > maxHeight) {
+          width = (width * maxHeight) / height;
+          height = maxHeight;
+        }
+        
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+        
+        // Compress as JPEG
+        const compressedDataUrl = canvas.toDataURL('image/jpeg', quality);
+        resolve(compressedDataUrl);
+      };
+      img.onerror = reject;
+    };
+    reader.onerror = reject;
+  });
+}
+
+// ==========================================
+// HANDLE IMAGE UPLOAD WITH COMPRESSION
+// ==========================================
+async function handleGalleryImageUpload(input) {
   const file = input.files[0];
   if (!file) return;
 
-  const reader = new FileReader();
-  reader.onload = function(e) {
+  // Check file size (limit to 5MB before compression)
+  if (file.size > 5 * 1024 * 1024) {
+    alert('Image is too large! Please choose an image under 5MB.');
+    input.value = '';
+    return;
+  }
+
+  try {
+    // Show loading state
     const preview = document.getElementById('galleryPreview');
-    preview.innerHTML = `<img src="${e.target.result}" style="width:100%; height:100%; object-fit:cover;">`;
-    document.getElementById('galleryImageUrl').value = e.target.result;
-  };
-  reader.readAsDataURL(file);
+    preview.innerHTML = '<span class="placeholder">Compressing image...</span>';
+    
+    // Compress the image
+    const compressedDataUrl = await compressImage(file, 800, 800, 0.7);
+    
+    // Update preview
+    preview.innerHTML = `<img src="${compressedDataUrl}" style="width:100%; height:100%; object-fit:cover;">`;
+    document.getElementById('galleryImageUrl').value = compressedDataUrl;
+    
+    console.log('✅ Image compressed and ready for upload');
+  } catch (error) {
+    console.error('Error compressing image:', error);
+    alert('Error processing image. Please try again.');
+    input.value = '';
+  }
 }
 
 // ==========================================
 // OPEN MODAL
 // ==========================================
 function openGalleryModal() {
-  document.getElementById('galleryModal').style.display = 'flex';
-  document.getElementById('galleryForm').reset();
-  document.getElementById('galleryPreview').innerHTML = '<span class="placeholder">No image selected</span>';
-  document.getElementById('galleryImageUrl').value = '';
+  const modal = document.getElementById('galleryModal');
+  if (modal) {
+    modal.style.display = 'flex';
+    document.getElementById('galleryForm').reset();
+    document.getElementById('galleryPreview').innerHTML = '<span class="placeholder">No image selected</span>';
+    document.getElementById('galleryImageUrl').value = '';
+    document.getElementById('galleryFileInput').value = '';
+  }
 }
 
 // ==========================================
 // CLOSE MODAL
 // ==========================================
 function closeGalleryModal() {
-  document.getElementById('galleryModal').style.display = 'none';
-  document.getElementById('galleryForm').reset();
+  const modal = document.getElementById('galleryModal');
+  if (modal) {
+    modal.style.display = 'none';
+    document.getElementById('galleryForm').reset();
+  }
 }
 
 // ==========================================
@@ -44,6 +117,8 @@ async function loadGallery() {
   try {
     grid.innerHTML = '<div class="empty-gallery">Loading images...</div>';
 
+    console.log('📡 Fetching from:', GALLERY_API_URL);
+    
     const res = await fetch(GALLERY_API_URL, {
       headers: { 'Cache-Control': 'no-cache' }
     });
@@ -51,6 +126,7 @@ async function loadGallery() {
     if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
     
     const images = await res.json();
+    console.log('✅ Gallery images loaded:', images.length);
 
     if (!Array.isArray(images) || images.length === 0) {
       grid.innerHTML = `
@@ -72,7 +148,7 @@ async function loadGallery() {
     `).join('');
 
   } catch (err) {
-    console.error('Error loading gallery:', err);
+    console.error('❌ Error loading gallery:', err);
     grid.innerHTML = `
       <div class="empty-gallery" style="color:#dc3545;">
         ⚠️ Failed to load gallery images.
@@ -108,6 +184,9 @@ async function deleteGalleryImage(id) {
 // INITIALIZE
 // ==========================================
 document.addEventListener('DOMContentLoaded', function() {
+  console.log('🚀 Gallery.js initialized');
+  console.log('🔗 GALLERY_API_URL:', GALLERY_API_URL);
+  
   loadGallery();
 
   // Add Image Button
@@ -115,6 +194,7 @@ document.addEventListener('DOMContentLoaded', function() {
   if (addBtn) {
     addBtn.addEventListener('click', function(e) {
       e.preventDefault();
+      console.log('➕ Add Image button clicked');
       openGalleryModal();
     });
   }
@@ -137,25 +217,11 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  // ==========================================
-  // GALLERY FORM SUBMIT - FIXED
-  // ==========================================
+  // Submit Form
   const form = document.getElementById('galleryForm');
   if (form) {
-    // Remove any existing submit listeners
-    const newForm = form.cloneNode(true);
-    form.parentNode.replaceChild(newForm, form);
-    
-    newForm.addEventListener('submit', async function(e) {
+    form.addEventListener('submit', async function(e) {
       e.preventDefault();
-      e.stopPropagation();
-      
-      // Stop event from bubbling to products.js
-      if (e.stopImmediatePropagation) {
-        e.stopImmediatePropagation();
-      }
-      
-      console.log('Gallery form submitted');
 
       const title = document.getElementById('galleryTitle').value.trim();
       const imageUrl = document.getElementById('galleryImageUrl').value.trim();
@@ -171,6 +237,8 @@ document.addEventListener('DOMContentLoaded', function() {
       submitBtn.disabled = true;
 
       try {
+        console.log('📡 Sending to:', GALLERY_API_URL);
+        
         const response = await fetch(GALLERY_API_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -186,7 +254,7 @@ document.addEventListener('DOMContentLoaded', function() {
           alert(`❌ Error: ${errData.error || 'Failed to save image.'}`);
         }
       } catch (err) {
-        console.error('Save error:', err);
+        console.error('❌ Save error:', err);
         alert('❌ Server unreachable. Make sure "node server.js" is running!');
       } finally {
         submitBtn.textContent = originalText;

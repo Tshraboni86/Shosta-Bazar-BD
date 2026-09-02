@@ -1,285 +1,416 @@
-const API_URL = 'http://localhost:5000/api';
+// admin/js/api.js
+// ==========================================
+// API CONFIGURATION - RENDER BACKEND
+// ==========================================
+// Replace this line:
+// const API_BASE = 'https://shosta-bazar-bd.onrender.com/api';
+
+// With this:
+var API_BASE = window.API_BASE || 'https://shosta-bazar-bd.onrender.com/api';
+
+console.log('🔗 API_BASE:', API_BASE);
 
 // ==========================================
-// 1. INITIALIZATION ON PAGE LOAD
+// CATEGORY DROPDOWN POPULATOR
 // ==========================================
-document.addEventListener('DOMContentLoaded', () => {
-  loadCategories();
-  loadProducts();
-  populateCategoryDropdown();
-});
-
-// ==========================================
-// 2. CATEGORIES LOGIC
-// ==========================================
-async function loadCategories() {
-  const tableBody = document.getElementById('categoriesTableBody');
-  if (!tableBody) return;
+async function populateCategoryDropdown() {
+  const dropdown = document.getElementById('productCategory');
+  if (!dropdown) {
+    console.log('⚠️ Category dropdown not found on this page');
+    return;
+  }
 
   try {
-    const response = await fetch(`${API_URL}/categories`);
+    console.log('📡 Fetching categories from:', `${API_BASE}/categories`);
+    
+    const response = await fetch(`${API_BASE}/categories`, {
+      headers: { 'Cache-Control': 'no-cache' }
+    });
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
     const categories = await response.json();
+    console.log('✅ Categories loaded:', categories.length);
+    
+    // Clear existing options
+    while (dropdown.options.length > 0) {
+      dropdown.remove(0);
+    }
+    
+    // Add default option
+    const defaultOption = document.createElement('option');
+    defaultOption.value = 'General';
+    defaultOption.textContent = '-- Select Category --';
+    dropdown.appendChild(defaultOption);
+    
+    // Add categories from database
+    if (Array.isArray(categories) && categories.length > 0) {
+      categories.forEach(cat => {
+        const option = document.createElement('option');
+        option.value = cat.name || cat;
+        option.textContent = cat.name || cat;
+        dropdown.appendChild(option);
+      });
+    }
+    
+  } catch (error) {
+    console.error('❌ Error fetching categories:', error);
+    
+    // Add fallback options if API fails
+    if (dropdown.options.length === 0) {
+      const fallback = ['General', 'Sarees', 'Lehenga', 'Gowns', 'Bridal', 'Salwar Kameez', 'Accessories'];
+      fallback.forEach(cat => {
+        const option = document.createElement('option');
+        option.value = cat;
+        option.textContent = cat;
+        dropdown.appendChild(option);
+      });
+    }
+  }
+}
 
-    if (!categories || categories.length === 0) {
-      tableBody.innerHTML = `
-        <tr>
-          <td colspan="5" style="text-align: center; padding: 20px;">
-            No categories found in MongoDB. Click <strong>+ ADD CATEGORY</strong> to create one.
-          </td>
-        </tr>`;
+// ==========================================
+// PRODUCT FORM SUBMIT HANDLER
+// ==========================================
+function setupProductForm() {
+  const form = document.getElementById('addProductForm') || document.querySelector('form');
+  if (!form) {
+    console.log('⚠️ Product form not found on this page');
+    return;
+  }
+  
+  // Skip if this is not a product form
+  if (form.id === 'categoryForm' || form.id === 'galleryForm') {
+    console.log('⏭️ Skipping non-product form');
+    return;
+  }
+  if (form.dataset && (form.dataset.formType === 'category' || form.dataset.formType === 'gallery')) {
+    console.log('⏭️ Skipping non-product form (data attribute)');
+    return;
+  }
+
+  console.log('📝 Setting up product form submit handler');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    // Check if form is currently in edit mode
+    const editId = form.dataset.editId;
+    if (editId) {
+      await updateProduct(editId);
       return;
     }
 
-    tableBody.innerHTML = categories.map(cat => `
-      <tr>
-        <td><div style="width:30px; height:30px; background:#c5a059; border-radius:4px;"></div></td>
-        <td><strong>${cat.name}</strong></td>
-        <td>0 Designs</td>
-        <td><span style="background:#e6f4ea; color:#137333; padding:4px 8px; border-radius:4px; font-size:12px; font-weight:bold;">ACTIVE</span></td>
-        <td>
-          <button onclick="deleteCategory('${cat._id}')" style="color:red; border:none; background:none; cursor:pointer; font-weight:bold;">
-            Delete
-          </button>
-        </td>
-      </tr>
-    `).join('');
-  } catch (err) {
-    console.error('Fetch categories error:', err);
-  }
-}
+    const nameEl = document.getElementById('productName') || document.querySelector('input[type="text"]');
+    const priceEl = document.getElementById('productPrice') || document.querySelector('input[type="number"]');
+    const categoryEl = document.getElementById('productCategory') || document.querySelector('select');
+    const oldPriceEl = document.getElementById('productOldPrice');
+    const imageEl = document.getElementById('productImage');
+    const descEl = document.getElementById('productDescription') || document.querySelector('textarea');
 
-async function deleteCategory(id) {
-  if (confirm('Are you sure you want to delete this category?')) {
-    try {
-      await fetch(`${API_URL}/categories/${id}`, { method: 'DELETE' });
-      loadCategories();
-      populateCategoryDropdown();
-    } catch (err) {
-      alert('Failed to delete category.');
+    const name = nameEl ? nameEl.value.trim() : '';
+    const price = priceEl ? priceEl.value.trim() : '';
+    const category = categoryEl ? categoryEl.value : 'General';
+    const oldPrice = oldPriceEl ? oldPriceEl.value.trim() : 0;
+    const image = imageEl ? imageEl.value.trim() : '';
+    const description = descEl ? descEl.value.trim() : '';
+
+    if (!name || !price) {
+      alert('Please fill out Product Name and Price.');
+      return;
     }
-  }
-}
 
-// Global click delegation for Category modal / prompt trigger
-document.addEventListener('click', async (e) => {
-  const target = e.target.closest('button, a');
-  if (target && (target.id === 'addCategoryBtn' || target.textContent.includes('ADD CATEGORY'))) {
-    e.preventDefault();
-    const categoryName = prompt('Enter new category name:');
-    if (!categoryName || categoryName.trim() === '') return;
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const originalText = submitBtn ? submitBtn.textContent : 'Save';
+    if (submitBtn) {
+      submitBtn.textContent = 'Saving...';
+      submitBtn.disabled = true;
+    }
 
     try {
-      const response = await fetch(`${API_URL}/categories`, {
+      console.log('📡 Sending product to:', `${API_BASE}/products`);
+      
+      const response = await fetch(`${API_BASE}/products`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: categoryName.trim() })
+        body: JSON.stringify({
+          name,
+          category,
+          price: Number(price),
+          oldPrice: Number(oldPrice) || 0,
+          image,
+          description,
+          status: 'ACTIVE'
+        })
       });
 
       if (response.ok) {
-        alert('✅ Category saved to Database!');
-        loadCategories();
-        populateCategoryDropdown();
+        const savedProduct = await response.json();
+        console.log('✅ Product saved:', savedProduct);
+        alert('✅ Product saved successfully!');
+        
+        if (form.id === 'addProductForm' || !form.id) {
+          form.reset();
+          const previewEl = document.getElementById('imagePreview');
+          if (previewEl) previewEl.innerHTML = '';
+        } else {
+          window.location.href = 'products.html';
+        }
+        
+        // Reload products table if visible
+        if (typeof loadProductsTable === 'function') {
+          loadProductsTable();
+        }
       } else {
-        alert('❌ Failed to save category to database.');
+        const errData = await response.json();
+        alert(`❌ Error: ${errData.error || 'Failed to save product.'}`);
       }
     } catch (err) {
-      console.error('Error saving category:', err);
-      alert('❌ Cannot connect to backend server!');
+      console.error('❌ Save error:', err);
+      alert('❌ Cannot connect to backend server. Make sure your Render server is running!');
+    } finally {
+      if (submitBtn) {
+        submitBtn.textContent = originalText;
+        submitBtn.disabled = false;
+      }
     }
-  }
-});
-
-// ==========================================
-// 3. PRODUCTS LOGIC
-// ==========================================
-
-// Populate Category <select> dropdown in product form dynamically from MongoDB
-async function populateCategoryDropdown() {
-  const categorySelect = document.getElementById('productCategory') || document.querySelector('select[name="category"]');
-  if (!categorySelect) return;
-
-  try {
-    const res = await fetch(`${API_URL}/categories`);
-    const categories = await res.json();
-
-    categorySelect.innerHTML = '<option value="">Select Category</option>' + 
-      categories.map(cat => `<option value="${cat.name}">${cat.name}</option>`).join('');
-  } catch (err) {
-    console.error('Error fetching categories for dropdown:', err);
-  }
+  });
 }
 
-// Load and display products from MongoDB into table
-async function loadProducts() {
-  const tableBody = document.getElementById('productsTableBody');
-  if (!tableBody) return;
+// ==========================================
+// LOAD PRODUCTS TABLE
+// ==========================================
+async function loadProductsTable() {
+  const tableBody = document.getElementById('productsTableBody') || document.querySelector('tbody');
+  if (!tableBody) {
+    console.log('⚠️ Products table body not found');
+    return;
+  }
 
   try {
-    const response = await fetch(`${API_URL}/products`);
+    console.log('📡 Fetching products from:', `${API_BASE}/products`);
+    
+    const response = await fetch(`${API_BASE}/products`, {
+      headers: { 'Cache-Control': 'no-cache' }
+    });
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
     const products = await response.json();
+    console.log('✅ Products loaded:', products.length);
 
-    if (!products || products.length === 0) {
-      tableBody.innerHTML = `
-        <tr>
-          <td colspan="5" style="text-align: center; padding: 20px;">
-            No products found in database. Add a product to get started.
-          </td>
-        </tr>`;
+    if (!Array.isArray(products) || products.length === 0) {
+      tableBody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:20px; color:#888;">No products found.</td></tr>';
       return;
     }
 
     tableBody.innerHTML = products.map(prod => `
       <tr>
         <td>
-          <img src="${prod.image || 'https://via.placeholder.com/40'}" 
-               alt="${prod.name}" 
-               style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px;">
+          <div style="width:50px; height:50px; background:#f0f0f0; border-radius:4px; overflow:hidden; display:flex; align-items:center; justify-content:center;">
+            ${prod.image ? `<img src="${prod.image}" style="width:100%; height:100%; object-fit:cover;" onerror="this.style.display='none'">` : '<span style="color:#ccc; font-size:10px;">No image</span>'}
+          </div>
         </td>
-        <td><strong>${prod.name}</strong></td>
-        <td>${prod.category || 'N/A'}</td>
-        <td>৳${prod.price}</td>
+        <td style="font-weight:600;">${prod.name}</td>
+        <td>${prod.category || 'General'}</td>
+        <td>৳${prod.price} ${prod.oldPrice ? `<del style="color:#888; font-size:0.85em; margin-left:4px;">৳${prod.oldPrice}</del>` : ''}</td>
+        <td><span style="color:${prod.status === 'ACTIVE' ? '#28a745' : '#dc3545'}; font-weight:bold;">${prod.status || 'ACTIVE'}</span></td>
         <td>
-          <button onclick="deleteProduct('${prod._id}')" 
-                  style="color: red; border: none; background: none; cursor: pointer; font-weight: bold;">
-            Delete
-          </button>
+          <button onclick="deleteProduct('${prod._id}')" style="color:#dc3545; background:none; border:none; cursor:pointer; font-weight:500; padding:4px 8px;">Delete</button>
+          <button onclick="editProduct('${prod._id}')" style="color:#007bff; background:none; border:none; cursor:pointer; font-weight:500; padding:4px 8px;">Edit</button>
         </td>
       </tr>
     `).join('');
+
   } catch (err) {
-    console.error('Error loading products:', err);
+    console.error('❌ Error loading products:', err);
+    tableBody.innerHTML = `
+      <tr>
+        <td colspan="6" style="text-align:center; padding:20px; color:#dc3545;">
+          ⚠️ Failed to load products. Make sure server is running.
+          <br>
+          <button onclick="loadProductsTable()" style="margin-top:10px; padding:6px 16px; background:#511824; color:white; border:none; border-radius:4px; cursor:pointer;">Retry</button>
+        </td>
+      </tr>
+    `;
   }
 }
 
-// Delete product from MongoDB
+// ==========================================
+// DELETE PRODUCT
+// ==========================================
 async function deleteProduct(id) {
-  if (confirm('Are you sure you want to delete this product?')) {
-    try {
-      await fetch(`${API_URL}/products/${id}`, { method: 'DELETE' });
-      loadProducts();
-    } catch (err) {
-      alert('Failed to delete product.');
+  if (!confirm('Are you sure you want to delete this product?')) return;
+  
+  try {
+    const response = await fetch(`${API_BASE}/products/${id}`, {
+      method: 'DELETE'
+    });
+    
+    if (response.ok) {
+      alert('✅ Product deleted successfully!');
+      loadProductsTable();
+    } else {
+      const err = await response.json();
+      alert(`❌ Error: ${err.error || 'Failed to delete product'}`);
+    }
+  } catch (err) {
+    console.error('❌ Delete error:', err);
+    alert('❌ Failed to delete product.');
+  }
+}
+
+// ==========================================
+// EDIT PRODUCT
+// ==========================================
+async function editProduct(id) {
+  try {
+    const response = await fetch(`${API_BASE}/products/${id}`);
+    if (!response.ok) throw new Error('Product not found');
+    
+    const product = await response.json();
+    
+    const nameEl = document.getElementById('productName');
+    const priceEl = document.getElementById('productPrice');
+    const categoryEl = document.getElementById('productCategory');
+    const oldPriceEl = document.getElementById('productOldPrice');
+    const imageEl = document.getElementById('productImage');
+    const descEl = document.getElementById('productDescription');
+    
+    if (nameEl) nameEl.value = product.name;
+    if (priceEl) priceEl.value = product.price;
+    if (categoryEl) categoryEl.value = product.category || 'General';
+    if (oldPriceEl) oldPriceEl.value = product.oldPrice || '';
+    if (imageEl) imageEl.value = product.image || '';
+    if (descEl) descEl.value = product.description || '';
+    
+    const form = document.getElementById('addProductForm') || document.querySelector('form');
+    if (form) {
+      const formTitle = document.querySelector('h2, h3');
+      if (formTitle) formTitle.textContent = '✏️ Edit Product';
+      
+      const submitBtn = form.querySelector('button[type="submit"]');
+      if (submitBtn) submitBtn.textContent = 'Update Product';
+      
+      form.dataset.editId = id;
+      form.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  } catch (err) {
+    console.error('❌ Edit error:', err);
+    alert('❌ Failed to load product details for editing.');
+  }
+}
+
+// ==========================================
+// UPDATE PRODUCT
+// ==========================================
+async function updateProduct(id) {
+  const nameEl = document.getElementById('productName');
+  const priceEl = document.getElementById('productPrice');
+  const categoryEl = document.getElementById('productCategory');
+  const oldPriceEl = document.getElementById('productOldPrice');
+  const imageEl = document.getElementById('productImage');
+  const descEl = document.getElementById('productDescription');
+
+  const name = nameEl ? nameEl.value.trim() : '';
+  const price = priceEl ? priceEl.value.trim() : '';
+  const category = categoryEl ? categoryEl.value : 'General';
+  const oldPrice = oldPriceEl ? oldPriceEl.value.trim() : 0;
+  const image = imageEl ? imageEl.value.trim() : '';
+  const description = descEl ? descEl.value.trim() : '';
+
+  if (!name || !price) {
+    alert('Please fill out Product Name and Price.');
+    return;
+  }
+
+  const form = document.getElementById('addProductForm') || document.querySelector('form');
+  const submitBtn = document.querySelector('button[type="submit"]');
+  const originalText = submitBtn ? submitBtn.textContent : 'Update';
+  if (submitBtn) {
+    submitBtn.textContent = 'Updating...';
+    submitBtn.disabled = true;
+  }
+
+  try {
+    const response = await fetch(`${API_BASE}/products/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name,
+        category,
+        price: Number(price),
+        oldPrice: Number(oldPrice) || 0,
+        image,
+        description,
+        status: 'ACTIVE'
+      })
+    });
+
+    if (response.ok) {
+      alert('✅ Product updated successfully!');
+      
+      if (form && form.dataset) {
+        delete form.dataset.editId;
+      }
+      
+      if (form && (form.id === 'addProductForm' || !form.id)) {
+        form.reset();
+        const formTitle = document.querySelector('h2, h3');
+        if (formTitle) formTitle.textContent = '➕ Add New Product';
+        if (submitBtn) submitBtn.textContent = 'Save Product';
+        
+        if (typeof loadProductsTable === 'function') {
+          loadProductsTable();
+        }
+      } else {
+        window.location.href = 'products.html';
+      }
+    } else {
+      const errData = await response.json();
+      alert(`❌ Error: ${errData.error || 'Failed to update product.'}`);
+    }
+  } catch (err) {
+    console.error('❌ Update error:', err);
+    alert('❌ Cannot connect to backend server. Make sure your Render server is running!');
+  } finally {
+    if (submitBtn) {
+      submitBtn.textContent = originalText;
+      submitBtn.disabled = false;
     }
   }
 }
 
-// High-priority Form Listener (Captures submit event before mock JS handles it)
-document.addEventListener('submit', async (e) => {
-  const form = e.target;
-
-  // Intercept form submission if form contains product fields or has addProductForm ID
-  if (form && (form.id === 'addProductForm' || form.querySelector('#productName') || form.action.includes('product'))) {
-    e.preventDefault();
-    e.stopImmediatePropagation(); // Stops mock-data.js or admin.js from firing
-
-    // Utility function to extract value from inputs dynamically
-    const getValue = (selector) => {
-      const el = form.querySelector(selector);
-      return el ? el.value.trim() : '';
-    };
-
-    const productData = {
-      name: getValue('#productName') || getValue('input[name="name"]') || getValue('input[placeholder*="Name"]'),
-      price: Number(getValue('#productPrice') || getValue('input[name="price"]') || getValue('input[placeholder*="Price"]')),
-      category: getValue('#productCategory') || getValue('select[name="category"]') || getValue('select'),
-      image: getValue('#productImage') || getValue('input[name="image"]') || getValue('input[type="text"][placeholder*="Image"]'),
-      description: getValue('#productDescription') || getValue('textarea')
-    };
-
-    if (!productData.name || !productData.price) {
-      alert('Please fill out Product Name and Price.');
-      return;
-    }
-
-    try {
-      const response = await fetch(`${API_URL}/products`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(productData)
-      });
-
-      if (response.ok) {
-        alert('✅ Product saved directly to MongoDB!');
-        form.reset();
-        loadProducts();
-      } else {
-        const errorData = await response.json();
-        alert(`❌ Database Error: ${errorData.error || 'Failed to save product.'}`);
-      }
-    } catch (err) {
-      console.error('Save error:', err);
-      alert('❌ Cannot connect to backend server. Make sure "node server.js" is running!');
-    }
-  }
-}, true); // Captured phase active
-// Dynamic Form Listener for Add Product
-document.addEventListener('submit', async (e) => {
-  const form = e.target;
+// ==========================================
+// INITIALIZE
+// ==========================================
+document.addEventListener('DOMContentLoaded', () => {
+  console.log('🚀 API.js initialized');
+  console.log('🔗 API_BASE:', API_BASE);
   
-  // Intercept if form contains a submit button or is on product-add page
-  if (form && (form.id === 'addProductForm' || form.querySelector('button[type="submit"]') || form.querySelector('#productName'))) {
-    e.preventDefault();
-
-    // Helper function to search input fields by ID, Name, or Placeholder
-    const getInputValue = (query) => {
-      const el = form.querySelector(query);
-      return el ? el.value.trim() : '';
-    };
-
-    // Grab field values dynamically using multiple selector fallbacks
-    const name = getInputValue('#productName') || 
-                 getInputValue('[name="name"]') || 
-                 getInputValue('[name="title"]') || 
-                 getInputValue('input[placeholder*="Name"]') || 
-                 getInputValue('input[type="text"]');
-
-    const priceVal = getInputValue('#productPrice') || 
-                     getInputValue('[name="price"]') || 
-                     getInputValue('input[placeholder*="Price"]');
-
-    const category = getInputValue('#productCategory') || 
-                     getInputValue('[name="category"]') || 
-                     getInputValue('select');
-
-    const image = getInputValue('#productImage') || 
-                  getInputValue('[name="image"]') || 
-                  getInputValue('input[type="text"][placeholder*="Image"]') || '';
-
-    const description = getInputValue('#productDescription') || 
-                        getInputValue('[name="description"]') || 
-                        getInputValue('textarea') || '';
-
-    const price = Number(priceVal);
-
-    // Validation check
-    if (!name || isNaN(price) || price <= 0) {
-      alert('Please fill out Product Name and a valid Price.');
-      return;
-    }
-
-    try {
-      const response = await fetch(`${API_URL}/products`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          name, 
-          price, 
-          category: category || 'General', 
-          image, 
-          description 
-        })
-      });
-
-      if (response.ok) {
-        alert('✅ Product saved directly to MongoDB!');
-        window.location.href = 'products.html'; // Redirect to products table
-      } else {
-        const err = await response.json();
-        alert(`❌ Error: ${err.error || 'Failed to save product'}`);
-      }
-    } catch (err) {
-      console.error('Fetch error:', err);
-      alert('❌ Cannot reach backend server. Ensure "node server.js" is running!');
-    }
+  // Populate category dropdown if it exists
+  if (document.getElementById('productCategory')) {
+    populateCategoryDropdown();
+  }
+  
+  // Setup product form
+  setupProductForm();
+  
+  // Load products table if it exists
+  if (document.getElementById('productsTableBody') || document.querySelector('tbody')) {
+    loadProductsTable();
   }
 });
+
+// ==========================================
+// GLOBAL FUNCTIONS
+// ==========================================
+window.populateCategoryDropdown = populateCategoryDropdown;
+window.loadProductsTable = loadProductsTable;
+window.deleteProduct = deleteProduct;
+window.editProduct = editProduct;
+window.updateProduct = updateProduct;

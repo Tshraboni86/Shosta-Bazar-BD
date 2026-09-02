@@ -922,7 +922,11 @@
   <section class="about" id="about">
     <div class="wrap about-grid">
       <div class="about-media reveal">
+<<<<<<< HEAD
         <div class="swatch" style="--ar:4/5; background: url('https://images.unsplash.com/photo-1631233839294-f06077977469?q=80&w=1200') center/cover no-repeat;">
+=======
+        <div class="swatch" style="--ar:4/5; background: url('images/im1.png;">
+>>>>>>> 4dbb591fc23a835749ba972a5ab2be809e7d3fdb
           <span class="swatch-label"> Dhaka</span>
         </div>
         <div class="frame"></div>
@@ -1176,9 +1180,14 @@
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
 </button>
 
+
 <script>
 // ==========================================
+<<<<<<< HEAD
 // API CONFIGURATION
+=======
+// API CONFIGURATION - DIRECT HARDCODE
+>>>>>>> 4dbb591fc23a835749ba972a5ab2be809e7d3fdb
 // ==========================================
 const API_BASE = 'https://shosta-bazar-bd.onrender.com/api';
 console.log('🔗 API_BASE:', API_BASE);
@@ -1330,6 +1339,7 @@ window.removeFromCart = removeFromCart;
 window.updateQuantity = updateQuantity;
 
 // ==========================================
+<<<<<<< HEAD
 // PRODUCT DETAIL MODAL
 // ==========================================
 let currentProductImages = [];
@@ -1524,6 +1534,21 @@ function renderProductPageProducts(products) {
   }
   
   productPageGrid.innerHTML = products.map((p, i) => {
+=======
+// FETCH PRODUCTS
+// ==========================================
+let allProducts = [];
+const productGrid = document.getElementById("productGrid");
+const fmt = n => "৳ " + Number(n).toLocaleString("en-IN");
+
+function renderProducts(filter = "All") {
+  const filtered = filter === "All" ? allProducts : allProducts.filter(p => p.category === filter);
+  if (filtered.length === 0) {
+    productGrid.innerHTML = `<div class="no-products"><h3>No products found</h3><p>Check back later.</p></div>`;
+    return;
+  }
+  productGrid.innerHTML = filtered.map((p, i) => {
+>>>>>>> 4dbb591fc23a835749ba972a5ab2be809e7d3fdb
     const tag = p.status === 'ACTIVE' ? 'New' : '';
     return `
       <div class="product-card reveal in" data-cat="${p.category || 'General'}" data-product='${JSON.stringify(p).replace(/'/g,"&#39;")}'>
@@ -1541,9 +1566,13 @@ function renderProductPageProducts(products) {
       </div>
     `;
   }).join('');
+<<<<<<< HEAD
   
   // Quick-add listeners
   document.querySelectorAll('#productPageGrid .quick-add').forEach(btn => {
+=======
+  document.querySelectorAll('.quick-add').forEach(btn => {
+>>>>>>> 4dbb591fc23a835749ba972a5ab2be809e7d3fdb
     btn.addEventListener('click', function(e) {
       e.stopPropagation();
       const product = {
@@ -1586,6 +1615,7 @@ let bridalTimer = null;
 
 async function fetchBridalSlides() {
   try {
+<<<<<<< HEAD
     const response = await fetch(`${API_BASE}/bridal-slides`);
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
     const slides = await response.json();
@@ -1667,6 +1697,59 @@ function startBridalTimer() {
   clearInterval(bridalTimer);
   if (bridalSlides.length > 1) {
     bridalTimer = setInterval(() => moveBridalSlide(1), 4000);
+=======
+    productGrid.innerHTML = `<div class="loading-spinner"><div class="spinner"></div></div>`;
+    const response = await fetch(`${API_BASE}/products`);
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    allProducts = await response.json();
+    console.log('✅ Products loaded:', allProducts.length);
+    const activeFilter = document.querySelector('#filterTabs .active');
+    renderProducts(activeFilter ? activeFilter.dataset.filter : 'All');
+  } catch (error) {
+    console.error('❌ Error fetching products:', error);
+    productGrid.innerHTML = `<div class="no-products"><h3>⚠️ Could not load products</h3><p>Make sure backend is running.</p><button onclick="fetchProducts()" style="margin-top:16px;padding:10px 24px;background:var(--maroon-800);color:var(--ivory-50);border:none;cursor:pointer;border-radius:4px;">Retry</button></div>`;
+  }
+}
+// ==========================================
+// FETCH CATEGORIES
+// ==========================================
+async function fetchCategories() {
+  const categoryGrid = document.getElementById('categoryGrid');
+  try {
+    categoryGrid.innerHTML = `<div class="loading-spinner"><div class="spinner"></div></div>`;
+    const response = await fetch(`${API_BASE}/categories`);
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    const categories = await response.json();
+    console.log('✅ Categories loaded:', categories.length);
+    if (!categories || categories.length === 0) {
+      categoryGrid.innerHTML = `<div class="no-products"><h3>No categories available</h3></div>`;
+      return;
+    }
+    const defaultImages = [
+      'https://images.unsplash.com/photo-1596462502278-27bfdc4033c8?q=80&w=1200',
+      'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=1200',
+      'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=1200',
+      'https://images.unsplash.com/photo-1566174053879-31528523f8ae?q=80&w=1200',
+      'https://images.unsplash.com/photo-1631233839294-f06077977469?q=80&w=1200',
+      'https://images.unsplash.com/photo-1617146053554-e991129b015b?q=80&w=1200'
+    ];
+    categoryGrid.innerHTML = categories.map((cat, index) => {
+      const imageUrl = cat.image || defaultImages[index % defaultImages.length];
+      return `
+        <div class="cat-card reveal" data-cat="${cat.name}">
+          <div class="swatch" style="--ar:3/4; background: url('${imageUrl}') center/cover no-repeat;"></div>
+          <div class="overlay"><h3>${cat.name}</h3><span class="count">${cat.designsCount || '0 Designs'}</span></div>
+        </div>
+      `;
+    }).join('');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add('in'); observer.unobserve(en.target); } });
+    }, { threshold: .15 });
+    document.querySelectorAll('#categoryGrid .reveal').forEach(el => observer.observe(el));
+  } catch (error) {
+    console.error('❌ Error fetching categories:', error);
+    categoryGrid.innerHTML = `<div class="no-products"><h3>⚠️ Could not load categories</h3><button onclick="fetchCategories()" style="margin-top:16px;padding:10px 24px;background:var(--maroon-800);color:var(--ivory-50);border:none;cursor:pointer;border-radius:4px;">Retry</button></div>`;
+>>>>>>> 4dbb591fc23a835749ba972a5ab2be809e7d3fdb
   }
 }
 
@@ -1681,6 +1764,7 @@ document.getElementById('bridalNext')?.addEventListener('click', () => moveBrida
 document.getElementById('bridalPrev')?.addEventListener('click', () => moveBridalSlide(-1));
 
 // ==========================================
+<<<<<<< HEAD
 // EXPLORE BRIDAL BUTTON
 // ==========================================
 document.getElementById('exploreBridalBtn').addEventListener('click', function(e) {
@@ -1703,6 +1787,8 @@ document.getElementById('exploreBridalBtn').addEventListener('click', function(e
 });
 
 // ==========================================
+=======
+>>>>>>> 4dbb591fc23a835749ba972a5ab2be809e7d3fdb
 // FETCH HERO SLIDES
 // ==========================================
 let heroSlides = [];
@@ -1756,11 +1842,47 @@ function initHeroSlider() {
 function updateHeroContent(index) {
   const slide = heroSlides[index % heroSlides.length];
   if (!slide) return;
+<<<<<<< HEAD
   document.getElementById('heroTitle').innerHTML = slide.title || 'Feel the joy of<br>presenting yourself';
   document.getElementById('heroSubtitle').textContent = slide.subtitle || 'Welcome to Shosta Bazar BD.';
   document.getElementById('heroEyebrow').textContent = slide.eyebrow || 'Designer Wear';
   document.getElementById('heroBtn1').textContent = slide.buttonText || 'Shop Now';
   document.getElementById('heroBtn1').href = slide.buttonLink || '#categories';
+=======
+  
+  document.getElementById('heroTitle').innerHTML = slide.title || 'Feel the joy of<br>presenting yourself';
+  document.getElementById('heroSubtitle').textContent = slide.subtitle || 'Welcome to Shosta Bazar BD.';
+  document.getElementById('heroEyebrow').textContent = slide.eyebrow || 'Designer Wear';
+  
+  // Shop Now button
+  const btn1 = document.getElementById('heroBtn1');
+  if (btn1) {
+    btn1.textContent = slide.buttonText || 'Shop Now';
+    btn1.href = slide.buttonLink || '#categories';
+    // Remove any existing onclick and use click event
+    btn1.onclick = function(e) {
+      e.preventDefault();
+      const target = document.querySelector('#categories');
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth' });
+      }
+    };
+  }
+  
+  // Bridal Collection button
+  const btn2 = document.getElementById('heroBtn2');
+  if (btn2) {
+    btn2.textContent = slide.buttonText2 || 'Bridal Collection';
+    btn2.href = slide.buttonLink2 || '#bridal';
+    btn2.onclick = function(e) {
+      e.preventDefault();
+      const target = document.querySelector('#bridal');
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth' });
+      }
+    };
+  }
+>>>>>>> 4dbb591fc23a835749ba972a5ab2be809e7d3fdb
 }
 
 function moveHeroSlide(direction) {
@@ -1781,6 +1903,7 @@ function startHeroTimer() {
 function restartHeroTimer() {
   clearInterval(heroTimer);
   if (heroSlides.length > 1) heroTimer = setInterval(() => moveHeroSlide(1), 4000);
+<<<<<<< HEAD
 }
 
 document.getElementById('heroNext')?.addEventListener('click', () => moveHeroSlide(1));
@@ -1817,6 +1940,55 @@ async function fetchGallery() {
     galleryGrid.innerHTML = `<div class="no-products" style="grid-column: 1 / -1; padding: 40px 0;"><h3>⚠️ Could not load gallery</h3><button onclick="fetchGallery()" style="margin-top:16px;padding:10px 24px;background:var(--maroon-800);color:var(--ivory-50);border:none;cursor:pointer;border-radius:4px;">Retry</button></div>`;
   }
 }
+=======
+}
+
+// Hero navigation buttons
+document.getElementById('heroNext')?.addEventListener('click', () => moveHeroSlide(1));
+document.getElementById('heroPrev')?.addEventListener('click', () => moveHeroSlide(-1));
+// ==========================================
+// FETCH GALLERY
+// ==========================================
+async function fetchGallery() {
+  const galleryGrid = document.getElementById('galleryGrid');
+  if (!galleryGrid) return;
+  try {
+    galleryGrid.innerHTML = `<div class="loading-spinner" style="grid-column: 1 / -1;"><div class="spinner"></div></div>`;
+    const response = await fetch(`${API_BASE}/gallery`);
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    const images = await response.json();
+    console.log('✅ Gallery images loaded:', images.length);
+    if (!images || images.length === 0) {
+      galleryGrid.innerHTML = `<div class="no-products" style="grid-column: 1 / -1; padding: 40px 0;"><h3>No gallery images yet</h3></div>`;
+      return;
+    }
+    galleryGrid.innerHTML = images.map(img => `
+      <a href="#" class="reveal" onclick="return false;">
+        <div class="swatch" style="--ar:1/1; background: url('${img.imageUrl || 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=800'}') center/cover no-repeat;"></div>
+        <div class="ig-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.4"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></div>
+      </a>
+    `).join('');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add('in'); observer.unobserve(en.target); } });
+    }, { threshold: .15 });
+    document.querySelectorAll('#galleryGrid .reveal').forEach(el => observer.observe(el));
+  } catch (error) {
+    console.error('❌ Error fetching gallery:', error);
+    galleryGrid.innerHTML = `<div class="no-products" style="grid-column: 1 / -1; padding: 40px 0;"><h3>⚠️ Could not load gallery</h3><button onclick="fetchGallery()" style="margin-top:16px;padding:10px 24px;background:var(--maroon-800);color:var(--ivory-50);border:none;cursor:pointer;border-radius:4px;">Retry</button></div>`;
+  }
+}
+
+// ==========================================
+// FILTER TABS
+// ==========================================
+document.getElementById("filterTabs").addEventListener("click", e => {
+  const btn = e.target.closest("button");
+  if (!btn) return;
+  document.querySelectorAll("#filterTabs button").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  if (allProducts.length > 0) renderProducts(btn.dataset.filter);
+});
+>>>>>>> 4dbb591fc23a835749ba972a5ab2be809e7d3fdb
 
 // ==========================================
 // HEADER SCROLL
@@ -1933,6 +2105,24 @@ document.addEventListener('DOMContentLoaded', () => {
   fetchHeroSlides();
   fetchBridalSlides();
   fetchGallery();
+});
+  // ==========================================
+// SMOOTH SCROLL FOR ALL NAVIGATION LINKS
+// ==========================================
+document.addEventListener('DOMContentLoaded', function() {
+  // Handle all links that start with #
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      const targetId = this.getAttribute('href');
+      if (targetId === '#') return;
+      
+      const targetElement = document.querySelector(targetId);
+      if (targetElement) {
+        e.preventDefault();
+        targetElement.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  });
 });
 </script>
 </body>

@@ -1,4 +1,5 @@
-const CUSTOMERS_API_URL = 'http://localhost:5000/api/customers';
+const API_BASE = 'https://shosta-bazar-bd.onrender.com/api';
+const CUSTOMERS_API_URL = `${API_BASE}/customers`;
 let allCustomers = [];
 
 // ==========================================
