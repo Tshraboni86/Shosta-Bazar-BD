@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gallery | Shosta Bazar BD Admin</title>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/admin.css">
@@ -117,24 +118,162 @@
       gap: 10px;
       margin-top: 20px;
     }
+    
+    /* Mobile Sidebar Toggle - MATCHES DASHBOARD */
+    .sidebar-toggle-mobile {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 24px;
+      color: #320e17;
+      cursor: pointer;
+      padding: 8px;
+      line-height: 1;
+    }
+    .sidebar-toggle-mobile:hover {
+      color: #a9812f;
+    }
+    
+    /* MOBILE RESPONSIVE - MATCHES DASHBOARD */
+    @media (max-width: 992px) {
+      .sidebar-toggle-mobile {
+        display: block;
+      }
+      .nav-left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .admin-navbar {
+        padding: 12px 16px;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      .admin-navbar h2 {
+        font-size: 18px;
+      }
+      .admin-sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 280px;
+        z-index: 1000;
+        background: #fff;
+        border-right: 1px solid #e0e0e0;
+        box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+        overflow-y: auto;
+      }
+      .admin-sidebar.open {
+        transform: translateX(0);
+      }
+      .sidebar-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.5);
+        z-index: 999;
+      }
+      .sidebar-overlay.show {
+        display: block;
+      }
+      .admin-main {
+        margin-left: 0 !important;
+        width: 100% !important;
+      }
+      .admin-layout {
+        display: block !important;
+      }
+      .sidebar-close {
+        display: none;
+        margin-left: auto;
+        background: none;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+        color: #320e17;
+      }
+      .admin-sidebar.open .sidebar-close {
+        display: block;
+      }
+      .gallery-grid {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        gap: 12px;
+      }
+    }
+    
+    @media (max-width: 576px) {
+      .admin-navbar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+      }
+      .admin-navbar h2 {
+        font-size: 16px;
+      }
+      .admin-navbar .btn-admin {
+        text-align: center;
+      }
+      .card {
+        padding: 12px;
+      }
+      .gallery-grid {
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: 10px;
+      }
+      .admin-sidebar {
+        width: 260px;
+      }
+      .modal-content {
+        margin: 16px;
+        padding: 16px;
+      }
+      .preview-container {
+        width: 100px;
+        height: 100px;
+      }
+    }
+    
+    @media (max-width: 400px) {
+      .gallery-grid {
+        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+        gap: 8px;
+      }
+      .gallery-item .delete-btn {
+        width: 24px;
+        height: 24px;
+        font-size: 12px;
+      }
+    }
   </style>
 </head>
 <body>
   <div class="admin-layout">
-    <aside class="admin-sidebar">
-      <div class="sidebar-header"><b>Shosta Bazar Admin</b></div>
+    <!-- Sidebar Overlay for Mobile -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+    
+    <!-- SIDEBAR - EXACTLY LIKE DASHBOARD -->
+    <aside class="admin-sidebar" id="adminSidebar">
+      <div class="sidebar-header">
+        <svg width="32" height="32" viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="#320e17" stroke="#c8a24a" stroke-width="2"/><text x="32" y="40" text-anchor="middle" font-family="serif" font-style="italic" font-size="23" fill="#e6cd93">SB</text></svg>
+        <b>Shosta Bazar Admin</b>
+        <button class="sidebar-close" onclick="toggleSidebar()">✕</button>
+      </div>
       <ul class="sidebar-menu">
         <li><a href="dashboard.html">Dashboard</a></li>
         <li><a href="products.html">Products</a></li>
         <li><a href="categories.html">Categories</a></li>
         <li><a href="hero.html">Hero Slider</a></li>
+        <li><a href="bridal-slides.html">Bridal Slider</a></li>
         <li class="active"><a href="gallery.html">Gallery</a></li>
         <li><a href="orders.html">Orders</a></li>
         <li><a href="customers.html">Customers</a></li>
         <li><a href="reviews.html">Reviews</a></li>
         <li><a href="offers.html">Offers</a></li>
         <li><a href="content.html">Website Content</a></li>
-        <li><a href="image-history.html">Image History</a></li>
+        <li><a href="product-detail-settings.html">Product Detail Settings</a></li>
         <li><a href="settings.html">Settings</a></li>
       </ul>
       <div class="sidebar-footer">
@@ -146,9 +285,13 @@
     </aside>
 
     <div class="admin-main">
-      <header class="content-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-        <h2>Gallery Management</h2>
-        <button id="addGalleryBtn" style="background: #201315; color: #fff; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">+ ADD IMAGE</button>
+      <header class="admin-navbar">
+        <div class="nav-left">
+          <!-- Three-dot menu button for mobile -->
+          <button class="sidebar-toggle-mobile" id="sidebarToggle" onclick="toggleSidebar()">☰</button>
+          <h2>Gallery Management</h2>
+        </div>
+        <button id="addGalleryBtn" class="btn-admin">+ Add Image</button>
       </header>
 
       <main class="content-body">
@@ -164,7 +307,7 @@
   <!-- Add Image Modal -->
   <div id="galleryModal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); z-index: 9999; justify-content: center; align-items: center;">
     <div style="background: #fff; padding: 24px; border-radius: 8px; width: 100%; max-width: 500px; box-sizing: border-box; margin: 20px;">
-      <h3 style="margin-top: 0; color: #320e17;">Add Gallery Image</h3>
+      <h3 style="margin-top: 0; color: #320e17;" id="modalTitle">Add Gallery Image</h3>
       <form id="galleryForm" data-form-type="gallery">
         <div style="margin-bottom: 12px;">
           <label style="display: block; margin-bottom: 4px; font-weight: 500;">Image Title (Optional)</label>
@@ -190,10 +333,229 @@
     </div>
   </div>
 
-  <script src="js/mock-data.js"></script>
-  <script src="js/auth.js"></script>
-  <script src="js/admin.js"></script>
-  <script src="js/gallery.js"></script>
-  <script src="js/api.js"></script>
+  <script>
+    // ==========================================
+    // SIDEBAR TOGGLE - MATCHES DASHBOARD
+    // ==========================================
+    function toggleSidebar() {
+      var sidebar = document.getElementById('adminSidebar');
+      var overlay = document.getElementById('sidebarOverlay');
+      sidebar.classList.toggle('open');
+      overlay.classList.toggle('show');
+    }
+
+    document.addEventListener('click', function(e) {
+      var sidebar = document.getElementById('adminSidebar');
+      var toggleBtn = document.getElementById('sidebarToggle');
+      if (window.innerWidth <= 992) {
+        if (!sidebar.contains(e.target) && !toggleBtn.contains(e.target)) {
+          sidebar.classList.remove('open');
+          document.getElementById('sidebarOverlay').classList.remove('show');
+        }
+      }
+    });
+
+    window.addEventListener('resize', function() {
+      if (window.innerWidth > 992) {
+        var sidebar = document.getElementById('adminSidebar');
+        var overlay = document.getElementById('sidebarOverlay');
+        sidebar.classList.remove('open');
+        overlay.classList.remove('show');
+      }
+    });
+
+    // ==========================================
+    // GALLERY DATA
+    // ==========================================
+    var galleryImages = [
+      {
+        id: 1,
+        title: 'Bridal Collection 2026',
+        image: 'https://images.unsplash.com/photo-1596462502278-27bfdc4033c8?q=80&w=300'
+      },
+      {
+        id: 2,
+        title: 'Designer Saree',
+        image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=300'
+      },
+      {
+        id: 3,
+        title: 'Bridal Gown',
+        image: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=300'
+      },
+      {
+        id: 4,
+        title: 'Lehenga Collection',
+        image: 'https://images.unsplash.com/photo-1566174053879-31528523f8ae?q=80&w=300'
+      },
+      {
+        id: 5,
+        title: 'Wedding Collection',
+        image: 'https://images.unsplash.com/photo-1594465911080-dd025b7e0744?q=80&w=300'
+      },
+      {
+        id: 6,
+        title: 'Party Wear',
+        image: 'https://images.unsplash.com/photo-1631233839294-f06077977469?q=80&w=300'
+      }
+    ];
+
+    var deleteTargetId = null;
+    var editTargetId = null;
+
+    // ==========================================
+    // RENDER GALLERY
+    // ==========================================
+    function renderGallery() {
+      var grid = document.getElementById('galleryGrid');
+      
+      if (!galleryImages || galleryImages.length === 0) {
+        grid.innerHTML = '<div class="empty-gallery">No images in gallery. Click "Add Image" to get started.</div>';
+        return;
+      }
+      
+      var html = '';
+      for (var i = 0; i < galleryImages.length; i++) {
+        var img = galleryImages[i];
+        html += `
+          <div class="gallery-item">
+            <img src="${img.image}" alt="${img.title || 'Gallery image'}" onerror="this.src='https://via.placeholder.com/300?text=No+Image'">
+            <button class="delete-btn" onclick="confirmDelete(${img.id})">✕</button>
+            ${img.title ? `<div class="title">${img.title}</div>` : ''}
+          </div>
+        `;
+      }
+      
+      grid.innerHTML = html;
+    }
+
+    // ==========================================
+    // MODAL FUNCTIONS
+    // ==========================================
+    function openGalleryModal() {
+      document.getElementById('galleryModal').style.display = 'flex';
+      document.getElementById('galleryForm').reset();
+      document.getElementById('galleryPreview').innerHTML = '<span class="placeholder">No image selected</span>';
+      document.getElementById('modalTitle').textContent = 'Add Gallery Image';
+      document.getElementById('galleryForm').dataset.editId = '';
+    }
+
+    function closeGalleryModal() {
+      document.getElementById('galleryModal').style.display = 'none';
+    }
+
+    function handleGalleryImageUpload(input) {
+      var file = input.files[0];
+      if (file) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+          var preview = document.getElementById('galleryPreview');
+          preview.innerHTML = '<img src="' + e.target.result + '" alt="Preview">';
+          document.getElementById('galleryImageUrl').value = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function confirmDelete(id) {
+      deleteTargetId = id;
+      var img = null;
+      for (var i = 0; i < galleryImages.length; i++) {
+        if (galleryImages[i].id === id) { img = galleryImages[i]; break; }
+      }
+      if (confirm('Are you sure you want to delete "' + (img ? img.title || 'this image' : 'this image') + '"? This action cannot be undone.')) {
+        var newImages = [];
+        for (var i = 0; i < galleryImages.length; i++) {
+          if (galleryImages[i].id !== deleteTargetId) newImages.push(galleryImages[i]);
+        }
+        galleryImages = newImages;
+        renderGallery();
+        showToast('✅ Image deleted successfully!');
+        deleteTargetId = null;
+      }
+    }
+
+    // ==========================================
+    // EVENT LISTENERS
+    // ==========================================
+    document.getElementById('addGalleryBtn').addEventListener('click', openGalleryModal);
+
+    document.getElementById('closeGalleryModalBtn').addEventListener('click', closeGalleryModal);
+
+    document.getElementById('galleryModal').addEventListener('click', function(e) {
+      if (e.target === this) closeGalleryModal();
+    });
+
+    document.getElementById('galleryForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      var title = document.getElementById('galleryTitle').value.trim();
+      var image = document.getElementById('galleryImageUrl').value.trim();
+      var editId = this.dataset.editId;
+      
+      if (!image) {
+        alert('Please enter an image URL or upload an image');
+        return;
+      }
+      
+      if (editId) {
+        // Edit existing
+        for (var i = 0; i < galleryImages.length; i++) {
+          if (galleryImages[i].id == editId) {
+            galleryImages[i].title = title;
+            galleryImages[i].image = image;
+            break;
+          }
+        }
+        showToast('✅ Image updated successfully!');
+      } else {
+        // Add new
+        var newImage = {
+          id: Date.now(),
+          title: title,
+          image: image
+        };
+        galleryImages.push(newImage);
+        showToast('✅ Image added successfully!');
+      }
+      
+      renderGallery();
+      closeGalleryModal();
+    });
+
+    // ==========================================
+    // TOAST NOTIFICATION
+    // ==========================================
+    function showToast(message) {
+      var toast = document.createElement('div');
+      toast.style.cssText = 'position: fixed; bottom: 20px; right: 20px; background: #28a745; color: #fff; padding: 12px 24px; border-radius: 8px; font-size: 14px; z-index: 9999; box-shadow: 0 4px 12px rgba(0,0,0,0.3); animation: slideIn 0.3s ease; font-family: Jost, sans-serif;';
+      toast.textContent = message;
+      document.body.appendChild(toast);
+      setTimeout(function() {
+        toast.style.opacity = '0';
+        toast.style.transition = 'opacity 0.3s';
+        setTimeout(function() { toast.remove(); }, 300);
+      }, 3000);
+    }
+
+    var style = document.createElement('style');
+    style.textContent = '@keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }';
+    document.head.appendChild(style);
+
+    // ==========================================
+    // LOGOUT
+    // ==========================================
+    function logout() {
+      localStorage.removeItem('adminLoggedIn');
+      window.location.href = 'login.html';
+    }
+
+    // ==========================================
+    // INITIALIZE
+    // ==========================================
+    document.addEventListener('DOMContentLoaded', function() {
+      renderGallery();
+    });
+  </script>
 </body>
 </html>

@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Orders | Shosta Bazar BD Admin</title>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/admin.css">
@@ -102,24 +103,189 @@
       background: #6c757d;
       cursor: default;
     }
+    
+    /* Mobile Sidebar Toggle - MATCHES DASHBOARD */
+    .sidebar-toggle-mobile {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 24px;
+      color: #320e17;
+      cursor: pointer;
+      padding: 8px;
+      line-height: 1;
+    }
+    .sidebar-toggle-mobile:hover {
+      color: #a9812f;
+    }
+    
+    /* MOBILE RESPONSIVE - MATCHES DASHBOARD */
+    @media (max-width: 992px) {
+      .sidebar-toggle-mobile {
+        display: block;
+      }
+      .nav-left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .admin-navbar {
+        padding: 12px 16px;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      .admin-navbar h2 {
+        font-size: 18px;
+      }
+      .admin-sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 280px;
+        z-index: 1000;
+        background: #fff;
+        border-right: 1px solid #e0e0e0;
+        box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+        overflow-y: auto;
+      }
+      .admin-sidebar.open {
+        transform: translateX(0);
+      }
+      .sidebar-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.5);
+        z-index: 999;
+      }
+      .sidebar-overlay.show {
+        display: block;
+      }
+      .admin-main {
+        margin-left: 0 !important;
+        width: 100% !important;
+      }
+      .admin-layout {
+        display: block !important;
+      }
+      .sidebar-close {
+        display: none;
+        margin-left: auto;
+        background: none;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+        color: #320e17;
+      }
+      .admin-sidebar.open .sidebar-close {
+        display: block;
+      }
+      .order-stats {
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 12px;
+      }
+      .stat-card .number {
+        font-size: 22px;
+      }
+    }
+    
+    @media (max-width: 576px) {
+      .admin-navbar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+      }
+      .admin-navbar h2 {
+        font-size: 16px;
+      }
+      .admin-navbar .btn-admin {
+        text-align: center;
+      }
+      .card {
+        padding: 12px;
+      }
+      .admin-table {
+        font-size: 11px;
+      }
+      .admin-table th,
+      .admin-table td {
+        padding: 6px 8px;
+      }
+      .admin-sidebar {
+        width: 260px;
+      }
+      .order-stats {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+      }
+      .stat-card {
+        padding: 10px;
+      }
+      .stat-card .number {
+        font-size: 18px;
+      }
+      .stat-card .label {
+        font-size: 10px;
+      }
+      #orderDetailModal > div {
+        margin: 12px;
+        padding: 16px;
+      }
+    }
+    
+    @media (max-width: 400px) {
+      .order-stats {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+      }
+      .stat-card {
+        padding: 8px;
+      }
+      .stat-card .number {
+        font-size: 16px;
+      }
+      .admin-table {
+        font-size: 10px;
+      }
+      .admin-table th,
+      .admin-table td {
+        padding: 4px 6px;
+      }
+      .status-badge {
+        font-size: 9px;
+        padding: 2px 8px;
+      }
+    }
   </style>
 </head>
 <body>
   <div class="admin-layout">
-    <aside class="admin-sidebar">
-      <div class="sidebar-header"><b>Shosta Bazar Admin</b></div>
+    <!-- Sidebar Overlay for Mobile -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+    
+    <!-- SIDEBAR - EXACTLY LIKE DASHBOARD -->
+    <aside class="admin-sidebar" id="adminSidebar">
+      <div class="sidebar-header">
+        <svg width="32" height="32" viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="#320e17" stroke="#c8a24a" stroke-width="2"/><text x="32" y="40" text-anchor="middle" font-family="serif" font-style="italic" font-size="23" fill="#e6cd93">SB</text></svg>
+        <b>Shosta Bazar Admin</b>
+        <button class="sidebar-close" onclick="toggleSidebar()">✕</button>
+      </div>
       <ul class="sidebar-menu">
         <li><a href="dashboard.html">Dashboard</a></li>
         <li><a href="products.html">Products</a></li>
         <li><a href="categories.html">Categories</a></li>
         <li><a href="hero.html">Hero Slider</a></li>
+        <li><a href="bridal-slides.html">Bridal Slider</a></li>
         <li><a href="gallery.html">Gallery</a></li>
         <li class="active"><a href="orders.html">Orders</a></li>
         <li><a href="customers.html">Customers</a></li>
         <li><a href="reviews.html">Reviews</a></li>
         <li><a href="offers.html">Offers</a></li>
         <li><a href="content.html">Website Content</a></li>
-        <li><a href="image-history.html">Image History</a></li>
+        <li><a href="product-detail-settings.html">Product Detail Settings</a></li>
         <li><a href="settings.html">Settings</a></li>
       </ul>
       <div class="sidebar-footer">
@@ -131,9 +297,13 @@
     </aside>
 
     <div class="admin-main">
-      <header class="content-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-        <h2>📦 Order Management</h2>
-        <button onclick="loadOrders()" style="background: #201315; color: #fff; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer;">🔄 Refresh</button>
+      <header class="admin-navbar">
+        <div class="nav-left">
+          <!-- Three-dot menu button for mobile -->
+          <button class="sidebar-toggle-mobile" id="sidebarToggle" onclick="toggleSidebar()">☰</button>
+          <h2>📦 Order Management</h2>
+        </div>
+        <button onclick="loadOrders()" class="btn-admin" style="background: #201315; color: #fff; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer;">🔄 Refresh</button>
       </header>
 
       <main class="content-body">
@@ -183,10 +353,280 @@
     </div>
   </div>
 
-  <script src="js/mock-data.js"></script>
-  <script src="js/auth.js"></script>
-  <script src="js/admin.js"></script>
-  <script src="js/orders.js"></script>
-  <script src="js/api.js"></script>
+  <script>
+    // ==========================================
+    // SIDEBAR TOGGLE - MATCHES DASHBOARD
+    // ==========================================
+    function toggleSidebar() {
+      var sidebar = document.getElementById('adminSidebar');
+      var overlay = document.getElementById('sidebarOverlay');
+      sidebar.classList.toggle('open');
+      overlay.classList.toggle('show');
+    }
+
+    document.addEventListener('click', function(e) {
+      var sidebar = document.getElementById('adminSidebar');
+      var toggleBtn = document.getElementById('sidebarToggle');
+      if (window.innerWidth <= 992) {
+        if (!sidebar.contains(e.target) && !toggleBtn.contains(e.target)) {
+          sidebar.classList.remove('open');
+          document.getElementById('sidebarOverlay').classList.remove('show');
+        }
+      }
+    });
+
+    window.addEventListener('resize', function() {
+      if (window.innerWidth > 992) {
+        var sidebar = document.getElementById('adminSidebar');
+        var overlay = document.getElementById('sidebarOverlay');
+        sidebar.classList.remove('open');
+        overlay.classList.remove('show');
+      }
+    });
+
+    // ==========================================
+    // ORDER DATA
+    // ==========================================
+    var orders = [
+      {
+        id: 'ORD-9921',
+        customer: 'Farzana R.',
+        phone: '017********',
+        items: 3,
+        total: 65000,
+        status: 'delivered',
+        date: '2026-08-20',
+        products: [
+          { name: 'Suhana Bridal Lehenga', qty: 1, price: 65000 },
+          { name: 'Bridal Accessories Set', qty: 2, price: 0 }
+        ]
+      },
+      {
+        id: 'ORD-9922',
+        customer: 'Nusrat J.',
+        phone: '018********',
+        items: 1,
+        total: 8500,
+        status: 'processing',
+        date: '2026-08-21',
+        products: [
+          { name: 'Meena Zari Saree', qty: 1, price: 8500 }
+        ]
+      },
+      {
+        id: 'ORD-9923',
+        customer: 'Tahmina K.',
+        phone: '019********',
+        items: 2,
+        total: 32000,
+        status: 'shipped',
+        date: '2026-08-22',
+        products: [
+          { name: 'Velvet Bridal Gown', qty: 1, price: 32000 }
+        ]
+      },
+      {
+        id: 'ORD-9924',
+        customer: 'Rafia S.',
+        phone: '016********',
+        items: 4,
+        total: 28000,
+        status: 'confirmed',
+        date: '2026-08-22',
+        products: [
+          { name: 'Pastel Lehenga Set', qty: 1, price: 28000 }
+        ]
+      },
+      {
+        id: 'ORD-9925',
+        customer: 'Sharmin A.',
+        phone: '015********',
+        items: 1,
+        total: 15000,
+        status: 'pending',
+        date: '2026-08-23',
+        products: [
+          { name: 'Classic White Gown', qty: 1, price: 15000 }
+        ]
+      },
+      {
+        id: 'ORD-9926',
+        customer: 'Sadia M.',
+        phone: '017********',
+        items: 2,
+        total: 12000,
+        status: 'cancelled',
+        date: '2026-08-19',
+        products: [
+          { name: 'Party Wear Saree', qty: 1, price: 12000 }
+        ]
+      }
+    ];
+
+    // ==========================================
+    // RENDER ORDERS
+    // ==========================================
+    function renderOrders() {
+      var tbody = document.getElementById('ordersTableBody');
+      var statusCounts = {
+        pending: 0,
+        confirmed: 0,
+        processing: 0,
+        shipped: 0,
+        delivered: 0,
+        cancelled: 0
+      };
+      
+      if (!orders || orders.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding:30px; color:#888;">No orders found</td></tr>';
+        updateStats(statusCounts);
+        return;
+      }
+      
+      var html = '';
+      for (var i = 0; i < orders.length; i++) {
+        var o = orders[i];
+        var statusClass = o.status;
+        var statusLabel = o.status.charAt(0).toUpperCase() + o.status.slice(1);
+        
+        // Count statuses
+        if (statusCounts[o.status] !== undefined) {
+          statusCounts[o.status]++;
+        }
+        
+        html += '<tr class="order-row">' +
+          '<td><strong>' + o.id + '</strong></td>' +
+          '<td>' + o.customer + '</td>' +
+          '<td>' + o.phone + '</td>' +
+          '<td>' + o.items + '</td>' +
+          '<td>৳' + o.total.toLocaleString() + '</td>' +
+          '<td><span class="status-badge ' + statusClass + '">' + statusLabel + '</span></td>' +
+          '<td>' + o.date + '</td>' +
+          '<td>' +
+            '<button class="btn-admin-secondary" style="padding:4px 10px; font-size:11px; margin-right:4px;" onclick="viewOrder(\'' + o.id + '\')">👁️ View</button>' +
+            '<button class="whatsapp-btn" onclick="sendWhatsApp(\'' + o.id + '\')">📱 WA</button>' +
+          '</td>' +
+        '</tr>';
+      }
+      
+      tbody.innerHTML = html;
+      updateStats(statusCounts);
+    }
+
+    function updateStats(counts) {
+      document.getElementById('pendingCount').textContent = counts.pending || 0;
+      document.getElementById('confirmedCount').textContent = counts.confirmed || 0;
+      document.getElementById('shippedCount').textContent = counts.shipped || 0;
+      document.getElementById('deliveredCount').textContent = counts.delivered || 0;
+      document.getElementById('cancelledCount').textContent = counts.cancelled || 0;
+    }
+
+    // ==========================================
+    // VIEW ORDER DETAILS
+    // ==========================================
+    function viewOrder(orderId) {
+      var order = null;
+      for (var i = 0; i < orders.length; i++) {
+        if (orders[i].id === orderId) { order = orders[i]; break; }
+      }
+      if (!order) return;
+      
+      document.getElementById('detailOrderId').textContent = 'Order #' + order.id;
+      
+      var content = document.getElementById('orderDetailContent');
+      var productsHtml = '';
+      if (order.products && order.products.length > 0) {
+        productsHtml = '<h4 style="margin:12px 0 8px; color:#320e17;">Products</h4><table><thead><tr><th>Product</th><th>Qty</th><th>Price</th></tr></thead><tbody>';
+        for (var i = 0; i < order.products.length; i++) {
+          var p = order.products[i];
+          productsHtml += '<tr><td>' + p.name + '</td><td>' + p.qty + '</td><td>৳' + p.price.toLocaleString() + '</td></tr>';
+        }
+        productsHtml += '</tbody></table>';
+      }
+      
+      content.innerHTML = 
+        '<div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px;">' +
+          '<div><strong>Customer:</strong> ' + order.customer + '</div>' +
+          '<div><strong>Phone:</strong> ' + order.phone + '</div>' +
+          '<div><strong>Order Date:</strong> ' + order.date + '</div>' +
+          '<div><strong>Status:</strong> <span class="status-badge ' + order.status + '">' + order.status.charAt(0).toUpperCase() + order.status.slice(1) + '</span></div>' +
+          '<div><strong>Items:</strong> ' + order.items + '</div>' +
+          '<div><strong>Total:</strong> ৳' + order.total.toLocaleString() + '</div>' +
+        '</div>' +
+        productsHtml;
+      
+      document.getElementById('orderDetailModal').style.display = 'flex';
+    }
+
+    function closeOrderDetail() {
+      document.getElementById('orderDetailModal').style.display = 'none';
+    }
+
+    document.getElementById('orderDetailModal').addEventListener('click', function(e) {
+      if (e.target === this) closeOrderDetail();
+    });
+
+    // ==========================================
+    // WHATSAPP FUNCTION
+    // ==========================================
+    function sendWhatsApp(orderId) {
+      var order = null;
+      for (var i = 0; i < orders.length; i++) {
+        if (orders[i].id === orderId) { order = orders[i]; break; }
+      }
+      if (!order) return;
+      
+      var message = '🛍️ *Order Update*\n\n' +
+        'Order #: ' + order.id + '\n' +
+        'Customer: ' + order.customer + '\n' +
+        'Total: ৳' + order.total.toLocaleString() + '\n' +
+        'Status: ' + order.status.charAt(0).toUpperCase() + order.status.slice(1);
+      
+      window.open('https://wa.me/88' + order.phone.replace(/[^0-9]/g, '') + '?text=' + encodeURIComponent(message), '_blank');
+      showToast('📱 WhatsApp opened for order ' + order.id);
+    }
+
+    // ==========================================
+    // LOAD ORDERS (Refresh)
+    // ==========================================
+    function loadOrders() {
+      renderOrders();
+      showToast('🔄 Orders refreshed!');
+    }
+
+    // ==========================================
+    // TOAST NOTIFICATION
+    // ==========================================
+    function showToast(message) {
+      var toast = document.createElement('div');
+      toast.style.cssText = 'position: fixed; bottom: 20px; right: 20px; background: #28a745; color: #fff; padding: 12px 24px; border-radius: 8px; font-size: 14px; z-index: 9999; box-shadow: 0 4px 12px rgba(0,0,0,0.3); animation: slideIn 0.3s ease; font-family: Jost, sans-serif;';
+      toast.textContent = message;
+      document.body.appendChild(toast);
+      setTimeout(function() {
+        toast.style.opacity = '0';
+        toast.style.transition = 'opacity 0.3s';
+        setTimeout(function() { toast.remove(); }, 300);
+      }, 3000);
+    }
+
+    var style = document.createElement('style');
+    style.textContent = '@keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }';
+    document.head.appendChild(style);
+
+    // ==========================================
+    // LOGOUT
+    // ==========================================
+    function logout() {
+      localStorage.removeItem('adminLoggedIn');
+      window.location.href = 'login.html';
+    }
+
+    // ==========================================
+    // INITIALIZE
+    // ==========================================
+    document.addEventListener('DOMContentLoaded', function() {
+      renderOrders();
+    });
+  </script>
 </body>
 </html>

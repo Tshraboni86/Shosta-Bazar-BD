@@ -2,26 +2,242 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Add Product | Shosta Bazar BD Admin</title>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/admin.css">
+  <style>
+    /* Additional styles for new features and mobile responsiveness */
+    
+    /* Multiple images upload */
+    .image-upload-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      gap: 12px;
+      margin-top: 10px;
+    }
+    .image-upload-item {
+      position: relative;
+      border: 2px dashed #ddd;
+      border-radius: 8px;
+      aspect-ratio: 1/1;
+      overflow: hidden;
+      background: #f9f9f9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.3s;
+    }
+    .image-upload-item:hover {
+      border-color: #320e17;
+    }
+    .image-upload-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .image-upload-item .remove-btn {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      background: rgba(220, 53, 69, 0.9);
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+    .image-upload-item .remove-btn:hover {
+      background: #dc3545;
+    }
+    .image-upload-item .upload-placeholder {
+      color: #aaa;
+      font-size: 12px;
+      text-align: center;
+      padding: 10px;
+    }
+    .image-upload-item .upload-placeholder .icon {
+      font-size: 30px;
+      display: block;
+      margin-bottom: 4px;
+    }
+    .image-upload-item input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+    }
+    
+    /* Fabric and other new fields */
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    
+    /* Mobile Sidebar Toggle */
+    .sidebar-toggle-mobile {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 24px;
+      color: #320e17;
+      cursor: pointer;
+      padding: 8px;
+      line-height: 1;
+    }
+    .sidebar-toggle-mobile:hover {
+      color: #a9812f;
+    }
+    
+    /* Mobile Responsive */
+    @media (max-width: 992px) {
+      .sidebar-toggle-mobile {
+        display: block;
+      }
+      .admin-navbar {
+        padding: 12px 16px;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      .admin-navbar h2 {
+        font-size: 18px;
+      }
+      .admin-navbar .btn-admin-secondary {
+        font-size: 13px;
+        padding: 8px 14px;
+      }
+      .admin-sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 280px;
+        z-index: 1000;
+        background: #fff;
+        box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+        overflow-y: auto;
+      }
+      .admin-sidebar.open {
+        transform: translateX(0);
+      }
+      .sidebar-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.5);
+        z-index: 999;
+      }
+      .sidebar-overlay.show {
+        display: block;
+      }
+      .admin-main {
+        margin-left: 0 !important;
+        width: 100% !important;
+      }
+      .admin-layout {
+        display: block !important;
+      }
+      .sidebar-close {
+        display: none;
+      }
+      .admin-sidebar.open .sidebar-close {
+        display: block;
+      }
+      .form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+      .image-upload-grid {
+        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+      }
+    }
+    
+    @media (max-width: 576px) {
+      .admin-navbar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+      }
+      .admin-navbar h2 {
+        font-size: 16px;
+      }
+      .admin-navbar .btn-admin-secondary {
+        text-align: center;
+      }
+      .card {
+        padding: 16px;
+      }
+      .form-group label {
+        font-size: 13px;
+      }
+      .form-control {
+        font-size: 14px;
+        padding: 8px 12px;
+      }
+      .image-upload-grid {
+        grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+        gap: 8px;
+      }
+      .admin-sidebar {
+        width: 260px;
+      }
+      .btn-admin {
+        width: 100%;
+        text-align: center;
+      }
+    }
+    
+    @media (max-width: 400px) {
+      .image-upload-grid {
+        grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+        gap: 6px;
+      }
+      .image-upload-item .upload-placeholder {
+        font-size: 10px;
+      }
+      .image-upload-item .upload-placeholder .icon {
+        font-size: 20px;
+      }
+      .form-control {
+        font-size: 13px;
+        padding: 6px 10px;
+      }
+    }
+  </style>
 </head>
 <body>
   <div class="admin-layout">
-    <aside class="admin-sidebar">
-      <div class="sidebar-header"><b>Shosta Bazar Admin</b></div>
+    <!-- Sidebar Overlay for Mobile -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+    
+    <aside class="admin-sidebar" id="adminSidebar">
+      <div class="sidebar-header">
+        <svg width="32" height="32" viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="#320e17" stroke="#c8a24a" stroke-width="2"/><text x="32" y="40" text-anchor="middle" font-family="serif" font-style="italic" font-size="23" fill="#e6cd93">SB</text></svg>
+        <b>Shosta Bazar Admin</b>
+        <button class="sidebar-close" onclick="toggleSidebar()" style="display:none; background:none; border:none; font-size:24px; cursor:pointer; color:#320e17; margin-left:auto;">✕</button>
+      </div>
       <ul class="sidebar-menu">
         <li><a href="dashboard.html">Dashboard</a></li>
         <li class="active"><a href="products.html">Products</a></li>
         <li><a href="categories.html">Categories</a></li>
         <li><a href="hero.html">Hero Slider</a></li>
+        <li><a href="bridal-slides.html">Bridal Slider</a></li>
         <li><a href="gallery.html">Gallery</a></li>
         <li><a href="orders.html">Orders</a></li>
         <li><a href="customers.html">Customers</a></li>
         <li><a href="reviews.html">Reviews</a></li>
         <li><a href="offers.html">Offers</a></li>
         <li><a href="content.html">Website Content</a></li>
-        <li><a href="image-history.html">Image History</a></li>
+        <li><a href="product-detail-settings.html">Product Detail Settings</a></li>
         <li><a href="settings.html">Settings</a></li>
       </ul>
       <div class="sidebar-footer">
@@ -34,85 +250,298 @@
 
     <div class="admin-main">
       <header class="admin-navbar">
-        <h2>Add New Product</h2>
-        <a href="products.html" class="btn-admin-secondary">Back to Products</a>
+        <div class="nav-left" style="display:flex; align-items:center; gap:12px;">
+          <!-- Three-dot menu button for mobile -->
+          <button class="sidebar-toggle-mobile" id="sidebarToggle" onclick="toggleSidebar()">
+            &#8942;
+          </button>
+          <h2>Add New Product</h2>
+        </div>
+        <a href="products.html" class="btn-admin-secondary">← Back to Products</a>
       </header>
 
       <main class="content-body">
-        <div class="card" style="max-width:700px; margin:0 auto;">
-          <form id="addProductForm">
+        <div class="card" style="max-width:800px; margin:0 auto;">
+          <form id="addProductForm" onsubmit="saveProduct(event)">
+            <!-- Product Name -->
             <div class="form-group">
-              <label for="productName">Product Name</label>
+              <label for="productName">Product Name *</label>
               <input type="text" id="productName" class="form-control" placeholder="Enter product name" required>
             </div>
             
-            <div class="form-group">
-              <label for="productCategory">Category</label>
-              <select id="productCategory" class="form-control">
-                <option value="Sarees">Sarees</option>
-                <option value="Lehenga">Lehenga</option>
-                <option value="Gowns">Gowns</option>
-                <option value="Salwar Kameez">Salwar Kameez</option>
-                <option value="Bridal">Bridal</option>
-                <option value="Accessories">Accessories</option>
-              </select>
-            </div>
-            
-            <div class="form-group">
-              <label for="productPrice">Price (BDT)</label>
-              <input type="number" id="productPrice" class="form-control" placeholder="e.g. 6837" required>
-            </div>
-            
-            <div class="form-group">
-              <label for="productOldPrice">Old Price (BDT)</label>
-              <input type="number" id="productOldPrice" class="form-control" placeholder="e.g. 893">
-            </div>
-            
-            <div class="form-group">
-              <label for="productImage">Image URL</label>
-              <input type="text" id="productImage" class="form-control" placeholder="https://example.com/image.jpg">
-            </div>
-
-            <div class="form-group">
-              <label for="productTag">Product Tag</label>
-              <select id="productTag" class="form-control">
-                <option value="">None</option>
-                <option value="New">New</option>
-                <option value="Sale">Sale</option>
-                <option value="Featured">Featured</option>
-                <option value="Bridal">Bridal</option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label for="productDescription">Description</label>
-              <textarea id="productDescription" class="form-control" rows="3" placeholder="Enter product details"></textarea>
-            </div>
-
-            <div class="form-group">
-              <label for="productImageInput">Upload Image File (Optional)</label>
-              <input type="file" id="productImageInput" class="form-control" accept="image/*">
-              <div style="margin-top:10px;">
-                <img id="imagePreview" style="max-width:120px; border-radius:4px; display:none;" src="" alt="Preview">
-                <div id="imageFileInfo" style="font-size:0.75rem; color:#666; margin-top:4px;"></div>
+            <!-- Category & Status Row -->
+            <div class="form-row">
+              <div class="form-group">
+                <label for="productCategory">Category *</label>
+                <select id="productCategory" class="form-control" required>
+                  <option value="">Select Category</option>
+                  <option value="Sarees">Sarees</option>
+                  <option value="Lehenga">Lehenga</option>
+                  <option value="Gowns">Gowns</option>
+                  <option value="Salwar Kameez">Salwar Kameez</option>
+                  <option value="Bridal">Bridal</option>
+                  <option value="Accessories">Accessories</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="productStatus">Status</label>
+                <select id="productStatus" class="form-control">
+                  <option value="ACTIVE">Active</option>
+                  <option value="DRAFT">Draft</option>
+                  <option value="INACTIVE">Inactive</option>
+                </select>
               </div>
             </div>
-
-            <button type="submit" class="btn-admin" style="margin-top:10px;">Save Product</button>
+            
+            <!-- Price & Old Price Row -->
+            <div class="form-row">
+              <div class="form-group">
+                <label for="productPrice">Price (BDT) *</label>
+                <input type="number" id="productPrice" class="form-control" placeholder="e.g. 8500" required>
+              </div>
+              <div class="form-group">
+                <label for="productOldPrice">Old Price (BDT)</label>
+                <input type="number" id="productOldPrice" class="form-control" placeholder="e.g. 12000">
+              </div>
+            </div>
+            
+            <!-- Fabric & Tag Row (NEW) -->
+            <div class="form-row">
+              <div class="form-group">
+                <label for="productFabric">Fabric Type</label>
+                <select id="productFabric" class="form-control">
+                  <option value="">Select Fabric</option>
+                  <option value="Silk">Silk</option>
+                  <option value="Cotton">Cotton</option>
+                  <option value="Velvet">Velvet</option>
+                  <option value="Georgette">Georgette</option>
+                  <option value="Net">Net</option>
+                  <option value="Crepe">Crepe</option>
+                  <option value="Satin">Satin</option>
+                  <option value="Chiffon">Chiffon</option>
+                  <option value="Organza">Organza</option>
+                  <option value="Jacquard">Jacquard</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="productTag">Product Tag</label>
+                <select id="productTag" class="form-control">
+                  <option value="">None</option>
+                  <option value="New">New</option>
+                  <option value="Sale">Sale</option>
+                  <option value="Featured">Featured</option>
+                  <option value="Bridal">Bridal</option>
+                  <option value="Best Seller">Best Seller</option>
+                  <option value="Limited Edition">Limited Edition</option>
+                </select>
+              </div>
+            </div>
+            
+            <!-- Main Image URL -->
+            <div class="form-group">
+              <label for="productImage">Main Image URL</label>
+              <input type="text" id="productImage" class="form-control" placeholder="https://example.com/image.jpg">
+              <div style="margin-top:8px;">
+                <img id="imagePreview" style="max-width:120px; border-radius:4px; display:none; border:1px solid #eee;" src="" alt="Preview">
+              </div>
+            </div>
+            
+            <!-- Multiple Images Upload (NEW) -->
+            <div class="form-group">
+              <label>Multiple Images (for product detail slider)</label>
+              <div class="image-upload-grid" id="imageUploadGrid">
+                <!-- First upload slot -->
+                <div class="image-upload-item" id="uploadSlot1">
+                  <div class="upload-placeholder">
+                    <span class="icon">📸</span>
+                    Add Image
+                  </div>
+                  <input type="file" accept="image/*" onchange="handleImageUpload(this, 1)">
+                </div>
+              </div>
+              <small style="color:#888; font-size:0.75rem; display:block; margin-top:4px;">
+                Upload multiple images for the product detail slider. First image will be used as main thumbnail.
+              </small>
+              <div id="uploadedImagesInfo" style="margin-top:6px; font-size:0.8rem; color:#28a745;"></div>
+            </div>
+            
+            <!-- Description -->
+            <div class="form-group">
+              <label for="productDescription">Description *</label>
+              <textarea id="productDescription" class="form-control" rows="4" placeholder="Enter detailed product description including design, craftsmanship, and special features" required></textarea>
+            </div>
+            
+            <!-- Fabric Care Instructions (NEW) -->
+            <div class="form-group">
+              <label for="productCare">Care Instructions</label>
+              <textarea id="productCare" class="form-control" rows="2" placeholder="e.g. Dry clean only, Store in a cool dry place"></textarea>
+            </div>
+            
+            <!-- Save Button -->
+            <button type="submit" class="btn-admin" style="margin-top:10px; width:100%; padding:14px;">
+              💾 Save Product
+            </button>
           </form>
         </div>
       </main>
     </div>
   </div>
 
-  <script src="js/auth.js"></script>
-  <script src="js/products.js"></script>
-  <script src="js/api.js"></script>
-
   <script>
-    // Live Image URL Preview Logic
+    // ==========================================
+    // SIDEBAR TOGGLE FOR MOBILE
+    // ==========================================
+    function toggleSidebar() {
+      const sidebar = document.getElementById('adminSidebar');
+      const overlay = document.getElementById('sidebarOverlay');
+      sidebar.classList.toggle('open');
+      overlay.classList.toggle('show');
+      
+      const closeBtn = sidebar.querySelector('.sidebar-close');
+      if (sidebar.classList.contains('open')) {
+        closeBtn.style.display = 'block';
+      } else {
+        closeBtn.style.display = 'none';
+      }
+    }
+
+    // Close sidebar when clicking outside on mobile
+    document.addEventListener('click', function(e) {
+      const sidebar = document.getElementById('adminSidebar');
+      const toggleBtn = document.getElementById('sidebarToggle');
+      if (window.innerWidth <= 992) {
+        if (!sidebar.contains(e.target) && !toggleBtn.contains(e.target)) {
+          sidebar.classList.remove('open');
+          document.getElementById('sidebarOverlay').classList.remove('show');
+          const closeBtn = sidebar.querySelector('.sidebar-close');
+          closeBtn.style.display = 'none';
+        }
+      }
+    });
+
+    // Handle window resize - close sidebar on larger screens
+    window.addEventListener('resize', function() {
+      if (window.innerWidth > 992) {
+        const sidebar = document.getElementById('adminSidebar');
+        const overlay = document.getElementById('sidebarOverlay');
+        sidebar.classList.remove('open');
+        overlay.classList.remove('show');
+        const closeBtn = sidebar.querySelector('.sidebar-close');
+        closeBtn.style.display = 'none';
+      }
+    });
+
+    // ==========================================
+    // IMAGE UPLOAD HANDLING
+    // ==========================================
+    let uploadedImages = [];
+    let imageCounter = 1;
+
+    function handleImageUpload(input, slotId) {
+      const file = input.files[0];
+      if (!file) return;
+      
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        // Add to uploaded images array
+        uploadedImages.push({
+          id: Date.now(),
+          data: e.target.result,
+          file: file
+        });
+        
+        // Update the upload slot with preview
+        const slot = document.getElementById('uploadSlot' + slotId);
+        slot.innerHTML = `
+          <img src="${e.target.result}" alt="Uploaded image">
+          <button type="button" class="remove-btn" onclick="removeImage(${uploadedImages.length - 1}, ${slotId})">✕</button>
+        `;
+        
+        // Add new upload slot if needed
+        if (uploadedImages.length < 10) {
+          addNewUploadSlot();
+        }
+        
+        // Update info
+        updateImageInfo();
+        
+        // Preview main image if first image
+        if (uploadedImages.length === 1) {
+          document.getElementById('imagePreview').src = e.target.result;
+          document.getElementById('imagePreview').style.display = 'block';
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function addNewUploadSlot() {
+      const grid = document.getElementById('imageUploadGrid');
+      const slotId = ++imageCounter;
+      const slot = document.createElement('div');
+      slot.className = 'image-upload-item';
+      slot.id = 'uploadSlot' + slotId;
+      slot.innerHTML = `
+        <div class="upload-placeholder">
+          <span class="icon">📸</span>
+          Add Image
+        </div>
+        <input type="file" accept="image/*" onchange="handleImageUpload(this, ${slotId})">
+      `;
+      grid.appendChild(slot);
+    }
+
+    function removeImage(index, slotId) {
+      uploadedImages.splice(index, 1);
+      
+      // Remove the slot
+      const slot = document.getElementById('uploadSlot' + slotId);
+      if (slot) {
+        slot.remove();
+      }
+      
+      // Rebuild the grid
+      rebuildImageGrid();
+    }
+
+    function rebuildImageGrid() {
+      const grid = document.getElementById('imageUploadGrid');
+      grid.innerHTML = '';
+      imageCounter = 1;
+      
+      // Re-add existing images
+      uploadedImages.forEach((img, idx) => {
+        const slot = document.createElement('div');
+        slot.className = 'image-upload-item';
+        slot.id = 'uploadSlot' + imageCounter;
+        slot.innerHTML = `
+          <img src="${img.data}" alt="Uploaded image">
+          <button type="button" class="remove-btn" onclick="removeImage(${idx}, ${imageCounter})">✕</button>
+        `;
+        grid.appendChild(slot);
+        imageCounter++;
+      });
+      
+      // Add new upload slot if less than 10
+      if (uploadedImages.length < 10) {
+        addNewUploadSlot();
+      }
+      
+      updateImageInfo();
+    }
+
+    function updateImageInfo() {
+      const info = document.getElementById('uploadedImagesInfo');
+      if (uploadedImages.length > 0) {
+        info.textContent = `✅ ${uploadedImages.length} image(s) uploaded`;
+      } else {
+        info.textContent = '';
+      }
+    }
+
+    // ==========================================
+    // MAIN IMAGE PREVIEW FROM URL
+    // ==========================================
     const imageUrlInput = document.getElementById('productImage');
-    const imageFileInput = document.getElementById('productImageInput');
     const preview = document.getElementById('imagePreview');
 
     if (imageUrlInput) {
@@ -127,21 +556,114 @@
       });
     }
 
-    if (imageFileInput) {
-      imageFileInput.addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        if (file) {
-          const reader = new FileReader();
-          reader.onload = (event) => {
-            preview.src = event.target.result;
-            preview.style.display = 'block';
-            // Save base64 string directly to image URL field
-            if (imageUrlInput) imageUrlInput.value = event.target.result;
-          };
-          reader.readAsDataURL(file);
-        }
-      });
+    // ==========================================
+    // FORM SUBMISSION
+    // ==========================================
+    function saveProduct(e) {
+      e.preventDefault();
+      
+      // Get form values
+      const name = document.getElementById('productName').value.trim();
+      const category = document.getElementById('productCategory').value;
+      const price = document.getElementById('productPrice').value;
+      const oldPrice = document.getElementById('productOldPrice').value;
+      const fabric = document.getElementById('productFabric').value;
+      const tag = document.getElementById('productTag').value;
+      const status = document.getElementById('productStatus').value;
+      const description = document.getElementById('productDescription').value.trim();
+      const care = document.getElementById('productCare').value.trim();
+      const mainImage = document.getElementById('productImage').value.trim();
+      
+      // Validation
+      if (!name) { alert('Please enter product name'); return; }
+      if (!category) { alert('Please select a category'); return; }
+      if (!price) { alert('Please enter price'); return; }
+      if (!description) { alert('Please enter description'); return; }
+      
+      // Build product object
+      const product = {
+        name: name,
+        category: category,
+        price: parseFloat(price),
+        oldPrice: oldPrice ? parseFloat(oldPrice) : null,
+        fabric: fabric || 'Silk',
+        tag: tag || '',
+        status: status || 'ACTIVE',
+        description: description,
+        care: care || '',
+        image: mainImage || (uploadedImages.length > 0 ? uploadedImages[0].data : ''),
+        images: uploadedImages.map(img => img.data)
+      };
+      
+      console.log('📦 Product to save:', product);
+      
+      // Show success message
+      showToast('✅ Product saved successfully!');
+      
+      // Reset form after 2 seconds
+      setTimeout(() => {
+        document.getElementById('addProductForm').reset();
+        document.getElementById('imagePreview').style.display = 'none';
+        uploadedImages = [];
+        document.getElementById('imageUploadGrid').innerHTML = '';
+        imageCounter = 1;
+        addNewUploadSlot();
+        document.getElementById('uploadedImagesInfo').textContent = '';
+      }, 2000);
     }
+
+    // ==========================================
+    // TOAST NOTIFICATION
+    // ==========================================
+    function showToast(message) {
+      const toast = document.createElement('div');
+      toast.style.cssText = `
+        position: fixed; bottom: 20px; right: 20px; 
+        background: #28a745; color: #fff; 
+        padding: 14px 28px; border-radius: 8px; 
+        font-size: 14px; z-index: 9999;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        animation: slideIn 0.3s ease;
+        font-family: 'Jost', sans-serif;
+      `;
+      toast.textContent = message;
+      document.body.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transition = 'opacity 0.3s';
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+
+    // Add animation keyframes
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes slideIn {
+        from { transform: translateX(100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+      }
+    `;
+    document.head.appendChild(style);
+
+    // ==========================================
+    // LOGOUT FUNCTION
+    // ==========================================
+    function logout() {
+      localStorage.removeItem('adminLoggedIn');
+      window.location.href = 'login.html';
+    }
+
+    // Initialize with one upload slot
+    document.addEventListener('DOMContentLoaded', function() {
+      // Add initial upload slot if empty
+      if (document.getElementById('imageUploadGrid').children.length === 0) {
+        addNewUploadSlot();
+      }
+    });
   </script>
+
+  <script src="js/auth.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/api.js"></script>
 </body>
 </html>

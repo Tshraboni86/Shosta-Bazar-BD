@@ -2,26 +2,145 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Categories | Shosta Bazar BD Admin</title>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/admin.css">
+  <style>
+    /* Mobile Sidebar Toggle - MATCHES DASHBOARD */
+    .sidebar-toggle-mobile {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 24px;
+      color: #320e17;
+      cursor: pointer;
+      padding: 8px;
+      line-height: 1;
+    }
+    .sidebar-toggle-mobile:hover {
+      color: #a9812f;
+    }
+    
+    /* MOBILE RESPONSIVE - MATCHES DASHBOARD */
+    @media (max-width: 992px) {
+      .sidebar-toggle-mobile {
+        display: block;
+      }
+      .nav-left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .admin-navbar {
+        padding: 12px 16px;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      .admin-navbar h2 {
+        font-size: 18px;
+      }
+      .admin-sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 280px;
+        z-index: 1000;
+        background: #fff;
+        border-right: 1px solid #e0e0e0;
+        box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+        overflow-y: auto;
+      }
+      .admin-sidebar.open {
+        transform: translateX(0);
+      }
+      .sidebar-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.5);
+        z-index: 999;
+      }
+      .sidebar-overlay.show {
+        display: block;
+      }
+      .admin-main {
+        margin-left: 0 !important;
+        width: 100% !important;
+      }
+      .admin-layout {
+        display: block !important;
+      }
+      .sidebar-close {
+        display: none;
+        margin-left: auto;
+        background: none;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+        color: #320e17;
+      }
+      .admin-sidebar.open .sidebar-close {
+        display: block;
+      }
+    }
+    
+    @media (max-width: 576px) {
+      .admin-navbar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+      }
+      .admin-navbar h2 {
+        font-size: 16px;
+      }
+      .admin-navbar .btn-admin {
+        text-align: center;
+      }
+      .card {
+        padding: 12px;
+      }
+      .admin-table {
+        font-size: 11px;
+      }
+      .admin-table th,
+      .admin-table td {
+        padding: 6px 8px;
+      }
+      .admin-sidebar {
+        width: 260px;
+      }
+    }
+  </style>
 </head>
 <body>
   <div class="admin-layout">
-    <aside class="admin-sidebar">
-      <div class="sidebar-header"><b>Shosta Bazar Admin</b></div>
+    <!-- Sidebar Overlay for Mobile -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+    
+    <!-- SIDEBAR - EXACTLY LIKE DASHBOARD -->
+    <aside class="admin-sidebar" id="adminSidebar">
+      <div class="sidebar-header">
+        <svg width="32" height="32" viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="#320e17" stroke="#c8a24a" stroke-width="2"/><text x="32" y="40" text-anchor="middle" font-family="serif" font-style="italic" font-size="23" fill="#e6cd93">SB</text></svg>
+        <b>Shosta Bazar Admin</b>
+        <button class="sidebar-close" onclick="toggleSidebar()">✕</button>
+      </div>
       <ul class="sidebar-menu">
         <li><a href="dashboard.html">Dashboard</a></li>
         <li><a href="products.html">Products</a></li>
         <li class="active"><a href="categories.html">Categories</a></li>
         <li><a href="hero.html">Hero Slider</a></li>
+        <li><a href="bridal-slides.html">Bridal Slider</a></li>
         <li><a href="gallery.html">Gallery</a></li>
         <li><a href="orders.html">Orders</a></li>
         <li><a href="customers.html">Customers</a></li>
         <li><a href="reviews.html">Reviews</a></li>
         <li><a href="offers.html">Offers</a></li>
         <li><a href="content.html">Website Content</a></li>
-        <li><a href="image-history.html">Image History</a></li>
+        <li><a href="product-detail-settings.html">Product Detail Settings</a></li>
         <li><a href="settings.html">Settings</a></li>
       </ul>
       <div class="sidebar-footer">
@@ -33,9 +152,13 @@
     </aside>
 
     <div class="admin-main">
-      <header class="content-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-        <h2>Category Management</h2>
-        <a href="#" id="addCategoryLink" style="background: #201315; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 4px; display: inline-block;">+ ADD CATEGORY</a>
+      <header class="admin-navbar">
+        <div class="nav-left">
+          <!-- Three-dot menu button for mobile -->
+          <button class="sidebar-toggle-mobile" id="sidebarToggle" onclick="toggleSidebar()">☰</button>
+          <h2>Category Management</h2>
+        </div>
+        <a href="#" id="addCategoryLink" class="btn-admin">+ Add Category</a>
       </header>
 
       <main class="content-body">
@@ -51,7 +174,9 @@
                   <th>Actions</th>
                 </tr>
               </thead>
-              <tbody id="categoriesTableBody"></tbody>
+              <tbody id="categoriesTableBody">
+                <!-- Categories rendered by JavaScript -->
+              </tbody>
             </table>
           </div>
         </div>
@@ -111,10 +236,293 @@
     </div>
   </div>
 
-  <script src="js/mock-data.js"></script>
-  <script src="js/auth.js"></script>
-  <script src="js/admin.js"></script>
-  <script src="js/categories.js"></script>
-  <script src="js/api.js"></script>
+  <script>
+    // ==========================================
+    // SIDEBAR TOGGLE - MATCHES DASHBOARD
+    // ==========================================
+    function toggleSidebar() {
+      var sidebar = document.getElementById('adminSidebar');
+      var overlay = document.getElementById('sidebarOverlay');
+      sidebar.classList.toggle('open');
+      overlay.classList.toggle('show');
+    }
+
+    document.addEventListener('click', function(e) {
+      var sidebar = document.getElementById('adminSidebar');
+      var toggleBtn = document.getElementById('sidebarToggle');
+      if (window.innerWidth <= 992) {
+        if (!sidebar.contains(e.target) && !toggleBtn.contains(e.target)) {
+          sidebar.classList.remove('open');
+          document.getElementById('sidebarOverlay').classList.remove('show');
+        }
+      }
+    });
+
+    window.addEventListener('resize', function() {
+      if (window.innerWidth > 992) {
+        var sidebar = document.getElementById('adminSidebar');
+        var overlay = document.getElementById('sidebarOverlay');
+        sidebar.classList.remove('open');
+        overlay.classList.remove('show');
+      }
+    });
+
+    // ==========================================
+    // CATEGORY DATA
+    // ==========================================
+    var categories = [
+      {
+        id: 1,
+        name: 'Sarees',
+        designs: '50 Designs',
+        image: 'https://images.unsplash.com/photo-1596462502278-27bfdc4033c8?q=80&w=100',
+        status: 'ACTIVE'
+      },
+      {
+        id: 2,
+        name: 'Lehenga',
+        designs: '35 Designs',
+        image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=100',
+        status: 'ACTIVE'
+      },
+      {
+        id: 3,
+        name: 'Gowns',
+        designs: '20 Designs',
+        image: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=100',
+        status: 'ACTIVE'
+      },
+      {
+        id: 4,
+        name: 'Salwar Kameez',
+        designs: '28 Designs',
+        image: 'https://images.unsplash.com/photo-1566174053879-31528523f8ae?q=80&w=100',
+        status: 'INACTIVE'
+      },
+      {
+        id: 5,
+        name: 'Bridal',
+        designs: '42 Designs',
+        image: 'https://images.unsplash.com/photo-1594465911080-dd025b7e0744?q=80&w=100',
+        status: 'ACTIVE'
+      }
+    ];
+
+    var deleteTargetId = null;
+    var editTargetId = null;
+
+    // ==========================================
+    // RENDER CATEGORIES
+    // ==========================================
+    function renderCategories() {
+      var tbody = document.getElementById('categoriesTableBody');
+      
+      if (!categories || categories.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:30px; color:#888;">No categories found</td></tr>';
+        return;
+      }
+      
+      var html = '';
+      for (var i = 0; i < categories.length; i++) {
+        var c = categories[i];
+        var statusClass = c.status === 'ACTIVE' ? 'badge-success' : 'badge-danger';
+        var statusText = c.status === 'ACTIVE' ? 'Active' : 'Inactive';
+        
+        html += '<tr>' +
+          '<td><img src="' + (c.image || 'https://via.placeholder.com/50') + '" alt="' + c.name + '" style="width:50px; height:50px; object-fit:cover; border-radius:4px;" onerror="this.src=\'https://via.placeholder.com/50\'"></td>' +
+          '<td><strong>' + c.name + '</strong></td>' +
+          '<td>' + c.designs + '</td>' +
+          '<td><span class="badge ' + statusClass + '">' + statusText + '</span></td>' +
+          '<td>' +
+            '<button class="btn-admin-secondary" style="padding:4px 12px; font-size:12px; margin-right:4px;" onclick="editCategory(' + c.id + ')">✏️ Edit</button>' +
+            '<button class="btn-admin" style="padding:4px 12px; font-size:12px; background:#dc3545;" onclick="confirmDelete(' + c.id + ')">🗑️</button>' +
+          '</td>' +
+        '</tr>';
+      }
+      
+      tbody.innerHTML = html;
+    }
+
+    // ==========================================
+    // MODAL FUNCTIONS
+    // ==========================================
+    function openModal() {
+      document.getElementById('categoryModal').style.display = 'flex';
+    }
+
+    function closeModal() {
+      document.getElementById('categoryModal').style.display = 'none';
+      document.getElementById('categoryForm').reset();
+      document.getElementById('modalTitle').textContent = 'Add New Category';
+      document.getElementById('catImage').value = '';
+      document.getElementById('imagePreview').innerHTML = '<span style="color: #aaa; font-size: 0.75rem;">No image</span>';
+      document.getElementById('catImageFile').value = '';
+      document.getElementById('categoryForm').dataset.editId = '';
+    }
+
+    function editCategory(id) {
+      var category = null;
+      for (var i = 0; i < categories.length; i++) {
+        if (categories[i].id === id) { category = categories[i]; break; }
+      }
+      if (!category) return;
+      
+      document.getElementById('modalTitle').textContent = 'Edit Category';
+      document.getElementById('catName').value = category.name;
+      document.getElementById('catDesigns').value = category.designs;
+      document.getElementById('catImage').value = category.image || '';
+      document.getElementById('catStatus').value = category.status;
+      document.getElementById('categoryForm').dataset.editId = id;
+      
+      if (category.image) {
+        var preview = document.getElementById('imagePreview');
+        preview.innerHTML = '<img src="' + category.image + '" style="width:100%; height:100%; object-fit:cover;">';
+      }
+      
+      openModal();
+    }
+
+    function confirmDelete(id) {
+      deleteTargetId = id;
+      var category = null;
+      for (var i = 0; i < categories.length; i++) {
+        if (categories[i].id === id) { category = categories[i]; break; }
+      }
+      document.getElementById('deleteMessage').textContent = 'Are you sure you want to delete "' + (category ? category.name : 'this category') + '"?';
+      document.getElementById('deleteModal').style.display = 'flex';
+    }
+
+    function closeDeleteModal() {
+      document.getElementById('deleteModal').style.display = 'none';
+      deleteTargetId = null;
+    }
+
+    // ==========================================
+    // IMAGE UPLOAD
+    // ==========================================
+    function handleImageUpload(input) {
+      var file = input.files[0];
+      if (file) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+          var preview = document.getElementById('imagePreview');
+          preview.innerHTML = '<img src="' + e.target.result + '" style="width:100%; height:100%; object-fit:cover;">';
+          document.getElementById('catImage').value = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    // ==========================================
+    // EVENT LISTENERS
+    // ==========================================
+    document.getElementById('addCategoryLink').addEventListener('click', function(e) {
+      e.preventDefault();
+      closeModal();
+      openModal();
+    });
+
+    document.getElementById('closeModalBtn').addEventListener('click', closeModal);
+
+    document.getElementById('categoryModal').addEventListener('click', function(e) {
+      if (e.target === this) closeModal();
+    });
+
+    document.getElementById('deleteCancelBtn').addEventListener('click', closeDeleteModal);
+    document.getElementById('deleteModal').addEventListener('click', function(e) {
+      if (e.target === this) closeDeleteModal();
+    });
+
+    document.getElementById('deleteConfirmBtn').addEventListener('click', function() {
+      if (deleteTargetId) {
+        var newCategories = [];
+        for (var i = 0; i < categories.length; i++) {
+          if (categories[i].id !== deleteTargetId) newCategories.push(categories[i]);
+        }
+        categories = newCategories;
+        renderCategories();
+        showToast('✅ Category deleted successfully!');
+        deleteTargetId = null;
+        closeDeleteModal();
+      }
+    });
+
+    document.getElementById('categoryForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      var name = document.getElementById('catName').value.trim();
+      var designs = document.getElementById('catDesigns').value.trim();
+      var image = document.getElementById('catImage').value.trim();
+      var status = document.getElementById('catStatus').value;
+      var editId = this.dataset.editId;
+      
+      if (!name) {
+        alert('Please enter a category name');
+        return;
+      }
+      
+      if (editId) {
+        // Edit existing
+        for (var i = 0; i < categories.length; i++) {
+          if (categories[i].id == editId) {
+            categories[i].name = name;
+            categories[i].designs = designs || '0 Designs';
+            categories[i].image = image || '';
+            categories[i].status = status;
+            break;
+          }
+        }
+        showToast('✅ Category updated successfully!');
+      } else {
+        // Add new
+        var newCategory = {
+          id: Date.now(),
+          name: name,
+          designs: designs || '0 Designs',
+          image: image || '',
+          status: status
+        };
+        categories.push(newCategory);
+        showToast('✅ Category added successfully!');
+      }
+      
+      renderCategories();
+      closeModal();
+    });
+
+    // ==========================================
+    // TOAST NOTIFICATION
+    // ==========================================
+    function showToast(message) {
+      var toast = document.createElement('div');
+      toast.style.cssText = 'position: fixed; bottom: 20px; right: 20px; background: #28a745; color: #fff; padding: 12px 24px; border-radius: 8px; font-size: 14px; z-index: 9999; box-shadow: 0 4px 12px rgba(0,0,0,0.3); animation: slideIn 0.3s ease; font-family: Jost, sans-serif;';
+      toast.textContent = message;
+      document.body.appendChild(toast);
+      setTimeout(function() {
+        toast.style.opacity = '0';
+        toast.style.transition = 'opacity 0.3s';
+        setTimeout(function() { toast.remove(); }, 300);
+      }, 3000);
+    }
+
+    var style = document.createElement('style');
+    style.textContent = '@keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }';
+    document.head.appendChild(style);
+
+    // ==========================================
+    // LOGOUT
+    // ==========================================
+    function logout() {
+      localStorage.removeItem('adminLoggedIn');
+      window.location.href = 'login.html';
+    }
+
+    // ==========================================
+    // INITIALIZE
+    // ==========================================
+    document.addEventListener('DOMContentLoaded', function() {
+      renderCategories();
+    });
+  </script>
 </body>
 </html>

@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Customers | Shosta Bazar BD Admin</title>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/admin.css">
@@ -107,24 +108,200 @@
     .status-badge.shipped { background: #b8d4e3; color: #1a3a5c; }
     .status-badge.delivered { background: #d4edda; color: #155724; }
     .status-badge.cancelled { background: #f8d7da; color: #721c24; }
+    
+    /* Mobile Sidebar Toggle - MATCHES DASHBOARD */
+    .sidebar-toggle-mobile {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 24px;
+      color: #320e17;
+      cursor: pointer;
+      padding: 8px;
+      line-height: 1;
+    }
+    .sidebar-toggle-mobile:hover {
+      color: #a9812f;
+    }
+    
+    /* MOBILE RESPONSIVE - MATCHES DASHBOARD */
+    @media (max-width: 992px) {
+      .sidebar-toggle-mobile {
+        display: block;
+      }
+      .nav-left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .admin-navbar {
+        padding: 12px 16px;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      .admin-navbar h2 {
+        font-size: 18px;
+      }
+      .admin-sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 280px;
+        z-index: 1000;
+        background: #fff;
+        border-right: 1px solid #e0e0e0;
+        box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+        overflow-y: auto;
+      }
+      .admin-sidebar.open {
+        transform: translateX(0);
+      }
+      .sidebar-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.5);
+        z-index: 999;
+      }
+      .sidebar-overlay.show {
+        display: block;
+      }
+      .admin-main {
+        margin-left: 0 !important;
+        width: 100% !important;
+      }
+      .admin-layout {
+        display: block !important;
+      }
+      .sidebar-close {
+        display: none;
+        margin-left: auto;
+        background: none;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+        color: #320e17;
+      }
+      .admin-sidebar.open .sidebar-close {
+        display: block;
+      }
+      .customer-stats {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 12px;
+      }
+      .stat-card .number {
+        font-size: 22px;
+      }
+    }
+    
+    @media (max-width: 576px) {
+      .admin-navbar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+      }
+      .admin-navbar h2 {
+        font-size: 16px;
+      }
+      .admin-navbar .btn-admin {
+        text-align: center;
+      }
+      .card {
+        padding: 12px;
+      }
+      .admin-table {
+        font-size: 11px;
+      }
+      .admin-table th,
+      .admin-table td {
+        padding: 6px 8px;
+      }
+      .admin-sidebar {
+        width: 260px;
+      }
+      .customer-stats {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+      }
+      .stat-card {
+        padding: 10px 12px;
+      }
+      .stat-card .number {
+        font-size: 18px;
+      }
+      .stat-card .label {
+        font-size: 10px;
+      }
+      #customerDetailModal > div {
+        margin: 12px;
+        padding: 16px;
+      }
+      .detail-grid {
+        grid-template-columns: 1fr;
+        gap: 4px 0;
+      }
+      .order-history-table {
+        font-size: 11px;
+      }
+      .order-history-table th,
+      .order-history-table td {
+        padding: 4px 8px;
+      }
+    }
+    
+    @media (max-width: 400px) {
+      .customer-stats {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+      .stat-card {
+        padding: 8px 10px;
+      }
+      .stat-card .number {
+        font-size: 16px;
+      }
+      .admin-table {
+        font-size: 10px;
+      }
+      .admin-table th,
+      .admin-table td {
+        padding: 4px 6px;
+      }
+      .customer-row .badge {
+        font-size: 9px;
+        padding: 1px 6px;
+      }
+    }
   </style>
 </head>
 <body>
   <div class="admin-layout">
-    <aside class="admin-sidebar">
-      <div class="sidebar-header"><b>Shosta Bazar Admin</b></div>
+    <!-- Sidebar Overlay for Mobile -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+    
+    <!-- SIDEBAR - EXACTLY LIKE DASHBOARD -->
+    <aside class="admin-sidebar" id="adminSidebar">
+      <div class="sidebar-header">
+        <svg width="32" height="32" viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="#320e17" stroke="#c8a24a" stroke-width="2"/><text x="32" y="40" text-anchor="middle" font-family="serif" font-style="italic" font-size="23" fill="#e6cd93">SB</text></svg>
+        <b>Shosta Bazar Admin</b>
+        <button class="sidebar-close" onclick="toggleSidebar()">✕</button>
+      </div>
       <ul class="sidebar-menu">
         <li><a href="dashboard.html">Dashboard</a></li>
         <li><a href="products.html">Products</a></li>
         <li><a href="categories.html">Categories</a></li>
         <li><a href="hero.html">Hero Slider</a></li>
+        <li><a href="bridal-slides.html">Bridal Slider</a></li>
         <li><a href="gallery.html">Gallery</a></li>
         <li><a href="orders.html">Orders</a></li>
         <li class="active"><a href="customers.html">Customers</a></li>
         <li><a href="reviews.html">Reviews</a></li>
         <li><a href="offers.html">Offers</a></li>
         <li><a href="content.html">Website Content</a></li>
-        <li><a href="image-history.html">Image History</a></li>
+        <li><a href="product-detail-settings.html">Product Detail Settings</a></li>
         <li><a href="settings.html">Settings</a></li>
       </ul>
       <div class="sidebar-footer">
@@ -136,9 +313,13 @@
     </aside>
 
     <div class="admin-main">
-      <header class="content-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-        <h2>👥 Customer Management</h2>
-        <button onclick="loadCustomers()" style="background: #201315; color: #fff; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer;">🔄 Refresh</button>
+      <header class="admin-navbar">
+        <div class="nav-left">
+          <!-- Three-dot menu button for mobile -->
+          <button class="sidebar-toggle-mobile" id="sidebarToggle" onclick="toggleSidebar()">☰</button>
+          <h2>👥 Customer Management</h2>
+        </div>
+        <button onclick="loadCustomers()" class="btn-admin" style="background: #201315; color: #fff; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer;">🔄 Refresh</button>
       </header>
 
       <main class="content-body">
@@ -151,8 +332,8 @@
         </div>
 
         <!-- Search Bar -->
-        <div style="margin-bottom: 16px; display: flex; gap: 10px;">
-          <input type="text" id="customerSearch" placeholder="Search by name or phone..." style="flex:1; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
+        <div style="margin-bottom: 16px; display: flex; gap: 10px; flex-wrap: wrap;">
+          <input type="text" id="customerSearch" placeholder="Search by name or phone..." style="flex:1; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; min-width: 150px;">
           <button onclick="searchCustomers()" style="padding: 10px 20px; background: #320e17; color: #fff; border: none; border-radius: 4px; cursor: pointer;">Search</button>
           <button onclick="clearSearch()" style="padding: 10px 20px; background: #6c757d; color: #fff; border: none; border-radius: 4px; cursor: pointer;">Clear</button>
         </div>
@@ -193,10 +374,270 @@
     </div>
   </div>
 
-  <script src="js/mock-data.js"></script>
-  <script src="js/auth.js"></script>
-  <script src="js/admin.js"></script>
-  <script src="js/customers.js"></script>
-  <script src="js/api.js"></script>
+  <script>
+    // ==========================================
+    // SIDEBAR TOGGLE - MATCHES DASHBOARD
+    // ==========================================
+    function toggleSidebar() {
+      var sidebar = document.getElementById('adminSidebar');
+      var overlay = document.getElementById('sidebarOverlay');
+      sidebar.classList.toggle('open');
+      overlay.classList.toggle('show');
+    }
+
+    document.addEventListener('click', function(e) {
+      var sidebar = document.getElementById('adminSidebar');
+      var toggleBtn = document.getElementById('sidebarToggle');
+      if (window.innerWidth <= 992) {
+        if (!sidebar.contains(e.target) && !toggleBtn.contains(e.target)) {
+          sidebar.classList.remove('open');
+          document.getElementById('sidebarOverlay').classList.remove('show');
+        }
+      }
+    });
+
+    window.addEventListener('resize', function() {
+      if (window.innerWidth > 992) {
+        var sidebar = document.getElementById('adminSidebar');
+        var overlay = document.getElementById('sidebarOverlay');
+        sidebar.classList.remove('open');
+        overlay.classList.remove('show');
+      }
+    });
+
+    // ==========================================
+    // CUSTOMER DATA
+    // ==========================================
+    var customers = [
+      {
+        id: 1,
+        name: 'Farzana R.',
+        phone: '017********',
+        orders: 5,
+        totalSpent: 125000,
+        lastOrder: '2026-08-20',
+        status: 'high',
+        statusLabel: 'VIP'
+      },
+      {
+        id: 2,
+        name: 'Nusrat J.',
+        phone: '018********',
+        orders: 3,
+        totalSpent: 45000,
+        lastOrder: '2026-08-21',
+        status: 'medium',
+        statusLabel: 'Regular'
+      },
+      {
+        id: 3,
+        name: 'Tahmina K.',
+        phone: '019********',
+        orders: 2,
+        totalSpent: 32000,
+        lastOrder: '2026-08-22',
+        status: 'medium',
+        statusLabel: 'Regular'
+      },
+      {
+        id: 4,
+        name: 'Rafia S.',
+        phone: '016********',
+        orders: 1,
+        totalSpent: 28000,
+        lastOrder: '2026-08-22',
+        status: 'low',
+        statusLabel: 'New'
+      },
+      {
+        id: 5,
+        name: 'Sharmin A.',
+        phone: '015********',
+        orders: 4,
+        totalSpent: 68000,
+        lastOrder: '2026-08-23',
+        status: 'high',
+        statusLabel: 'VIP'
+      },
+      {
+        id: 6,
+        name: 'Sadia M.',
+        phone: '017********',
+        orders: 2,
+        totalSpent: 22000,
+        lastOrder: '2026-08-19',
+        status: 'low',
+        statusLabel: 'New'
+      }
+    ];
+
+    var filteredCustomers = [];
+
+    // ==========================================
+    // RENDER CUSTOMERS
+    // ==========================================
+    function renderCustomers(customerList) {
+      var tbody = document.getElementById('customersTableBody');
+      var list = customerList || customers;
+      
+      if (!list || list.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:30px; color:#888;">No customers found</td></tr>';
+        updateStats([]);
+        return;
+      }
+      
+      var html = '';
+      var totalOrders = 0;
+      var totalRevenue = 0;
+      
+      for (var i = 0; i < list.length; i++) {
+        var c = list[i];
+        totalOrders += c.orders;
+        totalRevenue += c.totalSpent;
+        
+        var statusClass = c.status === 'high' ? 'high' : c.status === 'medium' ? 'medium' : 'low';
+        
+        html += '<tr class="customer-row" onclick="viewCustomer(' + c.id + ')">' +
+          '<td><strong>' + c.name + '</strong></td>' +
+          '<td>' + c.phone + '</td>' +
+          '<td>' + c.orders + '</td>' +
+          '<td>৳' + c.totalSpent.toLocaleString() + '</td>' +
+          '<td>' + c.lastOrder + '</td>' +
+          '<td><span class="badge ' + statusClass + '">' + c.statusLabel + '</span></td>' +
+          '<td><button class="btn-admin-secondary" style="padding:4px 10px; font-size:11px;" onclick="event.stopPropagation(); viewCustomer(' + c.id + ')">👁️ View</button></td>' +
+        '</tr>';
+      }
+      
+      tbody.innerHTML = html;
+      updateStats(list, totalOrders, totalRevenue);
+    }
+
+    function updateStats(list, totalOrders, totalRevenue) {
+      var totalCustomers = list.length || 0;
+      var orders = totalOrders || 0;
+      var revenue = totalRevenue || 0;
+      var avg = totalCustomers > 0 ? revenue / totalCustomers : 0;
+      
+      document.getElementById('totalCustomers').textContent = totalCustomers;
+      document.getElementById('totalOrders').textContent = orders;
+      document.getElementById('totalRevenue').textContent = '৳' + revenue.toLocaleString();
+      document.getElementById('avgSpent').textContent = '৳' + Math.round(avg).toLocaleString();
+    }
+
+    // ==========================================
+    // SEARCH FUNCTIONS
+    // ==========================================
+    function searchCustomers() {
+      var searchTerm = document.getElementById('customerSearch').value.toLowerCase().trim();
+      if (!searchTerm) {
+        renderCustomers(customers);
+        return;
+      }
+      
+      var filtered = [];
+      for (var i = 0; i < customers.length; i++) {
+        var c = customers[i];
+        if (c.name.toLowerCase().includes(searchTerm) || c.phone.includes(searchTerm)) {
+          filtered.push(c);
+        }
+      }
+      renderCustomers(filtered);
+    }
+
+    function clearSearch() {
+      document.getElementById('customerSearch').value = '';
+      renderCustomers(customers);
+    }
+
+    // ==========================================
+    // VIEW CUSTOMER DETAILS
+    // ==========================================
+    function viewCustomer(id) {
+      var customer = null;
+      for (var i = 0; i < customers.length; i++) {
+        if (customers[i].id === id) { customer = customers[i]; break; }
+      }
+      if (!customer) return;
+      
+      document.getElementById('detailCustomerName').textContent = customer.name;
+      
+      var content = document.getElementById('customerDetailContent');
+      content.innerHTML = 
+        '<div class="detail-section">' +
+          '<h4>Personal Information</h4>' +
+          '<div class="detail-grid">' +
+            '<div><span class="label">Name</span><br><span class="value">' + customer.name + '</span></div>' +
+            '<div><span class="label">Phone</span><br><span class="value">' + customer.phone + '</span></div>' +
+            '<div><span class="label">Total Orders</span><br><span class="value">' + customer.orders + '</span></div>' +
+            '<div><span class="label">Total Spent</span><br><span class="value">৳' + customer.totalSpent.toLocaleString() + '</span></div>' +
+            '<div><span class="label">Last Order</span><br><span class="value">' + customer.lastOrder + '</span></div>' +
+            '<div><span class="label">Status</span><br><span class="value"><span class="badge ' + customer.status + '">' + customer.statusLabel + '</span></span></div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="detail-section">' +
+          '<h4>Order History</h4>' +
+          '<table class="order-history-table">' +
+            '<thead><tr><th>Order ID</th><th>Date</th><th>Items</th><th>Total</th><th>Status</th></tr></thead>' +
+            '<tbody>' +
+              '<tr><td>#ORD-9921</td><td>2026-08-20</td><td>3</td><td>৳65,000</td><td><span class="status-badge delivered">Delivered</span></td></tr>' +
+              '<tr><td>#ORD-9918</td><td>2026-08-15</td><td>2</td><td>৳32,000</td><td><span class="status-badge shipped">Shipped</span></td></tr>' +
+              '<tr><td>#ORD-9905</td><td>2026-08-10</td><td>1</td><td>৳8,500</td><td><span class="status-badge delivered">Delivered</span></td></tr>' +
+            '</tbody>' +
+          '</table>' +
+        '</div>';
+      
+      document.getElementById('customerDetailModal').style.display = 'flex';
+    }
+
+    function closeCustomerDetail() {
+      document.getElementById('customerDetailModal').style.display = 'none';
+    }
+
+    document.getElementById('customerDetailModal').addEventListener('click', function(e) {
+      if (e.target === this) closeCustomerDetail();
+    });
+
+    // ==========================================
+    // LOAD CUSTOMERS (Refresh)
+    // ==========================================
+    function loadCustomers() {
+      renderCustomers(customers);
+      showToast('🔄 Customers refreshed!');
+    }
+
+    // ==========================================
+    // TOAST NOTIFICATION
+    // ==========================================
+    function showToast(message) {
+      var toast = document.createElement('div');
+      toast.style.cssText = 'position: fixed; bottom: 20px; right: 20px; background: #28a745; color: #fff; padding: 12px 24px; border-radius: 8px; font-size: 14px; z-index: 9999; box-shadow: 0 4px 12px rgba(0,0,0,0.3); animation: slideIn 0.3s ease; font-family: Jost, sans-serif;';
+      toast.textContent = message;
+      document.body.appendChild(toast);
+      setTimeout(function() {
+        toast.style.opacity = '0';
+        toast.style.transition = 'opacity 0.3s';
+        setTimeout(function() { toast.remove(); }, 300);
+      }, 3000);
+    }
+
+    var style = document.createElement('style');
+    style.textContent = '@keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }';
+    document.head.appendChild(style);
+
+    // ==========================================
+    // LOGOUT
+    // ==========================================
+    function logout() {
+      localStorage.removeItem('adminLoggedIn');
+      window.location.href = 'login.html';
+    }
+
+    // ==========================================
+    // INITIALIZE
+    // ==========================================
+    document.addEventListener('DOMContentLoaded', function() {
+      renderCustomers(customers);
+    });
+  </script>
 </body>
 </html>

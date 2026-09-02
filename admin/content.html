@@ -2,26 +2,350 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Website Content | Shosta Bazar BD Admin</title>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/admin.css">
+  <style>
+    /* Additional styles for content page */
+    
+    /* Content sections */
+    .content-section {
+      background: #fff;
+      border-radius: 8px;
+      padding: 20px 24px;
+      margin-bottom: 20px;
+      border: 1px solid #eee;
+      transition: border-color 0.2s;
+    }
+    .content-section:hover {
+      border-color: #c8a24a;
+    }
+    .content-section .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #f0ece7;
+    }
+    .content-section .section-header h3 {
+      margin: 0;
+      color: #320e17;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+    }
+    .content-section .section-header .status-badge {
+      display: inline-block;
+      padding: 3px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .status-badge.published {
+      background: #d4edda;
+      color: #155724;
+    }
+    .status-badge.draft {
+      background: #fff3cd;
+      color: #856404;
+    }
+    
+    /* Hero content preview */
+    .hero-preview {
+      background: #320e17;
+      color: #e6cd93;
+      padding: 20px 24px;
+      border-radius: 6px;
+      margin-top: 10px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-preview::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='none' stroke='rgba(230,205,147,0.08)' stroke-width='1'%3E%3Ccircle cx='40' cy='40' r='30'/%3E%3Ccircle cx='40' cy='40' r='20'/%3E%3C/g%3E%3C/svg%3E");
+      background-size: 80px 80px;
+      opacity: 0.3;
+    }
+    .hero-preview .preview-content {
+      position: relative;
+      z-index: 1;
+    }
+    .hero-preview .preview-content .eyebrow {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.3em;
+      color: #c8a24a;
+    }
+    .hero-preview .preview-content h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem;
+      margin: 8px 0;
+      font-style: italic;
+    }
+    .hero-preview .preview-content p {
+      font-size: 0.9rem;
+      opacity: 0.8;
+      margin: 0;
+    }
+    
+    /* About section preview */
+    .about-preview {
+      display: flex;
+      gap: 20px;
+      padding: 16px;
+      background: #f8f5f2;
+      border-radius: 6px;
+      margin-top: 10px;
+      align-items: center;
+    }
+    .about-preview .about-icon {
+      font-size: 40px;
+      opacity: 0.5;
+    }
+    .about-preview .about-text {
+      flex: 1;
+    }
+    .about-preview .about-text h4 {
+      margin: 0 0 4px;
+      color: #320e17;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+    }
+    .about-preview .about-text p {
+      margin: 0;
+      font-size: 0.85rem;
+      color: #666;
+    }
+    
+    /* Bridal slider preview */
+    .bridal-preview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 12px;
+      margin-top: 10px;
+    }
+    .bridal-preview-grid .slide-thumb {
+      aspect-ratio: 1/1;
+      border-radius: 6px;
+      overflow: hidden;
+      background: #f0f0f0;
+      border: 2px solid #eee;
+      transition: border-color 0.2s;
+    }
+    .bridal-preview-grid .slide-thumb:hover {
+      border-color: #c8a24a;
+    }
+    .bridal-preview-grid .slide-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .bridal-preview-grid .slide-thumb .placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      color: #999;
+      font-size: 0.75rem;
+      text-align: center;
+      padding: 10px;
+    }
+    
+    /* Mobile Sidebar Toggle - MATCHES DASHBOARD */
+    .sidebar-toggle-mobile {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 24px;
+      color: #320e17;
+      cursor: pointer;
+      padding: 8px;
+      line-height: 1;
+    }
+    .sidebar-toggle-mobile:hover {
+      color: #a9812f;
+    }
+    
+    /* Toast notification */
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #28a745;
+      color: #fff;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 14px;
+      z-index: 9999;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      animation: slideIn 0.3s ease;
+      font-family: Jost, sans-serif;
+    }
+    
+    /* MOBILE RESPONSIVE - MATCHES DASHBOARD */
+    @media (max-width: 992px) {
+      .sidebar-toggle-mobile {
+        display: block;
+      }
+      .nav-left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .admin-navbar {
+        padding: 12px 16px;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      .admin-navbar h2 {
+        font-size: 18px;
+      }
+      .admin-sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 280px;
+        z-index: 1000;
+        background: #fff;
+        border-right: 1px solid #e0e0e0;
+        box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+        overflow-y: auto;
+      }
+      .admin-sidebar.open {
+        transform: translateX(0);
+      }
+      .sidebar-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.5);
+        z-index: 999;
+      }
+      .sidebar-overlay.show {
+        display: block;
+      }
+      .admin-main {
+        margin-left: 0 !important;
+        width: 100% !important;
+      }
+      .admin-layout {
+        display: block !important;
+      }
+      .sidebar-close {
+        display: none;
+        margin-left: auto;
+        background: none;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+        color: #320e17;
+      }
+      .admin-sidebar.open .sidebar-close {
+        display: block;
+      }
+      .about-preview {
+        flex-direction: column;
+        text-align: center;
+      }
+      .bridal-preview-grid {
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      }
+      .hero-preview .preview-content h2 {
+        font-size: 1.2rem;
+      }
+    }
+    
+    @media (max-width: 576px) {
+      .admin-navbar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+      }
+      .admin-navbar h2 {
+        font-size: 16px;
+      }
+      .card {
+        padding: 12px;
+      }
+      .content-section {
+        padding: 16px;
+      }
+      .content-section .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
+      .bridal-preview-grid {
+        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+        gap: 8px;
+      }
+      .hero-preview {
+        padding: 16px;
+      }
+      .hero-preview .preview-content h2 {
+        font-size: 1rem;
+      }
+      .hero-preview .preview-content p {
+        font-size: 0.8rem;
+      }
+      .admin-sidebar {
+        width: 260px;
+      }
+      .form-control {
+        font-size: 14px;
+        padding: 8px 12px;
+      }
+      .btn-admin {
+        width: 100%;
+        text-align: center;
+      }
+      .about-preview .about-icon {
+        font-size: 30px;
+      }
+    }
+    
+    @media (max-width: 400px) {
+      .bridal-preview-grid {
+        grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+        gap: 6px;
+      }
+      .content-section {
+        padding: 12px;
+      }
+    }
+  </style>
 </head>
 <body>
   <div class="admin-layout">
-    <aside class="admin-sidebar">
-      <div class="sidebar-header"><b>Shosta Bazar Admin</b></div>
+    <!-- Sidebar Overlay for Mobile -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+    
+    <!-- SIDEBAR - EXACTLY LIKE DASHBOARD -->
+    <aside class="admin-sidebar" id="adminSidebar">
+      <div class="sidebar-header">
+        <svg width="32" height="32" viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="#320e17" stroke="#c8a24a" stroke-width="2"/><text x="32" y="40" text-anchor="middle" font-family="serif" font-style="italic" font-size="23" fill="#e6cd93">SB</text></svg>
+        <b>Shosta Bazar Admin</b>
+        <button class="sidebar-close" onclick="toggleSidebar()">✕</button>
+      </div>
       <ul class="sidebar-menu">
         <li><a href="dashboard.html">Dashboard</a></li>
         <li><a href="products.html">Products</a></li>
         <li><a href="categories.html">Categories</a></li>
         <li><a href="hero.html">Hero Slider</a></li>
+        <li><a href="bridal-slides.html">Bridal Slider</a></li>
         <li><a href="gallery.html">Gallery</a></li>
         <li><a href="orders.html">Orders</a></li>
         <li><a href="customers.html">Customers</a></li>
         <li><a href="reviews.html">Reviews</a></li>
         <li><a href="offers.html">Offers</a></li>
         <li class="active"><a href="content.html">Website Content</a></li>
-        <li><a href="image-history.html">Image History</a></li>
+        <li><a href="product-detail-settings.html">Product Detail Settings</a></li>
         <li><a href="settings.html">Settings</a></li>
       </ul>
       <div class="sidebar-footer">
@@ -34,30 +358,290 @@
 
     <div class="admin-main">
       <header class="admin-navbar">
-        <h2>Content Editor</h2>
+        <div class="nav-left">
+          <!-- Three-dot menu button for mobile -->
+          <button class="sidebar-toggle-mobile" id="sidebarToggle" onclick="toggleSidebar()">☰</button>
+          <h2>Website Content Editor</h2>
+        </div>
+        <button class="btn-admin" onclick="saveAllContent()">💾 Save All</button>
       </header>
 
       <main class="content-body">
-        <div class="card" style="max-width:700px;">
-          <h3>Bridal Section Copy</h3>
-          <form onsubmit="event.preventDefault(); showToast('Content updated');" style="margin-top:15px;">
+        <!-- Hero Section Content -->
+        <div class="content-section">
+          <div class="section-header">
+            <h3>🏠 Hero Section</h3>
+            <span class="status-badge published">Published</span>
+          </div>
+          <form class="content-form" data-section="hero" onsubmit="saveSection(event, 'hero')">
             <div class="form-group">
-              <label>Heading</label>
-              <input type="text" class="form-control" value="Dive into luxury with our exclusive bridal collection">
+              <label>Eyebrow Text</label>
+              <input type="text" class="form-control" id="heroEyebrow" value="Designer Wear" placeholder="e.g. Designer Wear">
             </div>
             <div class="form-group">
-              <label>Description Paragraph</label>
-              <textarea class="form-control" rows="4">A symphony of hand-embroidered sequins, mirror work, and rich fabric — each lehenga and saree designed to be the centrepiece of your grandest day.</textarea>
+              <label>Main Heading</label>
+              <input type="text" class="form-control" id="heroHeading" value="Feel the joy of presenting yourself" placeholder="Main heading text">
             </div>
-            <button type="submit" class="btn-admin">Save Section Copy</button>
+            <div class="form-group">
+              <label>Subtitle</label>
+              <textarea class="form-control" id="heroSubtitle" rows="2" placeholder="Subtitle text">Welcome to Shosta Bazar BD, your ultimate destination for exclusive luxury dresses.</textarea>
+            </div>
+            <div class="form-group">
+              <label>Button 1 Text</label>
+              <input type="text" class="form-control" id="heroBtn1" value="Shop Now" placeholder="Shop Now">
+            </div>
+            <div class="form-group">
+              <label>Button 1 Link</label>
+              <input type="text" class="form-control" id="heroBtn1Link" value="#categories" placeholder="#categories">
+            </div>
+            <div class="form-group">
+              <label>Button 2 Text</label>
+              <input type="text" class="form-control" id="heroBtn2" value="Bridal Collection" placeholder="Bridal Collection">
+            </div>
+            <div class="form-group">
+              <label>Button 2 Link</label>
+              <input type="text" class="form-control" id="heroBtn2Link" value="#bridal" placeholder="#bridal">
+            </div>
+            <button type="submit" class="btn-admin" style="margin-top:8px;">Save Hero Section</button>
           </form>
+          
+          <!-- Live Preview -->
+          <div class="hero-preview">
+            <div class="preview-content">
+              <div class="eyebrow" id="previewEyebrow">Designer Wear</div>
+              <h2 id="previewHeading">Feel the joy of presenting yourself</h2>
+              <p id="previewSubtitle">Welcome to Shosta Bazar BD, your ultimate destination for exclusive luxury dresses.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- About Section Content -->
+        <div class="content-section">
+          <div class="section-header">
+            <h3>📖 About Section</h3>
+            <span class="status-badge published">Published</span>
+          </div>
+          <form class="content-form" data-section="about" onsubmit="saveSection(event, 'about')">
+            <div class="form-group">
+              <label>Eyebrow Text</label>
+              <input type="text" class="form-control" id="aboutEyebrow" value="Our Story" placeholder="Our Story">
+            </div>
+            <div class="form-group">
+              <label>Main Heading</label>
+              <input type="text" class="form-control" id="aboutHeading" value="Since 2014, an ode to tradition worn with modern grace" placeholder="Heading text">
+            </div>
+            <div class="form-group">
+              <label>Paragraph 1</label>
+              <textarea class="form-control" id="aboutP1" rows="3" placeholder="First paragraph">Shosta Bazar BD is the exclusive luxury fashion house for women in Bangladesh. Our collection showcases a perfect blend of modern and traditional designs.</textarea>
+            </div>
+            <div class="form-group">
+              <label>Paragraph 2</label>
+              <textarea class="form-control" id="aboutP2" rows="3" placeholder="Second paragraph">Every piece is finished by hand in our Dhaka atelier — from bridal lehengas to occasion sarees — so that what you wear feels as considered as the moment you wear it for.</textarea>
+            </div>
+            <button type="submit" class="btn-admin" style="margin-top:8px;">Save About Section</button>
+          </form>
+          
+          <!-- About Preview -->
+          <div class="about-preview">
+            <div class="about-icon">👗</div>
+            <div class="about-text">
+              <h4 id="previewAboutHeading">Since 2014, an ode to tradition worn with modern grace</h4>
+              <p id="previewAboutText">Shosta Bazar BD is the exclusive luxury fashion house for women in Bangladesh.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bridal Section Content -->
+        <div class="content-section">
+          <div class="section-header">
+            <h3>👰 Bridal Section</h3>
+            <span class="status-badge published">Published</span>
+          </div>
+          <form class="content-form" data-section="bridal" onsubmit="saveSection(event, 'bridal')">
+            <div class="form-group">
+              <label>Eyebrow Text</label>
+              <input type="text" class="form-control" id="bridalEyebrow" value="The Bridal Edit" placeholder="The Bridal Edit">
+            </div>
+            <div class="form-group">
+              <label>Main Heading</label>
+              <input type="text" class="form-control" id="bridalHeading" value="Dive into luxury with our exclusive bridal collection" placeholder="Heading text">
+            </div>
+            <div class="form-group">
+              <label>Description</label>
+              <textarea class="form-control" id="bridalDescription" rows="3" placeholder="Description text">A symphony of hand-embroidered sequins, mirror work, and rich fabric — each lehenga and saree designed to be the centrepiece of your grandest day.</textarea>
+            </div>
+            <div class="form-group">
+              <label>Button Text</label>
+              <input type="text" class="form-control" id="bridalBtnText" value="Explore Bridal Wear" placeholder="Explore Bridal Wear">
+            </div>
+            <div class="form-group">
+              <label>Button Link</label>
+              <input type="text" class="form-control" id="bridalBtnLink" value="#" placeholder="#">
+            </div>
+            <button type="submit" class="btn-admin" style="margin-top:8px;">Save Bridal Section</button>
+          </form>
+        </div>
+
+        <!-- Bridal Slider Images Preview -->
+        <div class="content-section">
+          <div class="section-header">
+            <h3>🖼️ Bridal Slider Images</h3>
+            <span class="status-badge published">4 Images</span>
+          </div>
+          <p style="color:#888; font-size:0.85rem; margin-bottom:12px;">Manage your bridal slider images in the <a href="bridal-slides.html" style="color:#320e17; font-weight:600;">Bridal Slider</a> section.</p>
+          <div class="bridal-preview-grid">
+            <div class="slide-thumb">
+              <img src="https://images.unsplash.com/photo-1596462502278-27bfdc4033c8?q=80&w=100" alt="Bridal slide 1">
+            </div>
+            <div class="slide-thumb">
+              <img src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=100" alt="Bridal slide 2">
+            </div>
+            <div class="slide-thumb">
+              <img src="https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=100" alt="Bridal slide 3">
+            </div>
+            <div class="slide-thumb">
+              <img src="https://images.unsplash.com/photo-1566174053879-31528523f8ae?q=80&w=100" alt="Bridal slide 4">
+            </div>
+            <div class="slide-thumb">
+              <div class="placeholder">
+                <a href="bridal-slides.html" style="color:#320e17; text-decoration:underline;">+ Add More</a>
+              </div>
+            </div>
+          </div>
         </div>
       </main>
     </div>
   </div>
 
-  <script src="js/mock-data.js"></script>
-  <script src="js/auth.js"></script>
-  <script src="js/admin.js"></script>
+  <script>
+    // ==========================================
+    // SIDEBAR TOGGLE - MATCHES DASHBOARD
+    // ==========================================
+    function toggleSidebar() {
+      var sidebar = document.getElementById('adminSidebar');
+      var overlay = document.getElementById('sidebarOverlay');
+      sidebar.classList.toggle('open');
+      overlay.classList.toggle('show');
+    }
+
+    document.addEventListener('click', function(e) {
+      var sidebar = document.getElementById('adminSidebar');
+      var toggleBtn = document.getElementById('sidebarToggle');
+      if (window.innerWidth <= 992) {
+        if (!sidebar.contains(e.target) && !toggleBtn.contains(e.target)) {
+          sidebar.classList.remove('open');
+          document.getElementById('sidebarOverlay').classList.remove('show');
+        }
+      }
+    });
+
+    window.addEventListener('resize', function() {
+      if (window.innerWidth > 992) {
+        var sidebar = document.getElementById('adminSidebar');
+        var overlay = document.getElementById('sidebarOverlay');
+        sidebar.classList.remove('open');
+        overlay.classList.remove('show');
+      }
+    });
+
+    // ==========================================
+    // LIVE PREVIEW UPDATES
+    // ==========================================
+    function updateHeroPreview() {
+      var eyebrow = document.getElementById('heroEyebrow').value;
+      var heading = document.getElementById('heroHeading').value;
+      var subtitle = document.getElementById('heroSubtitle').value;
+      
+      document.getElementById('previewEyebrow').textContent = eyebrow || 'Designer Wear';
+      document.getElementById('previewHeading').textContent = heading || 'Feel the joy of presenting yourself';
+      document.getElementById('previewSubtitle').textContent = subtitle || 'Welcome to Shosta Bazar BD.';
+    }
+
+    function updateAboutPreview() {
+      var heading = document.getElementById('aboutHeading').value;
+      var p1 = document.getElementById('aboutP1').value;
+      
+      document.getElementById('previewAboutHeading').textContent = heading || 'Since 2014, an ode to tradition';
+      document.getElementById('previewAboutText').textContent = p1 || 'Shosta Bazar BD is the exclusive luxury fashion house.';
+    }
+
+    // Live preview on input
+    document.getElementById('heroEyebrow').addEventListener('input', updateHeroPreview);
+    document.getElementById('heroHeading').addEventListener('input', updateHeroPreview);
+    document.getElementById('heroSubtitle').addEventListener('input', updateHeroPreview);
+    
+    document.getElementById('aboutHeading').addEventListener('input', updateAboutPreview);
+    document.getElementById('aboutP1').addEventListener('input', updateAboutPreview);
+
+    // ==========================================
+    // SAVE SECTION
+    // ==========================================
+    function saveSection(e, section) {
+      e.preventDefault();
+      
+      var data = {};
+      var form = e.target;
+      var inputs = form.querySelectorAll('input, textarea, select');
+      
+      inputs.forEach(function(input) {
+        if (input.id) {
+          data[input.id] = input.value;
+        }
+      });
+      
+      console.log('📦 Saved ' + section + ' section:', data);
+      showToast('✅ ' + section.charAt(0).toUpperCase() + section.slice(1) + ' section saved successfully!');
+    }
+
+    function saveAllContent() {
+      // Collect all form data
+      var allData = {};
+      var forms = document.querySelectorAll('.content-form');
+      
+      forms.forEach(function(form) {
+        var inputs = form.querySelectorAll('input, textarea, select');
+        inputs.forEach(function(input) {
+          if (input.id) {
+            allData[input.id] = input.value;
+          }
+        });
+      });
+      
+      console.log('📦 Saved all content:', allData);
+      showToast('✅ All content saved successfully!');
+    }
+
+    // ==========================================
+    // TOAST NOTIFICATION
+    // ==========================================
+    function showToast(message) {
+      var toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.textContent = message;
+      document.body.appendChild(toast);
+      setTimeout(function() {
+        toast.style.opacity = '0';
+        toast.style.transition = 'opacity 0.3s';
+        setTimeout(function() { toast.remove(); }, 300);
+      }, 3000);
+    }
+
+    // ==========================================
+    // LOGOUT
+    // ==========================================
+    function logout() {
+      localStorage.removeItem('adminLoggedIn');
+      window.location.href = 'login.html';
+    }
+
+    // ==========================================
+    // INITIALIZE
+    // ==========================================
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initial preview update
+      updateHeroPreview();
+      updateAboutPreview();
+    });
+  </script>
 </body>
 </html>
