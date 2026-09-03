@@ -1,2129 +1,2848 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Shosta Bazar BD | Luxurious &amp; Exclusive Designer Wear in Bangladesh</title>
-<meta name="description" content="Shosta Bazar BD — exclusive luxury fashion house for women in Bangladesh. Bridal wear, sarees, lehengas, gowns &amp; accessories.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --maroon-950:#210a10;
-    --maroon-900:#320e17;
-    --maroon-800:#511824;
-    --maroon-700:#6d2032;
-    --gold-600:#a9812f;
-    --gold-500:#c8a24a;
-    --gold-300:#e6cd93;
-    --ivory-50:#f8f1e5;
-    --ivory-100:#f1e6d3;
-    --charcoal:#241a16;
-    --blush:#e9d2c6;
-    --line: rgba(200,162,74,.35);
-    --ease: cubic-bezier(.25,.8,.25,1);
-  }
-  *,*::before,*::after{ box-sizing:border-box; }
-  html{ scroll-behavior:smooth; }
-  body{
-    margin:0;
-    background:var(--ivory-50);
-    color:var(--charcoal);
-    font-family:'Jost',sans-serif;
-    font-weight:400;
-    -webkit-font-smoothing:antialiased;
-    overflow-x:hidden;
-  }
-  h1,h2,h3,.display{
-    font-family:'Cormorant Garamond',serif;
-    font-weight:600;
-    margin:0;
-    letter-spacing:.01em;
-  }
-  a{ color:inherit; text-decoration:none; }
-  img{ max-width:100%; display:block; }
-  ul{ list-style:none; margin:0; padding:0; }
-  button{ font-family:inherit; cursor:pointer; }
-  .eyebrow{
-    font-family:'Jost',sans-serif;
-    text-transform:uppercase;
-    letter-spacing:.35em;
-    font-size:.68rem;
-    color:var(--gold-600);
-  }
-  .wrap{ max-width:1240px; margin:0 auto; padding:0 32px; }
-  .btn{
-    display:inline-flex;
-    align-items:center;
-    gap:10px;
-    padding:15px 34px;
-    border:1px solid var(--charcoal);
-    background:transparent;
-    color:var(--charcoal);
-    font-size:.78rem;
-    letter-spacing:.18em;
-    text-transform:uppercase;
-    transition:all .4s var(--ease);
-  }
-  .btn:hover{ background:var(--charcoal); color:var(--ivory-50); }
-  .btn.gold{ border-color:var(--gold-500); color:var(--gold-300); }
-  .btn.gold:hover{ background:var(--gold-500); color:var(--maroon-950); }
-  .btn.dark{ border-color:var(--ivory-50); color:var(--ivory-50); }
-  .btn.dark:hover{ background:var(--ivory-50); color:var(--maroon-950); }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shosta Bazar BD | Luxurious &amp; Exclusive Designer Wear in Bangladesh</title>
+  <meta name="description" content="Shosta Bazar BD — exclusive luxury fashion house for women in Bangladesh. Bridal wear, sarees, lehengas, gowns &amp; accessories.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
 
-  .jaali{
-    width:100%; height:26px;
-    background-repeat:repeat-x;
-    background-position:center;
-    background-size:52px 26px;
-    opacity:.85;
-  }
-  .jaali.on-ivory{
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='52' height='26' viewBox='0 0 52 26'%3E%3Cg fill='none' stroke='%23c8a24a' stroke-width='1'%3E%3Cpath d='M0 13 C 8 2, 18 2, 26 13 C 34 24, 44 24, 52 13'/%3E%3Ccircle cx='26' cy='13' r='2.4' fill='%23c8a24a' stroke='none'/%3E%3C/g%3E%3C/svg%3E");
-  }
-  .jaali.on-maroon{
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='52' height='26' viewBox='0 0 52 26'%3E%3Cg fill='none' stroke='%23e6cd93' stroke-width='1'%3E%3Cpath d='M0 13 C 8 2, 18 2, 26 13 C 34 24, 44 24, 52 13'/%3E%3Ccircle cx='26' cy='13' r='2.4' fill='%23e6cd93' stroke='none'/%3E%3C/g%3E%3C/svg%3E");
-  }
+  <!-- ====== API CONFIGURATION ====== -->
+  <script>
+    const API_BASE = 'https://shosta-bazar-bd.onrender.com/api';
+    console.log('🔗 API_BASE:', API_BASE);
+  </script>
+  <!-- ====== END API CONFIGURATION ====== -->
 
-  .swatch{
-    position:relative;
-    width:100%;
-    aspect-ratio: var(--ar, 4/5);
-    overflow:hidden;
-    background-color: #eee;
-  }
-  .swatch::before{
-    content:'';
-    position:absolute; inset:0;
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='none' stroke='rgba(255,255,255,0.16)' stroke-width='1'%3E%3Cpath d='M0 40 C 20 10, 60 10, 80 40 C 60 70, 20 70, 0 40 Z'/%3E%3Ccircle cx='40' cy='40' r='6'/%3E%3C/g%3E%3C/svg%3E");
-    background-size:80px 80px;
-    mix-blend-mode:overlay;
-    z-index: 1;
-  }
-  .swatch .swatch-label{
-    position:absolute; left:50%; bottom:18px; transform:translateX(-50%);
-    font-size:.62rem; letter-spacing:.25em; text-transform:uppercase;
-    color:rgba(255,255,255,.55); white-space:nowrap;
-    z-index: 2;
-  }
-
-  .topbar{
-    background:var(--maroon-950);
-    color:var(--gold-300);
-    font-size:.72rem;
-    letter-spacing:.14em;
-    text-align:center;
-    padding:9px 12px;
-    text-transform:uppercase;
-  }
-
-  header.site{
-    position:sticky; top:0; z-index:100;
-    background:var(--ivory-50);
-    border-bottom:1px solid var(--line);
-    transition:box-shadow .3s var(--ease), padding .3s var(--ease);
-  }
-  header.site.scrolled{ box-shadow:0 6px 24px rgba(33,10,16,.08); }
-  .nav-row{
-    display:flex; align-items:center; justify-content:space-between;
-    padding:18px 32px;
-    max-width:1240px; margin:0 auto;
-    transition:padding .3s var(--ease);
-  }
-  header.site.scrolled .nav-row{ padding:11px 32px; }
-
-  .logo{
-    display:flex; align-items:center; gap:12px;
-    color:var(--maroon-800);
-  }
-  .logo-mark{ width:46px; height:46px; flex-shrink:0; transition:width .3s var(--ease), height .3s var(--ease); }
-  header.site.scrolled .logo-mark{ width:36px; height:36px; }
-  .logo-word{ display:flex; flex-direction:column; line-height:1.02; }
-  .logo-word b{
-    font-family:'Cormorant Garamond',serif;
-    font-style:italic; font-weight:600;
-    font-size:1.32rem; letter-spacing:.03em;
-    color:var(--maroon-800);
-  }
-  .logo-word em{
-    font-style:normal; font-weight:500;
-    font-size:.56rem; letter-spacing:.42em;
-    color:var(--gold-600); text-transform:uppercase;
-    margin-top:3px;
-  }
-
-  nav.primary{ display:flex; gap:34px; }
-  nav.primary a{
-    font-size:.78rem; letter-spacing:.1em; text-transform:uppercase;
-    position:relative; padding-bottom:4px; color:var(--charcoal);
-  }
-  nav.primary a::after{
-    content:''; position:absolute; left:0; bottom:0; width:0; height:1px;
-    background:var(--gold-500); transition:width .3s var(--ease);
-  }
-  nav.primary a:hover::after{ width:100%; }
-  
-  .wa-nav-icon svg { width:24px; height:24px; stroke:var(--charcoal); transition:stroke 0.3s; }
-  .wa-nav-icon:hover svg { stroke:#25D366; }
-
-  .nav-icons{ display:flex; align-items:center; gap:20px; }
-  .nav-icons button, .nav-icons a{ background:none; border:none; color:var(--charcoal); position:relative; cursor: pointer; display: flex; align-items: center; }
-  .nav-icons svg{ width:22px; height:22px; }
-  .cart-count{
-    position:absolute; top:-8px; right:-9px;
-    background:var(--maroon-800); color:var(--ivory-50);
-    font-size:.6rem; width:16px; height:16px; border-radius:50%;
-    display:flex; align-items:center; justify-content:center;
-  }
-  .burger{ display:none; background:none; border:none; }
-  .burger span{ display:block; width:24px; height:1px; background:var(--charcoal); margin:6px 0; transition:.3s; }
-
-  .floating-wa {
-    position: fixed;
-    bottom: 26px;
-    left: 26px;
-    width: 60px;
-    height: 60px;
-    background-color: #25D366;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-    z-index: 999;
-    transition: transform 0.3s;
-  }
-  .floating-wa:hover { transform: scale(1.1); }
-  .floating-wa svg { width: 34px; height: 34px; fill: white; }
-
-  .mobile-nav{
-    position:fixed; inset:0 0 0 auto; width:min(78vw,340px);
-    background:var(--ivory-50); z-index:200;
-    transform:translateX(100%); transition:transform .4s var(--ease);
-    padding:28px; display:flex; flex-direction:column; gap:26px;
-    box-shadow:-10px 0 30px rgba(0,0,0,.15);
-  }
-  .mobile-nav.open{ transform:translateX(0); }
-  .mobile-nav a{ font-size:1rem; letter-spacing:.05em; text-transform:uppercase; }
-  .mobile-nav .close-mn{ align-self:flex-end; background:none; border:none; font-size:1.4rem; color:var(--charcoal); }
-  .scrim{
-    position:fixed; inset:0; background:rgba(33,10,16,.4); z-index:190;
-    opacity:0; pointer-events:none; transition:opacity .3s var(--ease);
-  }
-  .scrim.show{ opacity:1; pointer-events:all; }
-
-  .hero{
-    position:relative;
-    height: 100vh;
-    display:flex; align-items:center; justify-content:center;
-    text-align:center;
-    color:var(--ivory-50);
-    overflow:hidden;
-    background: var(--maroon-950);
-  }
-  .hero-slider-track {
-    position: absolute; inset: 0; display: flex;
-    height: 100%;
-    transition: transform 1s cubic-bezier(0.645, 0.045, 0.355, 1);
-    z-index: 1;
-  }
-  .hero-slide {
-    height: 100%;
-    flex-shrink: 0;
-    background-size: cover; background-position: center;
-  }
-  .hero-overlay {
-    position: absolute; inset: 0; z-index: 2;
-    background: linear-gradient(160deg, rgba(33,10,16,0.3), rgba(33,10,16,0.7) 70%);
-  }
-  .hero-overlay::after{
-    content:''; position:absolute; inset:0;
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 140 140'%3E%3Cg fill='none' stroke='rgba(230,205,147,0.10)' stroke-width='1'%3E%3Cpath d='M0 70 C 35 20,105 20,140 70 C 105 120,35 120,0 70 Z'/%3E%3Cpath d='M70 0 C 120 35,120 105,70 140 C 20 105,20 35,70 0 Z'/%3E%3C/g%3E%3C/svg%3E");
-    background-size:140px 140px;
-  }
-  .hero-nav {
-    position: absolute; top: 50%; width: 100%; transform: translateY(-50%);
-    display: flex; justify-content: space-between; padding: 0 20px; z-index: 10;
-    pointer-events: none;
-  }
-  .hero-nav button {
-    pointer-events: auto; background: rgba(33,10,16,0.4); border: 1px solid var(--gold-500);
-    color: var(--gold-300); width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-  }
-  .hero-corner{
-    position:absolute; width:120px; height:120px; opacity:.5; z-index: 3;
-  }
-  .hero-corner.tl{ top:26px; left:26px; }
-  .hero-corner.br{ bottom:26px; right:26px; transform:rotate(180deg); }
-  .hero-inner{ position:relative; z-index:4; max-width:720px; padding:0 24px; }
-  .hero .eyebrow{ color:var(--gold-300); }
-  .hero h1{
-    font-size:clamp(2.6rem,6vw,4.6rem);
-    line-height:1.05;
-    margin:18px 0 22px;
-    font-style:italic;
-    font-weight:500;
-  }
-  .hero p{
-    font-size:1.02rem; line-height:1.8; color:rgba(248,241,229,.82);
-    max-width:520px; margin:0 auto 34px;
-  }
-  .hero-ctas{ display:flex; gap:16px; justify-content:center; flex-wrap:wrap; }
-  .scroll-cue{
-    position:absolute; bottom:28px; left:50%; transform:translateX(-50%);
-    display:flex; flex-direction:column; align-items:center; gap:8px;
-    color:var(--gold-300); font-size:.65rem; letter-spacing:.3em; text-transform:uppercase;
-    z-index:4;
-  }
-  .scroll-cue .line{ width:1px; height:34px; background:linear-gradient(var(--gold-300),transparent); animation:pulse 2s infinite; }
-  @keyframes pulse{ 0%,100%{opacity:1;} 50%{opacity:.2;} }
-
-  .marquee{
-    background:var(--charcoal); color:var(--gold-300);
-    overflow:hidden; white-space:nowrap; padding:14px 0;
-    border-top:1px solid var(--line); border-bottom:1px solid var(--line);
-  }
-  .marquee-track{ display:inline-flex; gap:40px; animation:scroll-left 28s linear infinite; }
-  .marquee-track span{ font-family:'Cormorant Garamond',serif; font-style:italic; font-size:1.05rem; letter-spacing:.05em; }
-  .marquee-track span::after{ content:'✦'; margin-left:40px; color:var(--gold-500); font-style:normal; }
-  @keyframes scroll-left{ from{ transform:translateX(0);} to{ transform:translateX(-50%);} }
-
-  section{ padding:100px 0; }
-  .section-head{ text-align:center; max-width:640px; margin:0 auto 56px; }
-  .section-head h2{ font-size:clamp(2rem,3.6vw,2.9rem); margin:14px 0 18px; font-style:italic; color:var(--maroon-800); }
-  .section-head p{ color:#6b574d; line-height:1.8; font-size:.98rem; }
-
-  .reveal{ opacity:0; transform:translateY(28px); transition:opacity .8s var(--ease), transform .8s var(--ease); }
-  .reveal.in{ opacity:1; transform:translateY(0); }
-
-  .about{ background:var(--ivory-50); }
-  .about-grid{
-    display:grid; grid-template-columns:.9fr 1.1fr; gap:70px; align-items:center;
-  }
-  .about-media{ position:relative; }
-  .about-media .swatch{ 
-    --ar:4/5; 
-    background: url('https://images.unsplash.com/photo-1631233839294-f06077977469?q=80&w=1200') center/cover no-repeat;
-  }
-  .about-media .frame{
-    position:absolute; inset:18px; border:1px solid var(--gold-500); pointer-events:none;
-  }
-  .about-copy .eyebrow{ margin-bottom:16px; display:block; }
-  .about-copy h2{ font-size:clamp(2rem,3.4vw,2.7rem); font-style:italic; color:var(--maroon-800); margin-bottom:22px; }
-  .about-copy p{ color:#5a473f; line-height:1.9; margin-bottom:18px; font-size:1rem; }
-  .stat-row{ display:flex; gap:44px; margin-top:34px; }
-  .stat-row div b{ font-family:'Cormorant Garamond',serif; font-size:2rem; color:var(--maroon-800); display:block; }
-  .stat-row div span{ font-size:.72rem; letter-spacing:.1em; text-transform:uppercase; color:#8a7267; }
-
-  .categories{ background:var(--ivory-100); }
-  .cat-grid{
-    display:grid; grid-template-columns:repeat(3,1fr); gap:6px;
-  }
-  .cat-card{
-    position:relative; overflow:hidden; cursor:pointer;
-  }
-  .cat-card .swatch{ --ar:3/4; transition:transform .6s var(--ease); }
-  .cat-card:hover .swatch{ transform:scale(1.06); }
-  .cat-card .overlay{
-    position:absolute; inset:0;
-    background:linear-gradient(to top, rgba(33,10,16,.75), rgba(33,10,16,0) 55%);
-    display:flex; flex-direction:column; justify-content:flex-end; padding:26px;
-  }
-  .cat-card h3{ color:var(--ivory-50); font-size:1.5rem; font-style:italic; }
-  .cat-card .count{ color:var(--gold-300); font-size:.7rem; letter-spacing:.15em; text-transform:uppercase; margin-top:6px; display:block; }
-
-  .product-page {
-    background:var(--ivory-50);
-    padding: 40px 0 80px;
-  }
-  .product-page .back-nav {
-    display:flex; align-items:center; gap:12px;
-    margin-bottom:32px;
-    font-size:1rem;
-    color:var(--maroon-800);
-    cursor:pointer;
-    transition:color 0.2s;
-    background:none; border:none;
-    font-family:'Jost',sans-serif;
-  }
-  .product-page .back-nav:hover { color:var(--gold-600); }
-  .product-page .back-nav svg { width:24px; height:24px; stroke:currentColor; stroke-width:2; }
-  .product-page .product-grid {
-    display:grid; grid-template-columns:repeat(4,1fr); gap:34px 26px;
-  }
-  .product-page .product-card { opacity:1; transition:opacity .3s var(--ease), transform .3s var(--ease); cursor:pointer; }
-  .product-media{ position:relative; overflow:hidden; }
-  .product-media .swatch{ --ar:3/4; transition:transform .6s var(--ease); }
-  .product-card:hover .product-media .swatch{ transform:scale(1.05); }
-  .tag{
-    position:absolute; top:14px; left:14px; background:var(--maroon-800); color:var(--gold-300);
-    font-size:.62rem; letter-spacing:.12em; text-transform:uppercase; padding:5px 11px;
-    z-index:2;
-  }
-  .quick-add{
-    position:absolute; left:0; right:0; bottom:0; padding:12px;
-    background:rgba(248,241,229,.94); text-align:center;
-    font-size:.68rem; letter-spacing:.16em; text-transform:uppercase; color:var(--maroon-900);
-    transform:translateY(100%); transition:transform .35s var(--ease);
-    z-index:2;
-  }
-  .product-card:hover .quick-add{ transform:translateY(0); }
-  .product-info{ padding-top:16px; text-align:center; }
-  .product-info .p-cat{ font-size:.66rem; letter-spacing:.16em; text-transform:uppercase; color:var(--gold-600); }
-  .product-info h3{ font-size:1.18rem; margin:8px 0 6px; font-weight:500; font-family:'Jost',sans-serif; letter-spacing:.01em; }
-  .price{ font-family:'Cormorant Garamond',serif; font-size:1.1rem; color:var(--maroon-800); }
-  .price .old{ text-decoration:line-through; color:#b09d8f; margin-right:8px; font-size:.95rem; }
-
-  /* Bridal Slider */
-  .bridal-slider {
-    position:relative;
-    overflow:hidden;
-    width:100%;
-    aspect-ratio: 16/9;
-    background:var(--maroon-950);
-    margin-bottom:30px;
-    border-radius:8px;
-  }
-  .bridal-slider-track {
-    display:flex;
-    height:100%;
-    transition:transform 1s cubic-bezier(0.645, 0.045, 0.355, 1);
-  }
-  .bridal-slide {
-    min-width:100%;
-    height:100%;
-    background-size:cover;
-    background-position:center;
-    flex-shrink:0;
-  }
-  .bridal-slider-nav {
-    position:absolute;
-    top:50%;
-    width:100%;
-    transform:translateY(-50%);
-    display:flex;
-    justify-content:space-between;
-    padding:0 16px;
-    z-index:5;
-    pointer-events:none;
-  }
-  .bridal-slider-nav button {
-    pointer-events:auto;
-    background:rgba(33,10,16,0.6);
-    border:1px solid var(--gold-500);
-    color:var(--gold-300);
-    width:44px;
-    height:44px;
-    border-radius:50%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    transition:background 0.3s;
-  }
-  .bridal-slider-nav button:hover {
-    background:rgba(33,10,16,0.9);
-  }
-  .bridal-slider-dots {
-    position:absolute;
-    bottom:16px;
-    left:50%;
-    transform:translateX(-50%);
-    display:flex;
-    gap:10px;
-    z-index:5;
-  }
-  .bridal-slider-dots span {
-    width:10px;
-    height:10px;
-    border-radius:50%;
-    background:rgba(255,255,255,0.4);
-    cursor:pointer;
-    transition:background 0.3s;
-  }
-  .bridal-slider-dots span.active {
-    background:var(--gold-500);
-  }
-
-  .bridal-banner{
-    position:relative;
-    background:linear-gradient(160deg, var(--maroon-900), var(--maroon-950));
-    color:var(--ivory-50);
-    text-align:center;
-    overflow:hidden;
-    padding:80px 0;
-  }
-  .bridal-banner .bridal-slider {
-    max-width:900px;
-    margin:0 auto 30px;
-    border-radius:12px;
-    box-shadow:0 10px 40px rgba(0,0,0,0.5);
-  }
-  .bridal-banner .wrap{ position:relative; z-index:2; }
-  .bridal-banner .eyebrow{ color:var(--gold-300); }
-  .bridal-banner h2{ font-size:clamp(2.2rem,4.4vw,3.4rem); font-style:italic; margin:18px 0 20px; }
-  .bridal-banner p{ max-width:560px; margin:0 auto 34px; color:rgba(248,241,229,.78); line-height:1.85; }
-
-  /* Product Detail Modal */
-  .product-detail-modal {
-    display:none;
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,0.85);
-    z-index:10000;
-    justify-content:center;
-    align-items:center;
-    padding:20px;
-    backdrop-filter:blur(8px);
-    -webkit-backdrop-filter:blur(8px);
-  }
-  .product-detail-modal.active {
-    display:flex;
-  }
-  .product-detail-content {
-    background:var(--ivory-50);
-    border-radius:12px;
-    max-width:1100px;
-    width:100%;
-    max-height:90vh;
-    display:flex;
-    overflow:hidden;
-    position:relative;
-    box-shadow:0 20px 60px rgba(0,0,0,0.6);
-  }
-  .product-detail-close {
-    position:absolute;
-    top:16px;
-    right:16px;
-    width:40px;
-    height:40px;
-    border-radius:50%;
-    background:rgba(0,0,0,0.6);
-    border:none;
-    color:#fff;
-    font-size:24px;
-    cursor:pointer;
-    z-index:10;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    transition:background 0.3s;
-  }
-  .product-detail-close:hover {
-    background:rgba(0,0,0,0.9);
-  }
-  .product-detail-left {
-    flex:1.2;
-    background:var(--ivory-100);
-    position:relative;
-    overflow:hidden;
-    min-height:400px;
-  }
-  .product-detail-left .main-image {
-    width:100%;
-    height:100%;
-    object-fit:contain;
-    display:block;
-    background:var(--ivory-100);
-  }
-  .product-detail-left .thumb-nav {
-    position:absolute;
-    top:50%;
-    width:100%;
-    transform:translateY(-50%);
-    display:flex;
-    justify-content:space-between;
-    padding:0 12px;
-    pointer-events:none;
-  }
-  .product-detail-left .thumb-nav button {
-    pointer-events:auto;
-    background:rgba(0,0,0,0.5);
-    border:none;
-    color:#fff;
-    width:36px;
-    height:36px;
-    border-radius:50%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    cursor:pointer;
-    transition:background 0.3s;
-  }
-  .product-detail-left .thumb-nav button:hover {
-    background:rgba(0,0,0,0.8);
-  }
-  .product-detail-left .thumb-nav svg {
-    width:18px;
-    height:18px;
-  }
-  .product-detail-left .thumb-dots {
-    position:absolute;
-    bottom:12px;
-    left:50%;
-    transform:translateX(-50%);
-    display:flex;
-    gap:8px;
-    z-index:5;
-  }
-  .product-detail-left .thumb-dots span {
-    width:8px;
-    height:8px;
-    border-radius:50%;
-    background:rgba(255,255,255,0.4);
-    cursor:pointer;
-    transition:background 0.3s;
-  }
-  .product-detail-left .thumb-dots span.active {
-    background:var(--gold-500);
-  }
-  .product-detail-right {
-    flex:0.8;
-    padding:32px 28px;
-    overflow-y:auto;
-    display:flex;
-    flex-direction:column;
-    gap:16px;
-    background:var(--ivory-50);
-  }
-  .product-detail-right .pd-category {
-    font-size:.7rem;
-    letter-spacing:.2em;
-    text-transform:uppercase;
-    color:var(--gold-600);
-  }
-  .product-detail-right h2 {
-    font-family:'Cormorant Garamond',serif;
-    font-size:1.8rem;
-    color:var(--maroon-800);
-    margin:0;
-  }
-  .product-detail-right .pd-price {
-    font-family:'Cormorant Garamond',serif;
-    font-size:1.4rem;
-    color:var(--maroon-800);
-  }
-  .product-detail-right .pd-price .old {
-    text-decoration:line-through;
-    color:#b09d8f;
-    margin-right:12px;
-    font-size:1.1rem;
-  }
-  .product-detail-right .pd-fabric {
-    font-size:.9rem;
-    color:#5a473f;
-    line-height:1.7;
-  }
-  .product-detail-right .pd-description {
-    font-size:.95rem;
-    color:#5a473f;
-    line-height:1.8;
-    border-top:1px solid var(--line);
-    padding-top:16px;
-  }
-  .product-detail-right .pd-add-btn {
-    padding:14px 32px;
-    background:var(--maroon-800);
-    color:var(--ivory-50);
-    border:none;
-    font-size:.85rem;
-    letter-spacing:.12em;
-    text-transform:uppercase;
-    transition:background 0.3s;
-    margin-top:auto;
-    border-radius:4px;
-  }
-  .product-detail-right .pd-add-btn:hover {
-    background:var(--maroon-700);
-  }
-
-  .testimonials{ background:var(--blush); }
-  .t-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:36px; }
-  .t-card{ background:var(--ivory-50); padding:36px 30px; position:relative; }
-  .t-card .quote-mark{ font-family:'Cormorant Garamond',serif; font-size:3rem; color:var(--gold-500); line-height:1; }
-  .t-card p{ line-height:1.85; color:#5a473f; margin:14px 0 22px; font-size:.96rem; }
-  .t-name{ font-family:'Cormorant Garamond',serif; font-style:italic; font-size:1.15rem; color:var(--maroon-800); }
-  .t-role{ font-size:.68rem; letter-spacing:.12em; text-transform:uppercase; color:#8a7267; margin-top:4px; }
-  .stars{ color:var(--gold-500); font-size:.85rem; letter-spacing:2px; margin-bottom:4px; }
-
-  .gallery{ background:var(--ivory-100); }
-  .g-grid{ display:grid; grid-template-columns:repeat(5,1fr); gap:6px; }
-  .g-grid .swatch{ --ar:1/1; }
-  .g-grid a{ position:relative; overflow:hidden; display:block; }
-  .g-grid .swatch{ transition:transform .5s var(--ease); }
-  .g-grid a:hover .swatch{ transform:scale(1.08); }
-  .g-grid a .ig-icon{
-    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
-    background:rgba(33,10,16,0); transition:background .3s var(--ease);
-  }
-  .g-grid a:hover .ig-icon{ background:rgba(33,10,16,.35); }
-  .g-grid a .ig-icon svg{ width:22px; height:22px; stroke:#fff; opacity:0; transition:opacity .3s var(--ease); }
-  .g-grid a:hover .ig-icon svg{ opacity:1; }
-
-  .newsletter{
-    background:var(--maroon-800); color:var(--ivory-50); text-align:center;
-  }
-  .newsletter h2{ font-size:clamp(1.8rem,3.2vw,2.4rem); font-style:italic; margin-bottom:14px; }
-  .newsletter p{ color:rgba(248,241,229,.78); margin-bottom:30px; }
-  .nl-form{ display:flex; max-width:440px; margin:0 auto; gap:0; }
-  .nl-form input{
-    flex:1; padding:15px 18px; border:1px solid var(--gold-500); background:transparent;
-    color:var(--ivory-50); font-family:'Jost',sans-serif; font-size:.9rem;
-  }
-  .nl-form input::placeholder{ color:rgba(248,241,229,.55); }
-  .nl-form button{
-    padding:15px 26px; background:var(--gold-500); color:var(--maroon-950); border:1px solid var(--gold-500);
-    font-size:.72rem; letter-spacing:.14em; text-transform:uppercase; transition:.3s;
-  }
-  .nl-form button:hover{ background:var(--gold-300); }
-  .nl-note{ font-size:.72rem; color:var(--gold-300); margin-top:14px; min-height:16px; }
-
-  footer{ background:var(--maroon-950); color:rgba(248,241,229,.75); padding-top:80px; }
-  .foot-grid{
-    display:grid; grid-template-columns:1.4fr 1fr 1fr 1.2fr; gap:50px;
-    padding-bottom:60px; border-bottom:1px solid rgba(230,205,147,.15);
-  }
-  .foot-logo{ display:flex; align-items:center; gap:12px; margin-bottom:18px; }
-  .foot-logo .logo-mark{ width:40px; height:40px; }
-  .foot-logo .logo-word b{ color:var(--ivory-50); font-size:1.24rem; }
-  .foot-logo .logo-word em{ color:var(--gold-500); }
-  .foot-about p{ line-height:1.85; font-size:.9rem; margin-bottom:22px; }
-  .foot-social{ display:flex; gap:14px; }
-  .foot-social a{
-    width:36px; height:36px; border:1px solid rgba(230,205,147,.35); border-radius:50%;
-    display:flex; align-items:center; justify-content:center; transition:.3s;
-  }
-  .foot-social a:hover{ background:var(--gold-500); border-color:var(--gold-500); }
-  .foot-social a:hover svg{ stroke:var(--maroon-950); }
-  .foot-social svg{ width:15px; height:15px; stroke:var(--gold-300); transition:.3s; }
-  .foot-col h4{
-    font-size:.72rem; letter-spacing:.18em; text-transform:uppercase; color:var(--gold-300);
-    margin-bottom:20px; font-family:'Jost',sans-serif; font-weight:500;
-  }
-  .foot-col ul li{ margin-bottom:12px; }
-  .foot-col ul a{ font-size:.88rem; transition:.25s; }
-  .foot-col ul a:hover{ color:var(--gold-300); padding-left:4px; }
-  .foot-contact li{ display:flex; gap:10px; font-size:.88rem; margin-bottom:16px; align-items:flex-start; line-height:1.6; }
-  .foot-contact svg{ width:16px; height:16px; stroke:var(--gold-500); flex-shrink:0; margin-top:2px; }
-  .foot-bottom{
-    display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;
-    padding:26px 0; font-size:.78rem; color:rgba(248,241,229,.5);
-  }
-  .foot-bottom a{ margin-left:18px; }
-  .foot-bottom a:hover{ color:var(--gold-300); }
-
-  .to-top{
-    position:fixed; right:26px; bottom:26px; z-index:80;
-    width:44px; height:44px; border-radius:50%; background:var(--maroon-800); color:var(--gold-300);
-    border:1px solid var(--gold-500); display:flex; align-items:center; justify-content:center;
-    opacity:0; pointer-events:none; transform:translateY(10px); transition:.35s var(--ease);
-  }
-  .to-top.show{ opacity:1; pointer-events:all; transform:translateY(0); }
-  .to-top svg{ width:18px; height:18px; }
-
-  .loading-spinner {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 40px 0;
-    grid-column: 1 / -1;
-  }
-  .spinner {
-    border: 3px solid var(--ivory-100);
-    border-top: 3px solid var(--gold-500);
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    animation: spin 1s linear infinite;
-  }
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
-  .no-products {
-    grid-column: 1 / -1;
-    text-align: center;
-    padding: 40px 0;
-    color: #6b574d;
-  }
-  .no-products h3 { font-size: 1.4rem; margin-bottom: 8px; }
-
-  #cartSidebar {
-    position:fixed; top:0; right:-420px; width:400px; max-width:90vw; height:100vh; background:#fff; z-index:1000; transition:right 0.3s ease; box-shadow:-4px 0 20px rgba(0,0,0,0.15); display:flex; flex-direction:column;
-  }
-  #cartSidebar .cart-header { padding:20px; border-bottom:1px solid #eee; display:flex; justify-content:space-between; align-items:center; }
-  #cartSidebar .cart-header h3 { margin:0; font-family:'Cormorant Garamond',serif; color:#511824; }
-  #cartItems { flex:1; overflow-y:auto; padding:20px; }
-  #cartSidebar .cart-footer { padding:20px; border-top:1px solid #eee; background:#f8f9fa; }
-  #cartOverlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:999; }
-  #checkoutModal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:1001; justify-content:center; align-items:center; }
-  #checkoutModal .modal-box { background:#fff; padding:30px; border-radius:8px; width:100%; max-width:500px; max-height:90vh; overflow-y:auto; margin:20px; }
-
-  @media (max-width:1200px) {
-    .product-page .product-grid {
-      grid-template-columns:repeat(3,1fr);
-      gap:24px 20px;
+  <style>
+    :root {
+      --maroon-950: #210a10;
+      --maroon-900: #320e17;
+      --maroon-800: #511824;
+      --maroon-700: #6d2032;
+      --gold-600: #a9812f;
+      --gold-500: #c8a24a;
+      --gold-300: #e6cd93;
+      --ivory-50: #f8f1e5;
+      --ivory-100: #f1e6d3;
+      --charcoal: #241a16;
+      --blush: #e9d2c6;
+      --line: rgba(200, 162, 74, .35);
+      --ease: cubic-bezier(.25, .8, .25, 1);
     }
-  }
 
-  @media (max-width:992px) {
-    nav.primary{ display:none; }
-    .burger{ display:block; }
-    .about-grid{ grid-template-columns:1fr; gap:40px; }
-    .cat-grid{ grid-template-columns:repeat(2,1fr); }
-    .product-page .product-grid { grid-template-columns:repeat(2,1fr); gap:20px 16px; }
-    .t-grid{ grid-template-columns:1fr; gap:24px; }
-    .foot-grid{ grid-template-columns:1fr 1fr; gap:40px; }
-    .g-grid{ grid-template-columns:repeat(3,1fr); }
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+    html {
+      scroll-behavior: smooth;
+    }
+    body {
+      margin: 0;
+      background: var(--ivory-50);
+      color: var(--charcoal);
+      font-family: 'Jost', sans-serif;
+      font-weight: 400;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    h1,
+    h2,
+    h3,
+    .display {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 600;
+      margin: 0;
+      letter-spacing: .01em;
+    }
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+    img {
+      max-width: 100%;
+      display: block;
+    }
+    ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    button {
+      font-family: inherit;
+      cursor: pointer;
+    }
+    .eyebrow {
+      font-family: 'Jost', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: .35em;
+      font-size: .68rem;
+      color: var(--gold-600);
+    }
+    .wrap {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 0 32px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 15px 34px;
+      border: 1px solid var(--charcoal);
+      background: transparent;
+      color: var(--charcoal);
+      font-size: .78rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      transition: all .4s var(--ease);
+    }
+    .btn:hover {
+      background: var(--charcoal);
+      color: var(--ivory-50);
+    }
+    .btn.gold {
+      border-color: var(--gold-500);
+      color: var(--gold-300);
+    }
+    .btn.gold:hover {
+      background: var(--gold-500);
+      color: var(--maroon-950);
+    }
+    .btn.dark {
+      border-color: var(--ivory-50);
+      color: var(--ivory-50);
+    }
+    .btn.dark:hover {
+      background: var(--ivory-50);
+      color: var(--maroon-950);
+    }
+
+    .jaali {
+      width: 100%;
+      height: 26px;
+      background-repeat: repeat-x;
+      background-position: center;
+      background-size: 52px 26px;
+      opacity: .85;
+    }
+    .jaali.on-ivory {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='52' height='26' viewBox='0 0 52 26'%3E%3Cg fill='none' stroke='%23c8a24a' stroke-width='1'%3E%3Cpath d='M0 13 C 8 2, 18 2, 26 13 C 34 24, 44 24, 52 13'/%3E%3Ccircle cx='26' cy='13' r='2.4' fill='%23c8a24a' stroke='none'/%3E%3C/g%3E%3C/svg%3E");
+    }
+    .jaali.on-maroon {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='52' height='26' viewBox='0 0 52 26'%3E%3Cg fill='none' stroke='%23e6cd93' stroke-width='1'%3E%3Cpath d='M0 13 C 8 2, 18 2, 26 13 C 34 24, 44 24, 52 13'/%3E%3Ccircle cx='26' cy='13' r='2.4' fill='%23e6cd93' stroke='none'/%3E%3C/g%3E%3C/svg%3E");
+    }
+
+    .swatch {
+      position: relative;
+      width: 100%;
+      aspect-ratio: var(--ar, 4/5);
+      overflow: hidden;
+      background-color: #eee;
+    }
+    .swatch::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='none' stroke='rgba(255,255,255,0.16)' stroke-width='1'%3E%3Cpath d='M0 40 C 20 10, 60 10, 80 40 C 60 70, 20 70, 0 40 Z'/%3E%3Ccircle cx='40' cy='40' r='6'/%3E%3C/g%3E%3C/svg%3E");
+      background-size: 80px 80px;
+      mix-blend-mode: overlay;
+      z-index: 1;
+    }
+    .swatch .swatch-label {
+      position: absolute;
+      left: 50%;
+      bottom: 18px;
+      transform: translateX(-50%);
+      font-size: .62rem;
+      letter-spacing: .25em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, .55);
+      white-space: nowrap;
+      z-index: 2;
+    }
+
+    .topbar {
+      background: var(--maroon-950);
+      color: var(--gold-300);
+      font-size: .72rem;
+      letter-spacing: .14em;
+      text-align: center;
+      padding: 9px 12px;
+      text-transform: uppercase;
+    }
+
+    header.site {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--ivory-50);
+      border-bottom: 1px solid var(--line);
+      transition: box-shadow .3s var(--ease), padding .3s var(--ease);
+    }
+    header.site.scrolled {
+      box-shadow: 0 6px 24px rgba(33, 10, 16, .08);
+    }
+    .nav-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 32px;
+      max-width: 1240px;
+      margin: 0 auto;
+      transition: padding .3s var(--ease);
+    }
+    header.site.scrolled .nav-row {
+      padding: 11px 32px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--maroon-800);
+    }
+    .logo-mark {
+      width: 46px;
+      height: 46px;
+      flex-shrink: 0;
+      transition: width .3s var(--ease), height .3s var(--ease);
+    }
+    header.site.scrolled .logo-mark {
+      width: 36px;
+      height: 36px;
+    }
+    .logo-word {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.02;
+    }
+    .logo-word b {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-weight: 600;
+      font-size: 1.32rem;
+      letter-spacing: .03em;
+      color: var(--maroon-800);
+    }
+    .logo-word em {
+      font-style: normal;
+      font-weight: 500;
+      font-size: .56rem;
+      letter-spacing: .42em;
+      color: var(--gold-600);
+      text-transform: uppercase;
+      margin-top: 3px;
+    }
+
+    nav.primary {
+      display: flex;
+      gap: 34px;
+    }
+    nav.primary a {
+      font-size: .78rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      position: relative;
+      padding-bottom: 4px;
+      color: var(--charcoal);
+    }
+    nav.primary a::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 0;
+      height: 1px;
+      background: var(--gold-500);
+      transition: width .3s var(--ease);
+    }
+    nav.primary a:hover::after {
+      width: 100%;
+    }
+
+    .wa-nav-icon svg {
+      width: 24px;
+      height: 24px;
+      stroke: var(--charcoal);
+      transition: stroke 0.3s;
+    }
+    .wa-nav-icon:hover svg {
+      stroke: #25D366;
+    }
+
+    .nav-icons {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .nav-icons button,
+    .nav-icons a {
+      background: none;
+      border: none;
+      color: var(--charcoal);
+      position: relative;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+    }
+    .nav-icons svg {
+      width: 22px;
+      height: 22px;
+    }
+    .cart-count {
+      position: absolute;
+      top: -8px;
+      right: -9px;
+      background: var(--maroon-800);
+      color: var(--ivory-50);
+      font-size: .6rem;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .burger {
+      display: none;
+      background: none;
+      border: none;
+    }
+    .burger span {
+      display: block;
+      width: 24px;
+      height: 1px;
+      background: var(--charcoal);
+      margin: 6px 0;
+      transition: .3s;
+    }
+
+    .floating-wa {
+      position: fixed;
+      bottom: 26px;
+      left: 26px;
+      width: 60px;
+      height: 60px;
+      background-color: #25D366;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      z-index: 999;
+      transition: transform 0.3s;
+    }
+    .floating-wa:hover {
+      transform: scale(1.1);
+    }
+    .floating-wa svg {
+      width: 34px;
+      height: 34px;
+      fill: white;
+    }
+
+    .mobile-nav {
+      position: fixed;
+      inset: 0 0 0 auto;
+      width: min(78vw, 340px);
+      background: var(--ivory-50);
+      z-index: 200;
+      transform: translateX(100%);
+      transition: transform .4s var(--ease);
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 26px;
+      box-shadow: -10px 0 30px rgba(0, 0, 0, .15);
+    }
+    .mobile-nav.open {
+      transform: translateX(0);
+    }
+    .mobile-nav a {
+      font-size: 1rem;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+    }
+    .mobile-nav .close-mn {
+      align-self: flex-end;
+      background: none;
+      border: none;
+      font-size: 1.4rem;
+      color: var(--charcoal);
+    }
+    .scrim {
+      position: fixed;
+      inset: 0;
+      background: rgba(33, 10, 16, .4);
+      z-index: 190;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .3s var(--ease);
+    }
+    .scrim.show {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .hero {
+      position: relative;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: var(--ivory-50);
+      overflow: hidden;
+      background: var(--maroon-950);
+    }
+    .hero-slider-track {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      height: 100%;
+      transition: transform 1s cubic-bezier(0.645, 0.045, 0.355, 1);
+      z-index: 1;
+    }
+    .hero-slide {
+      height: 100%;
+      flex-shrink: 0;
+      background-size: cover;
+      background-position: center;
+    }
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      background: linear-gradient(160deg, rgba(33, 10, 16, 0.3), rgba(33, 10, 16, 0.7) 70%);
+    }
+    .hero-overlay::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 140 140'%3E%3Cg fill='none' stroke='rgba(230,205,147,0.10)' stroke-width='1'%3E%3Cpath d='M0 70 C 35 20,105 20,140 70 C 105 120,35 120,0 70 Z'/%3E%3Cpath d='M70 0 C 120 35,120 105,70 140 C 20 105,20 35,70 0 Z'/%3E%3C/g%3E%3C/svg%3E");
+      background-size: 140px 140px;
+    }
+    .hero-nav {
+      position: absolute;
+      top: 50%;
+      width: 100%;
+      transform: translateY(-50%);
+      display: flex;
+      justify-content: space-between;
+      padding: 0 20px;
+      z-index: 10;
+      pointer-events: none;
+    }
+    .hero-nav button {
+      pointer-events: auto;
+      background: rgba(33, 10, 16, 0.4);
+      border: 1px solid var(--gold-500);
+      color: var(--gold-300);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .hero-corner {
+      position: absolute;
+      width: 120px;
+      height: 120px;
+      opacity: .5;
+      z-index: 3;
+    }
+    .hero-corner.tl {
+      top: 26px;
+      left: 26px;
+    }
+    .hero-corner.br {
+      bottom: 26px;
+      right: 26px;
+      transform: rotate(180deg);
+    }
+    .hero-inner {
+      position: relative;
+      z-index: 4;
+      max-width: 720px;
+      padding: 0 24px;
+    }
+    .hero .eyebrow {
+      color: var(--gold-300);
+    }
+    .hero h1 {
+      font-size: clamp(2.6rem, 6vw, 4.6rem);
+      line-height: 1.05;
+      margin: 18px 0 22px;
+      font-style: italic;
+      font-weight: 500;
+    }
+    .hero p {
+      font-size: 1.02rem;
+      line-height: 1.8;
+      color: rgba(248, 241, 229, .82);
+      max-width: 520px;
+      margin: 0 auto 34px;
+    }
+    .hero-ctas {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .scroll-cue {
+      position: absolute;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: var(--gold-300);
+      font-size: .65rem;
+      letter-spacing: .3em;
+      text-transform: uppercase;
+      z-index: 4;
+    }
+    .scroll-cue .line {
+      width: 1px;
+      height: 34px;
+      background: linear-gradient(var(--gold-300), transparent);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%,
+      100% {
+        opacity: 1;
+      }
+      50% {
+        opacity: .2;
+      }
+    }
+
+    .marquee {
+      background: var(--charcoal);
+      color: var(--gold-300);
+      overflow: hidden;
+      white-space: nowrap;
+      padding: 14px 0;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+    .marquee-track {
+      display: inline-flex;
+      gap: 40px;
+      animation: scroll-left 28s linear infinite;
+    }
+    .marquee-track span {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1.05rem;
+      letter-spacing: .05em;
+    }
+    .marquee-track span::after {
+      content: '✦';
+      margin-left: 40px;
+      color: var(--gold-500);
+      font-style: normal;
+    }
+    @keyframes scroll-left {
+      from {
+        transform: translateX(0);
+      }
+      to {
+        transform: translateX(-50%);
+      }
+    }
+
+    section {
+      padding: 100px 0;
+    }
+    .section-head {
+      text-align: center;
+      max-width: 640px;
+      margin: 0 auto 56px;
+    }
+    .section-head h2 {
+      font-size: clamp(2rem, 3.6vw, 2.9rem);
+      margin: 14px 0 18px;
+      font-style: italic;
+      color: var(--maroon-800);
+    }
+    .section-head p {
+      color: #6b574d;
+      line-height: 1.8;
+      font-size: .98rem;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity .8s var(--ease), transform .8s var(--ease);
+    }
+    .reveal.in {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .about {
+      background: var(--ivory-50);
+    }
+    .about-grid {
+      display: grid;
+      grid-template-columns: .9fr 1.1fr;
+      gap: 70px;
+      align-items: center;
+    }
+    .about-media {
+      position: relative;
+    }
+    .about-media .swatch {
+      --ar: 4/5;
+      background: url('https://images.unsplash.com/photo-1631233839294-f06077977469?q=80&w=1200') center/cover no-repeat;
+    }
+    .about-media .frame {
+      position: absolute;
+      inset: 18px;
+      border: 1px solid var(--gold-500);
+      pointer-events: none;
+    }
+    .about-copy .eyebrow {
+      margin-bottom: 16px;
+      display: block;
+    }
+    .about-copy h2 {
+      font-size: clamp(2rem, 3.4vw, 2.7rem);
+      font-style: italic;
+      color: var(--maroon-800);
+      margin-bottom: 22px;
+    }
+    .about-copy p {
+      color: #5a473f;
+      line-height: 1.9;
+      margin-bottom: 18px;
+      font-size: 1rem;
+    }
+    .stat-row {
+      display: flex;
+      gap: 44px;
+      margin-top: 34px;
+    }
+    .stat-row div b {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem;
+      color: var(--maroon-800);
+      display: block;
+    }
+    .stat-row div span {
+      font-size: .72rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: #8a7267;
+    }
+
+    .categories {
+      background: var(--ivory-100);
+    }
+    .cat-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+    }
+    .cat-card {
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .cat-card .swatch {
+      --ar: 3/4;
+      transition: transform .6s var(--ease);
+    }
+    .cat-card:hover .swatch {
+      transform: scale(1.06);
+    }
+    .cat-card .overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(33, 10, 16, .75), rgba(33, 10, 16, 0) 55%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 26px;
+    }
+    .cat-card h3 {
+      color: var(--ivory-50);
+      font-size: 1.5rem;
+      font-style: italic;
+    }
+    .cat-card .count {
+      color: var(--gold-300);
+      font-size: .7rem;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      margin-top: 6px;
+      display: block;
+    }
+
+    .product-page {
+      background: var(--ivory-50);
+      padding: 40px 0 80px;
+    }
+    .product-page .back-nav {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 32px;
+      font-size: 1rem;
+      color: var(--maroon-800);
+      cursor: pointer;
+      transition: color 0.2s;
+      background: none;
+      border: none;
+      font-family: 'Jost', sans-serif;
+    }
+    .product-page .back-nav:hover {
+      color: var(--gold-600);
+    }
+    .product-page .back-nav svg {
+      width: 24px;
+      height: 24px;
+      stroke: currentColor;
+      stroke-width: 2;
+    }
+    .product-page .product-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 34px 26px;
+    }
+    .product-page .product-card {
+      opacity: 1;
+      transition: opacity .3s var(--ease), transform .3s var(--ease);
+      cursor: pointer;
+    }
+    .product-media {
+      position: relative;
+      overflow: hidden;
+    }
+    .product-media .swatch {
+      --ar: 3/4;
+      transition: transform .6s var(--ease);
+    }
+    .product-card:hover .product-media .swatch {
+      transform: scale(1.05);
+    }
+    .tag {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      background: var(--maroon-800);
+      color: var(--gold-300);
+      font-size: .62rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      padding: 5px 11px;
+      z-index: 2;
+    }
+    .quick-add {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 12px;
+      background: rgba(248, 241, 229, .94);
+      text-align: center;
+      font-size: .68rem;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--maroon-900);
+      transform: translateY(100%);
+      transition: transform .35s var(--ease);
+      z-index: 2;
+    }
+    .product-card:hover .quick-add {
+      transform: translateY(0);
+    }
+    .product-info {
+      padding-top: 16px;
+      text-align: center;
+    }
+    .product-info .p-cat {
+      font-size: .66rem;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--gold-600);
+    }
+    .product-info h3 {
+      font-size: 1.18rem;
+      margin: 8px 0 6px;
+      font-weight: 500;
+      font-family: 'Jost', sans-serif;
+      letter-spacing: .01em;
+    }
+    .price {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      color: var(--maroon-800);
+    }
+    .price .old {
+      text-decoration: line-through;
+      color: #b09d8f;
+      margin-right: 8px;
+      font-size: .95rem;
+    }
+
+    /* Bridal Slider */
+    .bridal-slider {
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: var(--maroon-950);
+      margin-bottom: 30px;
+      border-radius: 8px;
+    }
+    .bridal-slider-track {
+      display: flex;
+      height: 100%;
+      transition: transform 1s cubic-bezier(0.645, 0.045, 0.355, 1);
+    }
+    .bridal-slide {
+      min-width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+      flex-shrink: 0;
+    }
+    .bridal-slider-nav {
+      position: absolute;
+      top: 50%;
+      width: 100%;
+      transform: translateY(-50%);
+      display: flex;
+      justify-content: space-between;
+      padding: 0 16px;
+      z-index: 5;
+      pointer-events: none;
+    }
+    .bridal-slider-nav button {
+      pointer-events: auto;
+      background: rgba(33, 10, 16, 0.6);
+      border: 1px solid var(--gold-500);
+      color: var(--gold-300);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.3s;
+    }
+    .bridal-slider-nav button:hover {
+      background: rgba(33, 10, 16, 0.9);
+    }
+    .bridal-slider-dots {
+      position: absolute;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+      z-index: 5;
+    }
+    .bridal-slider-dots span {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.4);
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .bridal-slider-dots span.active {
+      background: var(--gold-500);
+    }
+
+    .bridal-banner {
+      position: relative;
+      background: linear-gradient(160deg, var(--maroon-900), var(--maroon-950));
+      color: var(--ivory-50);
+      text-align: center;
+      overflow: hidden;
+      padding: 80px 0;
+    }
+    .bridal-banner .bridal-slider {
+      max-width: 900px;
+      margin: 0 auto 30px;
+      border-radius: 12px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    }
+    .bridal-banner .wrap {
+      position: relative;
+      z-index: 2;
+    }
+    .bridal-banner .eyebrow {
+      color: var(--gold-300);
+    }
+    .bridal-banner h2 {
+      font-size: clamp(2.2rem, 4.4vw, 3.4rem);
+      font-style: italic;
+      margin: 18px 0 20px;
+    }
+    .bridal-banner p {
+      max-width: 560px;
+      margin: 0 auto 34px;
+      color: rgba(248, 241, 229, .78);
+      line-height: 1.85;
+    }
+
+    /* Product Detail Modal */
+    .product-detail-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      z-index: 10000;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+    .product-detail-modal.active {
+      display: flex;
+    }
     .product-detail-content {
-      flex-direction:column;
-      max-height:95vh;
+      background: var(--ivory-50);
+      border-radius: 12px;
+      max-width: 1100px;
+      width: 100%;
+      max-height: 90vh;
+      display: flex;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+    }
+    .product-detail-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.6);
+      border: none;
+      color: #fff;
+      font-size: 24px;
+      cursor: pointer;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.3s;
+    }
+    .product-detail-close:hover {
+      background: rgba(0, 0, 0, 0.9);
     }
     .product-detail-left {
-      min-height:300px;
-      max-height:50vh;
+      flex: 1.2;
+      background: var(--ivory-100);
+      position: relative;
+      overflow: hidden;
+      min-height: 400px;
+    }
+    .product-detail-left .main-image {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      background: var(--ivory-100);
+    }
+    .product-detail-left .thumb-nav {
+      position: absolute;
+      top: 50%;
+      width: 100%;
+      transform: translateY(-50%);
+      display: flex;
+      justify-content: space-between;
+      padding: 0 12px;
+      pointer-events: none;
+    }
+    .product-detail-left .thumb-nav button {
+      pointer-events: auto;
+      background: rgba(0, 0, 0, 0.5);
+      border: none;
+      color: #fff;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .product-detail-left .thumb-nav button:hover {
+      background: rgba(0, 0, 0, 0.8);
+    }
+    .product-detail-left .thumb-nav svg {
+      width: 18px;
+      height: 18px;
+    }
+    .product-detail-left .thumb-dots {
+      position: absolute;
+      bottom: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 8px;
+      z-index: 5;
+    }
+    .product-detail-left .thumb-dots span {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.4);
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .product-detail-left .thumb-dots span.active {
+      background: var(--gold-500);
     }
     .product-detail-right {
-      flex:1;
-      padding:24px 20px;
-      overflow-y:auto;
+      flex: 0.8;
+      padding: 32px 28px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      background: var(--ivory-50);
     }
-    .bridal-slider {
-      aspect-ratio: 16/10;
+    .product-detail-right .pd-category {
+      font-size: .7rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--gold-600);
     }
-  }
+    .product-detail-right h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.8rem;
+      color: var(--maroon-800);
+      margin: 0;
+    }
+    .product-detail-right .pd-price {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem;
+      color: var(--maroon-800);
+    }
+    .product-detail-right .pd-price .old {
+      text-decoration: line-through;
+      color: #b09d8f;
+      margin-right: 12px;
+      font-size: 1.1rem;
+    }
+    .product-detail-right .pd-fabric {
+      font-size: .9rem;
+      color: #5a473f;
+      line-height: 1.7;
+    }
+    .product-detail-right .pd-description {
+      font-size: .95rem;
+      color: #5a473f;
+      line-height: 1.8;
+      border-top: 1px solid var(--line);
+      padding-top: 16px;
+    }
+    .product-detail-right .pd-add-btn {
+      padding: 14px 32px;
+      background: var(--maroon-800);
+      color: var(--ivory-50);
+      border: none;
+      font-size: .85rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      transition: background 0.3s;
+      margin-top: auto;
+      border-radius: 4px;
+    }
+    .product-detail-right .pd-add-btn:hover {
+      background: var(--maroon-700);
+    }
 
-  @media (max-width:576px) {
-    .wrap{ padding:0 16px; }
-    .nav-row{ padding:12px 16px; }
-    section{ padding:50px 0; }
-    .cat-grid{ grid-template-columns:1fr; gap:8px; }
-    .product-page .product-grid{ grid-template-columns:1fr 1fr; gap:14px 10px; }
-    .product-page { padding: 20px 0 50px; }
-    .product-detail-left { min-height:250px; }
-    .product-detail-right { padding:16px; }
-    .product-detail-right h2 { font-size:1.4rem; }
-    .bridal-slider { aspect-ratio: 16/12; }
-    .bridal-slider-nav button { width:32px; height:32px; }
-    .bridal-slider-nav button svg { width:14px; height:14px; }
-    .foot-grid{ grid-template-columns:1fr; gap:30px; }
-    .g-grid{ grid-template-columns:repeat(3,1fr); gap:4px; }
-    .nl-form{ flex-direction:column; gap:10px; }
-    .nl-form input{ width:100%; }
-    .nl-form button{ width:100%; }
-    .stat-row{ gap:20px; flex-direction:column; align-items:flex-start; }
-    .hero h1{ font-size:clamp(1.8rem,4vw,2.8rem); }
-    .hero-ctas{ flex-direction:column; align-items:center; gap:12px; }
-    .hero-ctas .btn{ width:100%; justify-content:center; }
-    .logo-mark{ width:32px; height:32px; }
-    .logo-word b{ font-size:.95rem; }
-    .logo-word em{ font-size:.45rem; letter-spacing:.25em; }
-    .floating-wa{ width:44px; height:44px; bottom:12px; left:12px; }
-    .floating-wa svg{ width:24px; height:24px; }
-    .to-top{ width:34px; height:34px; right:12px; bottom:12px; }
-    #cartSidebar{ width:100%; max-width:100%; right:-100%; }
-    .bridal-banner { padding:50px 0; }
-    .bridal-banner h2 { font-size:clamp(1.6rem,3vw,2.2rem); }
-  }
+    .testimonials {
+      background: var(--blush);
+    }
+    .t-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 36px;
+    }
+    .t-card {
+      background: var(--ivory-50);
+      padding: 36px 30px;
+      position: relative;
+    }
+    .t-card .quote-mark {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3rem;
+      color: var(--gold-500);
+      line-height: 1;
+    }
+    .t-card p {
+      line-height: 1.85;
+      color: #5a473f;
+      margin: 14px 0 22px;
+      font-size: .96rem;
+    }
+    .t-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1.15rem;
+      color: var(--maroon-800);
+    }
+    .t-role {
+      font-size: .68rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: #8a7267;
+      margin-top: 4px;
+    }
+    .stars {
+      color: var(--gold-500);
+      font-size: .85rem;
+      letter-spacing: 2px;
+      margin-bottom: 4px;
+    }
 
-  @media (max-width:380px) {
-    .product-page .product-grid{ grid-template-columns:1fr 1fr; gap:10px 8px; }
-    .product-info h3{ font-size:.8rem; }
-    .price{ font-size:.8rem; }
-    .product-detail-left { min-height:200px; }
-  }
-</style>
+    .gallery {
+      background: var(--ivory-100);
+    }
+    .g-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 6px;
+    }
+    .g-grid .swatch {
+      --ar: 1/1;
+    }
+    .g-grid a {
+      position: relative;
+      overflow: hidden;
+      display: block;
+    }
+    .g-grid .swatch {
+      transition: transform .5s var(--ease);
+    }
+    .g-grid a:hover .swatch {
+      transform: scale(1.08);
+    }
+    .g-grid a .ig-icon {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(33, 10, 16, 0);
+      transition: background .3s var(--ease);
+    }
+    .g-grid a:hover .ig-icon {
+      background: rgba(33, 10, 16, .35);
+    }
+    .g-grid a .ig-icon svg {
+      width: 22px;
+      height: 22px;
+      stroke: #fff;
+      opacity: 0;
+      transition: opacity .3s var(--ease);
+    }
+    .g-grid a:hover .ig-icon svg {
+      opacity: 1;
+    }
+
+    .newsletter {
+      background: var(--maroon-800);
+      color: var(--ivory-50);
+      text-align: center;
+    }
+    .newsletter h2 {
+      font-size: clamp(1.8rem, 3.2vw, 2.4rem);
+      font-style: italic;
+      margin-bottom: 14px;
+    }
+    .newsletter p {
+      color: rgba(248, 241, 229, .78);
+      margin-bottom: 30px;
+    }
+    .nl-form {
+      display: flex;
+      max-width: 440px;
+      margin: 0 auto;
+      gap: 0;
+    }
+    .nl-form input {
+      flex: 1;
+      padding: 15px 18px;
+      border: 1px solid var(--gold-500);
+      background: transparent;
+      color: var(--ivory-50);
+      font-family: 'Jost', sans-serif;
+      font-size: .9rem;
+    }
+    .nl-form input::placeholder {
+      color: rgba(248, 241, 229, .55);
+    }
+    .nl-form button {
+      padding: 15px 26px;
+      background: var(--gold-500);
+      color: var(--maroon-950);
+      border: 1px solid var(--gold-500);
+      font-size: .72rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      transition: .3s;
+    }
+    .nl-form button:hover {
+      background: var(--gold-300);
+    }
+    .nl-note {
+      font-size: .72rem;
+      color: var(--gold-300);
+      margin-top: 14px;
+      min-height: 16px;
+    }
+
+    footer {
+      background: var(--maroon-950);
+      color: rgba(248, 241, 229, .75);
+      padding-top: 80px;
+    }
+    .foot-grid {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
+      gap: 50px;
+      padding-bottom: 60px;
+      border-bottom: 1px solid rgba(230, 205, 147, .15);
+    }
+    .foot-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .foot-logo .logo-mark {
+      width: 40px;
+      height: 40px;
+    }
+    .foot-logo .logo-word b {
+      color: var(--ivory-50);
+      font-size: 1.24rem;
+    }
+    .foot-logo .logo-word em {
+      color: var(--gold-500);
+    }
+    .foot-about p {
+      line-height: 1.85;
+      font-size: .9rem;
+      margin-bottom: 22px;
+    }
+    .foot-social {
+      display: flex;
+      gap: 14px;
+    }
+    .foot-social a {
+      width: 36px;
+      height: 36px;
+      border: 1px solid rgba(230, 205, 147, .35);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: .3s;
+    }
+    .foot-social a:hover {
+      background: var(--gold-500);
+      border-color: var(--gold-500);
+    }
+    .foot-social a:hover svg {
+      stroke: var(--maroon-950);
+    }
+    .foot-social svg {
+      width: 15px;
+      height: 15px;
+      stroke: var(--gold-300);
+      transition: .3s;
+    }
+    .foot-col h4 {
+      font-size: .72rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--gold-300);
+      margin-bottom: 20px;
+      font-family: 'Jost', sans-serif;
+      font-weight: 500;
+    }
+    .foot-col ul li {
+      margin-bottom: 12px;
+    }
+    .foot-col ul a {
+      font-size: .88rem;
+      transition: .25s;
+    }
+    .foot-col ul a:hover {
+      color: var(--gold-300);
+      padding-left: 4px;
+    }
+    .foot-contact li {
+      display: flex;
+      gap: 10px;
+      font-size: .88rem;
+      margin-bottom: 16px;
+      align-items: flex-start;
+      line-height: 1.6;
+    }
+    .foot-contact svg {
+      width: 16px;
+      height: 16px;
+      stroke: var(--gold-500);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .foot-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding: 26px 0;
+      font-size: .78rem;
+      color: rgba(248, 241, 229, .5);
+    }
+    .foot-bottom a {
+      margin-left: 18px;
+    }
+    .foot-bottom a:hover {
+      color: var(--gold-300);
+    }
+
+    .to-top {
+      position: fixed;
+      right: 26px;
+      bottom: 26px;
+      z-index: 80;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--maroon-800);
+      color: var(--gold-300);
+      border: 1px solid var(--gold-500);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(10px);
+      transition: .35s var(--ease);
+    }
+    .to-top.show {
+      opacity: 1;
+      pointer-events: all;
+      transform: translateY(0);
+    }
+    .to-top svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .loading-spinner {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px 0;
+      grid-column: 1 / -1;
+    }
+    .spinner {
+      border: 3px solid var(--ivory-100);
+      border-top: 3px solid var(--gold-500);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+    .no-products {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 40px 0;
+      color: #6b574d;
+    }
+    .no-products h3 {
+      font-size: 1.4rem;
+      margin-bottom: 8px;
+    }
+
+    #cartSidebar {
+      position: fixed;
+      top: 0;
+      right: -420px;
+      width: 400px;
+      max-width: 90vw;
+      height: 100vh;
+      background: #fff;
+      z-index: 1000;
+      transition: right 0.3s ease;
+      box-shadow: -4px 0 20px rgba(0, 0, 0, 0.15);
+      display: flex;
+      flex-direction: column;
+    }
+    #cartSidebar .cart-header {
+      padding: 20px;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    #cartSidebar .cart-header h3 {
+      margin: 0;
+      font-family: 'Cormorant Garamond', serif;
+      color: #511824;
+    }
+    #cartItems {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+    }
+    #cartSidebar .cart-footer {
+      padding: 20px;
+      border-top: 1px solid #eee;
+      background: #f8f9fa;
+    }
+    #cartOverlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+    }
+    #checkoutModal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 1001;
+      justify-content: center;
+      align-items: center;
+    }
+    #checkoutModal .modal-box {
+      background: #fff;
+      padding: 30px;
+      border-radius: 8px;
+      width: 100%;
+      max-width: 500px;
+      max-height: 90vh;
+      overflow-y: auto;
+      margin: 20px;
+    }
+
+    @media (max-width: 1200px) {
+      .product-page .product-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px 20px;
+      }
+    }
+
+    @media (max-width: 992px) {
+      nav.primary {
+        display: none;
+      }
+      .burger {
+        display: block;
+      }
+      .about-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+      .cat-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .product-page .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px 16px;
+      }
+      .t-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+      .foot-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+      }
+      .g-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .product-detail-content {
+        flex-direction: column;
+        max-height: 95vh;
+      }
+      .product-detail-left {
+        min-height: 300px;
+        max-height: 50vh;
+      }
+      .product-detail-right {
+        flex: 1;
+        padding: 24px 20px;
+        overflow-y: auto;
+      }
+      .bridal-slider {
+        aspect-ratio: 16/10;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .wrap {
+        padding: 0 16px;
+      }
+      .nav-row {
+        padding: 12px 16px;
+      }
+      section {
+        padding: 50px 0;
+      }
+      .cat-grid {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+      .product-page .product-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 14px 10px;
+      }
+      .product-page {
+        padding: 20px 0 50px;
+      }
+      .product-detail-left {
+        min-height: 250px;
+      }
+      .product-detail-right {
+        padding: 16px;
+      }
+      .product-detail-right h2 {
+        font-size: 1.4rem;
+      }
+      .bridal-slider {
+        aspect-ratio: 16/12;
+      }
+      .bridal-slider-nav button {
+        width: 32px;
+        height: 32px;
+      }
+      .bridal-slider-nav button svg {
+        width: 14px;
+        height: 14px;
+      }
+      .foot-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+      }
+      .g-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 4px;
+      }
+      .nl-form {
+        flex-direction: column;
+        gap: 10px;
+      }
+      .nl-form input {
+        width: 100%;
+      }
+      .nl-form button {
+        width: 100%;
+      }
+      .stat-row {
+        gap: 20px;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .hero h1 {
+        font-size: clamp(1.8rem, 4vw, 2.8rem);
+      }
+      .hero-ctas {
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+      }
+      .hero-ctas .btn {
+        width: 100%;
+        justify-content: center;
+      }
+      .logo-mark {
+        width: 32px;
+        height: 32px;
+      }
+      .logo-word b {
+        font-size: .95rem;
+      }
+      .logo-word em {
+        font-size: .45rem;
+        letter-spacing: .25em;
+      }
+      .floating-wa {
+        width: 44px;
+        height: 44px;
+        bottom: 12px;
+        left: 12px;
+      }
+      .floating-wa svg {
+        width: 24px;
+        height: 24px;
+      }
+      .to-top {
+        width: 34px;
+        height: 34px;
+        right: 12px;
+        bottom: 12px;
+      }
+      #cartSidebar {
+        width: 100%;
+        max-width: 100%;
+        right: -100%;
+      }
+      .bridal-banner {
+        padding: 50px 0;
+      }
+      .bridal-banner h2 {
+        font-size: clamp(1.6rem, 3vw, 2.2rem);
+      }
+    }
+
+    @media (max-width: 380px) {
+      .product-page .product-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px 8px;
+      }
+      .product-info h3 {
+        font-size: .8rem;
+      }
+      .price {
+        font-size: .8rem;
+      }
+      .product-detail-left {
+        min-height: 200px;
+      }
+    }
+  </style>
 </head>
 <body>
 
-<div class="topbar">Complimentary shipping across Bangladesh &nbsp;•&nbsp; Handcrafted, made to order</div>
+  <div class="topbar">Complimentary shipping across Bangladesh &nbsp;•&nbsp; Handcrafted, made to order</div>
 
-<!-- Floating WhatsApp Button -->
-<a href="https://wa.me/" target="_blank" class="floating-wa" aria-label="WhatsApp">
-  <svg viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.539 2.016 2.126-.54c1.029.59 1.967.931 3.162.931 3.176 0 5.765-2.587 5.765-5.766 0-3.178-2.587-5.764-5.765-5.764m4.411 8.24c-.171.474-.985.869-1.353.921-.368.053-.715.111-2.221-.464-1.507-.575-2.457-2.096-2.533-2.196-.076-.101-.617-.819-.617-1.562 0-.742.389-1.108.528-1.258.139-.15.305-.188.406-.188.101 0 .202.001.291.005.093.004.22-.034.343.265.124.3.424 1.034.461 1.108.037.075.061.161.011.261-.05.1-.075.162-.15.25-.075.088-.158.176-.226.237-.075.068-.154.141-.065.276.089.135.397.654.851 1.107.583.583 1.075.764 1.21.84.135.075.214.062.294-.037.08-.1.343-.399.435-.537.092-.137.185-.115.31-.069.124.047.789.373.926.441.137.069.227.103.261.153.035.049.035.286-.136.76z"/></svg>
-</a>
+  <!-- Floating WhatsApp Button -->
+  <a href="https://wa.me/" target="_blank" class="floating-wa" aria-label="WhatsApp">
+    <svg viewBox="0 0 24 24">
+      <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.539 2.016 2.126-.54c1.029.59 1.967.931 3.162.931 3.176 0 5.765-2.587 5.765-5.766 0-3.178-2.587-5.764-5.765-5.764m4.411 8.24c-.171.474-.985.869-1.353.921-.368.053-.715.111-2.221-.464-1.507-.575-2.457-2.096-2.533-2.196-.076-.101-.617-.819-.617-1.562 0-.742.389-1.108.528-1.258.139-.15.305-.188.406-.188.101 0 .202.001.291.005.093.004.22-.034.343.265.124.3.424 1.034.461 1.108.037.075.061.161.011.261-.05.1-.075.162-.15.25-.075.088-.158.176-.226.237-.075.068-.154.141-.065.276.089.135.397.654.851 1.107.583.583 1.075.764 1.21.84.135.075.214.062.294-.037.08-.1.343-.399.435-.537.092-.137.185-.115.31-.069.124.047.789.373.926.441.137.069.227.103.261.153.035.049.035.286-.136.76z" />
+    </svg>
+  </a>
 
-<header class="site" id="siteHeader">
-  <div class="nav-row">
-    <button class="burger" id="burgerBtn" aria-label="Open menu">
-      <span></span><span></span><span></span>
-    </button>
-    <a href="#top" class="logo" aria-label="Shosta Bazar BD — home">
-      <svg class="logo-mark" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
-        <circle cx="32" cy="32" r="30" fill="var(--maroon-900)" stroke="var(--gold-500)" stroke-width="1.4"/>
-        <text x="32" y="40" text-anchor="middle" font-family="'Cormorant Garamond', serif" font-style="italic" font-weight="600" font-size="23" fill="var(--gold-300)">SB</text>
-      </svg>
-      <span class="logo-word"><b>Shosta Bazar</b><em>BD</em></span>
-    </a>
-    <nav class="primary">
-      <a href="#categories">Sarees</a>
-      <a href="#categories">Lehenga</a>
-      <a href="#categories">Gowns</a>
-      <a href="#categories">Salwar Kameez</a>
-      <a href="#bridal">Bridal</a>
-      <a href="#about">About</a>
-    </nav>
-    <div class="nav-icons">
-      <a href="https://wa.me/" target="_blank" class="wa-nav-icon" aria-label="WhatsApp">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 1 1-7.6-14.7 8.38 8.38 0 0 1 3.8.9L21 3.5Z"/></svg>
+  <header class="site" id="siteHeader">
+    <div class="nav-row">
+      <button class="burger" id="burgerBtn" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+      <a href="#top" class="logo" aria-label="Shosta Bazar BD — home">
+        <svg class="logo-mark" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
+          <circle cx="32" cy="32" r="30" fill="var(--maroon-900)" stroke="var(--gold-500)" stroke-width="1.4" />
+          <text x="32" y="40" text-anchor="middle" font-family="'Cormorant Garamond', serif" font-style="italic" font-weight="600" font-size="23" fill="var(--gold-300)">SB</text>
+        </svg>
+        <span class="logo-word"><b>Shosta Bazar</b><em>BD</em></span>
       </a>
-      <button aria-label="Bag" onclick="toggleCart()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M6 8h12l-1 12H7L6 8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
-        <span class="cart-count" id="cartCount">0</span>
-      </button>
-    </div>
-  </div>
-</header>
-
-<div class="scrim" id="scrim"></div>
-<aside class="mobile-nav" id="mobileNav">
-  <button class="close-mn" id="closeMn" aria-label="Close menu">&times;</button>
-  <a href="#categories">Sarees</a>
-  <a href="#categories">Lehenga</a>
-  <a href="#categories">Gowns</a>
-  <a href="#categories">Salwar Kameez</a>
-  <a href="#bridal">Bridal</a>
-  <a href="#about">About</a>
-  <a href="#footer">Contact</a>
-</aside>
-
-<main id="top">
-
-  <!-- HERO -->
-  <section class="hero" style="padding:0;">
-    <div class="hero-nav">
-      <button id="heroPrev" aria-label="Previous image"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
-      <button id="heroNext" aria-label="Next image"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></button>
-    </div>
-    <div class="hero-slider-track" id="heroTrack"></div>
-    <div class="hero-overlay"></div>
-    <svg class="hero-corner tl" viewBox="0 0 120 120" fill="none" stroke="#e6cd93" stroke-width="1"><path d="M4 4h40M4 4v40"/><circle cx="4" cy="4" r="3" fill="#e6cd93"/></svg>
-    <svg class="hero-corner br" viewBox="0 0 120 120" fill="none" stroke="#e6cd93" stroke-width="1"><path d="M4 4h40M4 4v40"/><circle cx="4" cy="4" r="3" fill="#e6cd93"/></svg>
-    <div class="hero-inner">
-      <span class="eyebrow" id="heroEyebrow">Designer Wear</span>
-      <h1 id="heroTitle">Feel the joy of<br>presenting yourself</h1>
-      <p id="heroSubtitle">Welcome to Shosta Bazar BD, your ultimate destination for exclusive luxury dresses — a perfect blend of modern and traditional design, unique embellishments, and rich texture.</p>
-      <div class="hero-ctas">
-        <a href="#categories" class="btn gold" id="heroBtn1">Shop Now</a>
-        <a href="#bridal" class="btn dark" id="heroBtn2">Bridal Collection</a>
+      <nav class="primary">
+        <a href="#categories">Sarees</a>
+        <a href="#categories">Lehenga</a>
+        <a href="#categories">Gowns</a>
+        <a href="#categories">Salwar Kameez</a>
+        <a href="#bridal">Bridal</a>
+        <a href="#about">About</a>
+      </nav>
+      <div class="nav-icons">
+        <a href="https://wa.me/" target="_blank" class="wa-nav-icon" aria-label="WhatsApp">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+            <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 1 1-7.6-14.7 8.38 8.38 0 0 1 3.8.9L21 3.5Z" />
+          </svg>
+        </a>
+        <button aria-label="Bag" onclick="toggleCart()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4">
+            <path d="M6 8h12l-1 12H7L6 8Z" />
+            <path d="M9 8V6a3 3 0 0 1 6 0v2" />
+          </svg>
+          <span class="cart-count" id="cartCount">0</span>
+        </button>
       </div>
     </div>
-    <div class="scroll-cue"><span>Scroll</span><span class="line"></span></div>
-  </section>
+  </header>
 
-  <div class="marquee">
-    <div class="marquee-track">
-      <span>Bridal Wear</span><span>Sarees</span><span>Lehenga</span><span>Designer Gowns</span><span>Salwar Kameez</span><span>Accessories</span>
-      <span>Bridal Wear</span><span>Sarees</span><span>Lehenga</span><span>Designer Gowns</span><span>Salwar Kameez</span><span>Accessories</span>
-    </div>
-  </div>
+  <div class="scrim" id="scrim"></div>
+  <aside class="mobile-nav" id="mobileNav">
+    <button class="close-mn" id="closeMn" aria-label="Close menu">&times;</button>
+    <a href="#categories">Sarees</a>
+    <a href="#categories">Lehenga</a>
+    <a href="#categories">Gowns</a>
+    <a href="#categories">Salwar Kameez</a>
+    <a href="#bridal">Bridal</a>
+    <a href="#about">About</a>
+    <a href="#footer">Contact</a>
+  </aside>
 
-  <!-- ABOUT -->
-  <section class="about" id="about">
-    <div class="wrap about-grid">
-      <div class="about-media reveal">
-<<<<<<< HEAD
-        <div class="swatch" style="--ar:4/5; background: url('https://images.unsplash.com/photo-1631233839294-f06077977469?q=80&w=1200') center/cover no-repeat;">
-=======
-        <div class="swatch" style="--ar:4/5; background: url('images/im1.png;">
->>>>>>> 4dbb591fc23a835749ba972a5ab2be809e7d3fdb
-          <span class="swatch-label"> Dhaka</span>
-        </div>
-        <div class="frame"></div>
+  <main id="top">
+
+    <!-- HERO -->
+    <section class="hero" style="padding:0;">
+      <div class="hero-nav">
+        <button id="heroPrev" aria-label="Previous image"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
+        <button id="heroNext" aria-label="Next image"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></button>
       </div>
-      <div class="about-copy reveal">
-        <span class="eyebrow">Our Story</span>
-        <h2>Since 2014, an ode to tradition worn with modern grace</h2>
-        <p>Shosta Bazar BD is the exclusive luxury fashion house for women in Bangladesh. Our collection showcases a perfect blend of modern and traditional designs, featuring hand-placed embellishments, sequin and mirror work, and richly textured fabrics.</p>
-        <p>Every piece is finished by hand in our Dhaka atelier — from bridal lehengas to occasion sarees — so that what you wear feels as considered as the moment you wear it for.</p>
-        <div class="stat-row">
-          <div><b>10+</b><span>Years of Craft</span></div>
-          <div><b>5,000+</b><span>Pieces Delivered</span></div>
-          <div><b>100%</b><span>Handcrafted</span></div>
+      <div class="hero-slider-track" id="heroTrack"></div>
+      <div class="hero-overlay"></div>
+      <svg class="hero-corner tl" viewBox="0 0 120 120" fill="none" stroke="#e6cd93" stroke-width="1"><path d="M4 4h40M4 4v40"/><circle cx="4" cy="4" r="3" fill="#e6cd93"/></svg>
+      <svg class="hero-corner br" viewBox="0 0 120 120" fill="none" stroke="#e6cd93" stroke-width="1"><path d="M4 4h40M4 4v40"/><circle cx="4" cy="4" r="3" fill="#e6cd93"/></svg>
+      <div class="hero-inner">
+        <span class="eyebrow" id="heroEyebrow">Designer Wear</span>
+        <h1 id="heroTitle">Feel the joy of<br>presenting yourself</h1>
+        <p id="heroSubtitle">Welcome to Shosta Bazar BD, your ultimate destination for exclusive luxury dresses — a perfect blend of modern and traditional design, unique embellishments, and rich texture.</p>
+        <div class="hero-ctas">
+          <a href="#categories" class="btn gold" id="heroBtn1">Shop Now</a>
+          <a href="#bridal" class="btn dark" id="heroBtn2">Bridal Collection</a>
         </div>
       </div>
-    </div>
-  </section>
+      <div class="scroll-cue"><span>Scroll</span><span class="line"></span></div>
+    </section>
 
-  <div class="jaali on-ivory"></div>
-
-  <!-- CATEGORIES -->
-  <section class="categories" id="categories">
-    <div class="wrap">
-      <div class="section-head reveal">
-        <span class="eyebrow">Shop by Category</span>
-        <h2>Find your elegance</h2>
-        <p>From bridal grandeur to everyday designer wear — six houses of craft, one philosophy.</p>
+    <div class="marquee">
+      <div class="marquee-track">
+        <span>Bridal Wear</span><span>Sarees</span><span>Lehenga</span><span>Designer Gowns</span><span>Salwar Kameez</span><span>Accessories</span>
+        <span>Bridal Wear</span><span>Sarees</span><span>Lehenga</span><span>Designer Gowns</span><span>Salwar Kameez</span><span>Accessories</span>
       </div>
     </div>
-    <div class="cat-grid" id="categoryGrid">
-      <div class="loading-spinner"><div class="spinner"></div></div>
-    </div>
-  </section>
 
-  <!-- PRODUCT PAGE (for categories) -->
-  <section class="product-page" id="productPage" style="display:none;">
-    <div class="wrap">
-      <button class="back-nav" id="backToHome">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M15 18l-6-6 6-6"/></svg>
-        Back to home
-      </button>
-      <div class="section-head" style="text-align:left; margin-bottom:32px;">
-        <span class="eyebrow" id="productPageCategoryLabel">Category</span>
-        <h2 id="productPageTitle">Collection</h2>
+    <!-- ABOUT -->
+    <section class="about" id="about">
+      <div class="wrap about-grid">
+        <div class="about-media reveal">
+          <div class="swatch" style="--ar:4/5; background: url('https://images.unsplash.com/photo-1631233839294-f06077977469?q=80&w=1200') center/cover no-repeat;">
+            <span class="swatch-label"> Dhaka</span>
+          </div>
+          <div class="frame"></div>
+        </div>
+        <div class="about-copy reveal">
+          <span class="eyebrow">Our Story</span>
+          <h2>Since 2014, an ode to tradition worn with modern grace</h2>
+          <p>Shosta Bazar BD is the exclusive luxury fashion house for women in Bangladesh. Our collection showcases a perfect blend of modern and traditional designs, featuring hand-placed embellishments, sequin and mirror work, and richly textured fabrics.</p>
+          <p>Every piece is finished by hand in our Dhaka atelier — from bridal lehengas to occasion sarees — so that what you wear feels as considered as the moment you wear it for.</p>
+          <div class="stat-row">
+            <div><b>10+</b><span>Years of Craft</span></div>
+            <div><b>5,000+</b><span>Pieces Delivered</span></div>
+            <div><b>100%</b><span>Handcrafted</span></div>
+          </div>
+        </div>
       </div>
-      <div class="product-grid" id="productPageGrid">
+    </section>
+
+    <div class="jaali on-ivory"></div>
+
+    <!-- CATEGORIES -->
+    <section class="categories" id="categories">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="eyebrow">Shop by Category</span>
+          <h2>Find your elegance</h2>
+          <p>From bridal grandeur to everyday designer wear — six houses of craft, one philosophy.</p>
+        </div>
+      </div>
+      <div class="cat-grid" id="categoryGrid">
         <div class="loading-spinner"><div class="spinner"></div></div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <div class="jaali on-ivory"></div>
-
-  <!-- BRIDAL BANNER with Slider -->
-  <section class="bridal-banner" id="bridal">
-    <div class="wrap reveal">
-      <span class="eyebrow">The Bridal Edit</span>
-      <h2>Dive into luxury with our exclusive bridal collection</h2>
-      <p>A symphony of hand-embroidered sequins, mirror work, and rich fabric — each lehenga and saree designed to be the centrepiece of your grandest day.</p>
-      
-      <!-- Bridal Slider -->
-      <div class="bridal-slider" id="bridalSlider">
-        <div class="bridal-slider-track" id="bridalSliderTrack">
-          <!-- Slides loaded dynamically -->
+    <!-- PRODUCT PAGE (for categories) -->
+    <section class="product-page" id="productPage" style="display:none;">
+      <div class="wrap">
+        <button class="back-nav" id="backToHome">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M15 18l-6-6 6-6"/></svg>
+          Back to home
+        </button>
+        <div class="section-head" style="text-align:left; margin-bottom:32px;">
+          <span class="eyebrow" id="productPageCategoryLabel">Category</span>
+          <h2 id="productPageTitle">Collection</h2>
         </div>
-        <div class="bridal-slider-nav">
-          <button id="bridalPrev" aria-label="Previous"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
-          <button id="bridalNext" aria-label="Next"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></button>
+        <div class="product-grid" id="productPageGrid">
+          <div class="loading-spinner"><div class="spinner"></div></div>
         </div>
-        <div class="bridal-slider-dots" id="bridalDots"></div>
       </div>
-      
-      <a href="#" class="btn gold" id="exploreBridalBtn">Explore Bridal Wear</a>
-    </div>
-  </section>
+    </section>
 
-  <!-- Cart Sidebar -->
-  <div id="cartSidebar">
-    <div class="cart-header"><h3>🛒 Your Cart</h3><button onclick="toggleCart()" style="background:none; border:none; font-size:24px; cursor:pointer;">✕</button></div>
-    <div id="cartItems"><p style="text-align:center; color:#888; padding:40px 0;">Your cart is empty</p></div>
-    <div class="cart-footer">
-      <div style="display:flex; justify-content:space-between; margin-bottom:12px;"><span>Subtotal:</span><span id="cartSubtotal">৳0</span></div>
-      <div style="display:flex; justify-content:space-between; margin-bottom:12px;"><span>Delivery:</span><span id="cartDelivery">৳0</span></div>
-      <div style="display:flex; justify-content:space-between; font-weight:700; font-size:1.2rem; margin-bottom:16px;"><span>Total:</span><span id="cartTotal">৳0</span></div>
-      <button onclick="openCheckout()" style="width:100%; padding:14px; background:#511824; color:#fff; border:none; border-radius:4px; font-size:1rem; cursor:pointer; font-weight:600;">Proceed to Checkout</button>
-    </div>
-  </div>
-  <div id="cartOverlay" onclick="toggleCart()"></div>
+    <div class="jaali on-ivory"></div>
 
-  <!-- Checkout Modal -->
-  <div id="checkoutModal">
-    <div class="modal-box">
-      <h3 style="margin-top:0; color:#511824; font-family:'Cormorant Garamond',serif;">📋 Confirm Order</h3>
-      <form id="checkoutForm">
-        <div style="margin-bottom:12px;"><label style="display:block; margin-bottom:4px; font-weight:500;">Full Name *</label><input type="text" id="checkoutName" required style="width:100%; padding:10px; border:1px solid #ddd; border-radius:4px; box-sizing:border-box;"></div>
-        <div style="margin-bottom:12px;"><label style="display:block; margin-bottom:4px; font-weight:500;">Phone Number *</label><input type="tel" id="checkoutPhone" required style="width:100%; padding:10px; border:1px solid #ddd; border-radius:4px; box-sizing:border-box;"></div>
-        <div style="margin-bottom:12px;"><label style="display:block; margin-bottom:4px; font-weight:500;">Email (Optional)</label><input type="email" id="checkoutEmail" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:4px; box-sizing:border-box;"></div>
-        <div style="margin-bottom:12px;"><label style="display:block; margin-bottom:4px; font-weight:500;">Delivery Address *</label><textarea id="checkoutAddress" required style="width:100%; padding:10px; border:1px solid #ddd; border-radius:4px; box-sizing:border-box; min-height:80px;"></textarea></div>
-        <div style="margin-bottom:12px;"><label style="display:block; margin-bottom:4px; font-weight:500;">Payment Method</label><select id="checkoutPayment" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:4px; box-sizing:border-box;"><option value="Cash on Delivery">Cash on Delivery</option><option value="bKash">bKash</option><option value="Nagad">Nagad</option><option value="Rocket">Rocket</option></select></div>
-        <div style="margin-bottom:16px;"><label style="display:block; margin-bottom:4px; font-weight:500;">Order Notes (Optional)</label><textarea id="checkoutNotes" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:4px; box-sizing:border-box; min-height:60px;"></textarea></div>
-        <div style="display:flex; justify-content:space-between; margin-bottom:16px; font-weight:600; font-size:1.1rem;"><span>Total:</span><span id="checkoutTotal">৳0</span></div>
-        <div style="display:flex; gap:10px;"><button type="button" onclick="closeCheckout()" style="flex:1; padding:12px; background:#6c757d; color:#fff; border:none; border-radius:4px; cursor:pointer;">Cancel</button><button type="submit" style="flex:2; padding:12px; background:#25D366; color:#fff; border:none; border-radius:4px; cursor:pointer; font-weight:600;">📱 Order via WhatsApp</button></div>
-      </form>
-    </div>
-  </div>
+    <!-- BRIDAL BANNER with Slider -->
+    <section class="bridal-banner" id="bridal">
+      <div class="wrap reveal">
+        <span class="eyebrow">The Bridal Edit</span>
+        <h2>Dive into luxury with our exclusive bridal collection</h2>
+        <p>A symphony of hand-embroidered sequins, mirror work, and rich fabric — each lehenga and saree designed to be the centrepiece of your grandest day.</p>
 
-  <!-- Product Detail Modal -->
-  <div class="product-detail-modal" id="productDetailModal">
-    <div class="product-detail-content">
-      <button class="product-detail-close" id="pdClose">&times;</button>
-      <div class="product-detail-left" id="pdLeft">
-        <img class="main-image" id="pdMainImage" src="" alt="Product detail">
-        <div class="thumb-nav">
-          <button id="pdPrev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
-          <button id="pdNext"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></button>
+        <!-- Bridal Slider -->
+        <div class="bridal-slider" id="bridalSlider">
+          <div class="bridal-slider-track" id="bridalSliderTrack">
+            <!-- Slides loaded dynamically -->
+          </div>
+          <div class="bridal-slider-nav">
+            <button id="bridalPrev" aria-label="Previous"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
+            <button id="bridalNext" aria-label="Next"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></button>
+          </div>
+          <div class="bridal-slider-dots" id="bridalDots"></div>
         </div>
-        <div class="thumb-dots" id="pdDots"></div>
+
+        <a href="#" class="btn gold" id="exploreBridalBtn">Explore Bridal Wear</a>
       </div>
-      <div class="product-detail-right" id="pdRight">
-        <div class="pd-category" id="pdCategory">Category</div>
-        <h2 id="pdName">Product Name</h2>
-        <div class="pd-price" id="pdPrice">৳0</div>
-        <div class="pd-fabric" id="pdFabric"><strong>Fabric:</strong> Premium Silk</div>
-        <div class="pd-description" id="pdDescription">Product description goes here. Details about the design, craftsmanship, and special features.</div>
-        <button class="pd-add-btn" id="pdAddBtn">Add to Bag</button>
+    </section>
+
+    <!-- Cart Sidebar -->
+    <div id="cartSidebar">
+      <div class="cart-header"><h3>🛒 Your Cart</h3><button onclick="toggleCart()" style="background:none; border:none; font-size:24px; cursor:pointer;">✕</button></div>
+      <div id="cartItems"><p style="text-align:center; color:#888; padding:40px 0;">Your cart is empty</p></div>
+      <div class="cart-footer">
+        <div style="display:flex; justify-content:space-between; margin-bottom:12px;"><span>Subtotal:</span><span id="cartSubtotal">৳0</span></div>
+        <div style="display:flex; justify-content:space-between; margin-bottom:12px;"><span>Delivery:</span><span id="cartDelivery">৳0</span></div>
+        <div style="display:flex; justify-content:space-between; font-weight:700; font-size:1.2rem; margin-bottom:16px;"><span>Total:</span><span id="cartTotal">৳0</span></div>
+        <button onclick="openCheckout()" style="width:100%; padding:14px; background:#511824; color:#fff; border:none; border-radius:4px; font-size:1rem; cursor:pointer; font-weight:600;">Proceed to Checkout</button>
       </div>
     </div>
-  </div>
+    <div id="cartOverlay" onclick="toggleCart()"></div>
 
-  <!-- TESTIMONIALS -->
-  <section class="testimonials">
+    <!-- Checkout Modal -->
+    <div id="checkoutModal">
+      <div class="modal-box">
+        <h3 style="margin-top:0; color:#511824; font-family:'Cormorant Garamond',serif;">📋 Confirm Order</h3>
+        <form id="checkoutForm">
+          <div style="margin-bottom:12px;"><label style="display:block; margin-bottom:4px; font-weight:500;">Full Name *</label><input type="text" id="checkoutName" required style="width:100%; padding:10px; border:1px solid #ddd; border-radius:4px; box-sizing:border-box;"></div>
+          <div style="margin-bottom:12px;"><label style="display:block; margin-bottom:4px; font-weight:500;">Phone Number *</label><input type="tel" id="checkoutPhone" required style="width:100%; padding:10px; border:1px solid #ddd; border-radius:4px; box-sizing:border-box;"></div>
+          <div style="margin-bottom:12px;"><label style="display:block; margin-bottom:4px; font-weight:500;">Email (Optional)</label><input type="email" id="checkoutEmail" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:4px; box-sizing:border-box;"></div>
+          <div style="margin-bottom:12px;"><label style="display:block; margin-bottom:4px; font-weight:500;">Delivery Address *</label><textarea id="checkoutAddress" required style="width:100%; padding:10px; border:1px solid #ddd; border-radius:4px; box-sizing:border-box; min-height:80px;"></textarea></div>
+          <div style="margin-bottom:12px;"><label style="display:block; margin-bottom:4px; font-weight:500;">Payment Method</label><select id="checkoutPayment" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:4px; box-sizing:border-box;"><option value="Cash on Delivery">Cash on Delivery</option><option value="bKash">bKash</option><option value="Nagad">Nagad</option><option value="Rocket">Rocket</option></select></div>
+          <div style="margin-bottom:16px;"><label style="display:block; margin-bottom:4px; font-weight:500;">Order Notes (Optional)</label><textarea id="checkoutNotes" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:4px; box-sizing:border-box; min-height:60px;"></textarea></div>
+          <div style="display:flex; justify-content:space-between; margin-bottom:16px; font-weight:600; font-size:1.1rem;"><span>Total:</span><span id="checkoutTotal">৳0</span></div>
+          <div style="display:flex; gap:10px;"><button type="button" onclick="closeCheckout()" style="flex:1; padding:12px; background:#6c757d; color:#fff; border:none; border-radius:4px; cursor:pointer;">Cancel</button><button type="submit" style="flex:2; padding:12px; background:#25D366; color:#fff; border:none; border-radius:4px; cursor:pointer; font-weight:600;">📱 Order via WhatsApp</button></div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Product Detail Modal -->
+    <div class="product-detail-modal" id="productDetailModal">
+      <div class="product-detail-content">
+        <button class="product-detail-close" id="pdClose">&times;</button>
+        <div class="product-detail-left" id="pdLeft">
+          <img class="main-image" id="pdMainImage" src="" alt="Product detail">
+          <div class="thumb-nav">
+            <button id="pdPrev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
+            <button id="pdNext"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></button>
+          </div>
+          <div class="thumb-dots" id="pdDots"></div>
+        </div>
+        <div class="product-detail-right" id="pdRight">
+          <div class="pd-category" id="pdCategory">Category</div>
+          <h2 id="pdName">Product Name</h2>
+          <div class="pd-price" id="pdPrice">৳0</div>
+          <div class="pd-fabric" id="pdFabric"><strong>Fabric:</strong> Premium Silk</div>
+          <div class="pd-description" id="pdDescription">Product description goes here. Details about the design, craftsmanship, and special features.</div>
+          <button class="pd-add-btn" id="pdAddBtn">Add to Bag</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TESTIMONIALS -->
+    <section class="testimonials">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="eyebrow">Kind Words</span>
+          <h2>From our clients</h2>
+        </div>
+        <div class="t-grid">
+          <div class="t-card reveal">
+            <div class="stars">★★★★★</div>
+            <p class="display quote-mark">&ldquo;</p>
+            <p>The detail work on my bridal lehenga was beyond anything I imagined — every mirror and sequin placed with real intention.</p>
+            <div class="t-name">Farzana R.</div>
+            <div class="t-role">Bridal Customer</div>
+          </div>
+          <div class="t-card reveal">
+            <div class="stars">★★★★★</div>
+            <p class="display quote-mark">&ldquo;</p>
+            <p>Beautiful fabric, careful stitching, and a team that actually listens to what you want. Worth the wait.</p>
+            <div class="t-name">Nusrat J.</div>
+            <div class="t-role">Repeat Customer</div>
+          </div>
+          <div class="t-card reveal">
+            <div class="stars">★★★★★</div>
+            <p class="display quote-mark">&ldquo;</p>
+            <p>Their showroom in Banani is as elegant as the clothes — staff take real time to help you find the right piece.</p>
+            <div class="t-name">Ishrat K.</div>
+            <div class="t-role">Dhaka</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- GALLERY -->
+    <section class="gallery" style="padding-bottom:0;">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="eyebrow">@shostabazarbd</span>
+          <h2>Follow the collection</h2>
+        </div>
+      </div>
+      <div class="g-grid" id="galleryGrid">
+        <div class="loading-spinner" style="grid-column: 1 / -1;"><div class="spinner"></div></div>
+      </div>
+    </section>
+
+    <!-- NEWSLETTER -->
+    <section class="newsletter">
+      <div class="wrap">
+        <span class="eyebrow" style="color:var(--gold-300);">Stay in Touch</span>
+        <h2>Be the first to know</h2>
+        <p>New arrivals, bridal edits, and private trunk shows — straight to your inbox.</p>
+        <form class="nl-form" id="nlForm">
+          <input type="email" placeholder="Your email address" required id="nlEmail">
+          <button type="submit">Subscribe</button>
+        </form>
+        <div class="nl-note" id="nlNote"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer id="footer">
     <div class="wrap">
-      <div class="section-head reveal">
-        <span class="eyebrow">Kind Words</span>
-        <h2>From our clients</h2>
-      </div>
-      <div class="t-grid">
-        <div class="t-card reveal">
-          <div class="stars">★★★★★</div>
-          <p class="display quote-mark">&ldquo;</p>
-          <p>The detail work on my bridal lehenga was beyond anything I imagined — every mirror and sequin placed with real intention.</p>
-          <div class="t-name">Farzana R.</div>
-          <div class="t-role">Bridal Customer</div>
+      <div class="foot-grid">
+        <div class="foot-about">
+          <div class="foot-logo">
+            <svg class="logo-mark" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
+              <circle cx="32" cy="32" r="30" fill="var(--maroon-900)" stroke="var(--gold-500)" stroke-width="1.4" />
+              <text x="32" y="40" text-anchor="middle" font-family="'Cormorant Garamond', serif" font-style="italic" font-weight="600" font-size="23" fill="var(--gold-300)">SB</text>
+            </svg>
+            <span class="logo-word"><b>Shosta Bazar</b><em>BD</em></span>
+          </div>
+          <p>Luxurious and exclusive designer wear in Bangladesh. Bridal wear, party dresses, sarees, lehengas, gowns and accessories — order online or visit our showroom.</p>
+          <div class="foot-social">
+            <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.4"><path d="M14 9h3V6h-3c-1.7 0-3 1.3-3 3v2H9v3h2v6h3v-6h3l1-3h-4V9c0-.5.5-1 1-1Z"/></svg></a>
+            <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.4"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></a>
+            <a href="#" aria-label="TikTok"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.4"><path d="M15 4v9.5a3.5 3.5 0 1 1-3-3.46V7a6.5 6.5 0 1 0 6 6.48V9.8A6 6 0 0 0 21 11V8a4 4 0 0 1-4-4h-2Z"/></svg></a>
+            <a href="#" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.4"><rect x="3" y="6" width="18" height="12" rx="3"/><path d="M11 9.5 15 12l-4 2.5v-5Z" fill="currentColor" stroke="none"/></svg></a>
+            <a href="#" aria-label="Pinterest"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.4"><circle cx="12" cy="12" r="9"/><path d="M9.5 17.5 12 8m0 0c2 0 3.5 1.3 3.5 3.2 0 2.2-1.2 3.8-3 3.8-.7 0-1.2-.3-1.5-.7"/></svg></a>
+          </div>
         </div>
-        <div class="t-card reveal">
-          <div class="stars">★★★★★</div>
-          <p class="display quote-mark">&ldquo;</p>
-          <p>Beautiful fabric, careful stitching, and a team that actually listens to what you want. Worth the wait.</p>
-          <div class="t-name">Nusrat J.</div>
-          <div class="t-role">Repeat Customer</div>
+        <div class="foot-col">
+          <h4>Shop</h4>
+          <ul>
+            <li><a href="#categories">Sarees</a></li>
+            <li><a href="#categories">Lehenga</a></li>
+            <li><a href="#categories">Designer Gowns</a></li>
+            <li><a href="#categories">Salwar Kameez</a></li>
+            <li><a href="#bridal">Bridal Wear</a></li>
+          </ul>
         </div>
-        <div class="t-card reveal">
-          <div class="stars">★★★★★</div>
-          <p class="display quote-mark">&ldquo;</p>
-          <p>Their showroom in Banani is as elegant as the clothes — staff take real time to help you find the right piece.</p>
-          <div class="t-name">Ishrat K.</div>
-          <div class="t-role">Dhaka</div>
+        <div class="foot-col">
+          <h4>Customer Care</h4>
+          <ul>
+            <li><a href="#">FAQ</a></li>
+            <li><a href="#">Blog</a></li>
+            <li><a href="#about">About Us</a></li>
+            <li><a href="#">Terms &amp; Conditions</a></li>
+            <li><a href="#">Terms of Use</a></li>
+            <li><a href="#">Returns Policy</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+          </ul>
         </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- GALLERY -->
-  <section class="gallery" style="padding-bottom:0;">
-    <div class="wrap">
-      <div class="section-head reveal">
-        <span class="eyebrow">@shostabazarbd</span>
-        <h2>Follow the collection</h2>
-      </div>
-    </div>
-    <div class="g-grid" id="galleryGrid">
-      <div class="loading-spinner" style="grid-column: 1 / -1;"><div class="spinner"></div></div>
-    </div>
-  </section>
-
-  <!-- NEWSLETTER -->
-  <section class="newsletter">
-    <div class="wrap">
-      <span class="eyebrow" style="color:var(--gold-300);">Stay in Touch</span>
-      <h2>Be the first to know</h2>
-      <p>New arrivals, bridal edits, and private trunk shows — straight to your inbox.</p>
-      <form class="nl-form" id="nlForm">
-        <input type="email" placeholder="Your email address" required id="nlEmail">
-        <button type="submit">Subscribe</button>
-      </form>
-      <div class="nl-note" id="nlNote"></div>
-    </div>
-  </section>
-
-</main>
-
-<footer id="footer">
-  <div class="wrap">
-    <div class="foot-grid">
-      <div class="foot-about">
-        <div class="foot-logo">
-          <svg class="logo-mark" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
-            <circle cx="32" cy="32" r="30" fill="var(--maroon-900)" stroke="var(--gold-500)" stroke-width="1.4"/>
-            <text x="32" y="40" text-anchor="middle" font-family="'Cormorant Garamond', serif" font-style="italic" font-weight="600" font-size="23" fill="var(--gold-300)">SB</text>
-          </svg>
-          <span class="logo-word"><b>Shosta Bazar</b><em>BD</em></span>
-        </div>
-        <p>Luxurious and exclusive designer wear in Bangladesh. Bridal wear, party dresses, sarees, lehengas, gowns and accessories — order online or visit our showroom.</p>
-        <div class="foot-social">
-          <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.4"><path d="M14 9h3V6h-3c-1.7 0-3 1.3-3 3v2H9v3h2v6h3v-6h3l1-3h-4V9c0-.5.5-1 1-1Z"/></svg></a>
-          <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.4"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></a>
-          <a href="#" aria-label="TikTok"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.4"><path d="M15 4v9.5a3.5 3.5 0 1 1-3-3.46V7a6.5 6.5 0 1 0 6 6.48V9.8A6 6 0 0 0 21 11V8a4 4 0 0 1-4-4h-2Z"/></svg></a>
-          <a href="#" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.4"><rect x="3" y="6" width="18" height="12" rx="3"/><path d="M11 9.5 15 12l-4 2.5v-5Z" fill="currentColor" stroke="none"/></svg></a>
-          <a href="#" aria-label="Pinterest"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.4"><circle cx="12" cy="12" r="9"/><path d="M9.5 17.5 12 8m0 0c2 0 3.5 1.3 3.5 3.2 0 2.2-1.2 3.8-3 3.8-.7 0-1.2-.3-1.5-.7"/></svg></a>
+        <div class="foot-col">
+          <h4>Visit / Contact</h4>
+          <ul class="foot-contact">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke-width="1.4"><path d="M12 21s-7-6.2-7-11a7 7 0 1 1 14 0c0 4.8-7 11-7 11Z"/><circle cx="12" cy="10" r="2.4"/></svg><span>Dhaka, Bangladesh</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 5h3l2 5-2 1a11 11 0 0 0 6 6l1-2 5 2v3a2 2 0 0 1-2 2A16 16 0 0 1 4 7a2 2 0 0 1 2-2Z"/></svg><span>018********</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 6 8 7 8-7"/></svg><span>shostabazarbd@gmail.com</span></li>
+          </ul>
         </div>
       </div>
-      <div class="foot-col">
-        <h4>Shop</h4>
-        <ul>
-          <li><a href="#categories">Sarees</a></li>
-          <li><a href="#categories">Lehenga</a></li>
-          <li><a href="#categories">Designer Gowns</a></li>
-          <li><a href="#categories">Salwar Kameez</a></li>
-          <li><a href="#bridal">Bridal Wear</a></li>
-        </ul>
-      </div>
-      <div class="foot-col">
-        <h4>Customer Care</h4>
-        <ul>
-          <li><a href="#">FAQ</a></li>
-          <li><a href="#">Blog</a></li>
-          <li><a href="#about">About Us</a></li>
-          <li><a href="#">Terms &amp; Conditions</a></li>
-          <li><a href="#">Terms of Use</a></li>
-          <li><a href="#">Returns Policy</a></li>
-          <li><a href="#">Privacy Policy</a></li>
-        </ul>
-      </div>
-      <div class="foot-col">
-        <h4>Visit / Contact</h4>
-        <ul class="foot-contact">
-          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="1.4"><path d="M12 21s-7-6.2-7-11a7 7 0 1 1 14 0c0 4.8-7 11-7 11Z"/><circle cx="12" cy="10" r="2.4"/></svg><span>Dhaka, Bangladesh</span></li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 5h3l2 5-2 1a11 11 0 0 0 6 6l1-2 5 2v3a2 2 0 0 1-2 2A16 16 0 0 1 4 7a2 2 0 0 1 2-2Z"/></svg><span>018********</span></li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 6 8 7 8-7"/></svg><span>shostabazarbd@gmail.com</span></li>
-        </ul>
+      <div class="foot-bottom">
+        <span>&copy; <span id="year"></span> Shosta Bazar BD. All rights reserved.</span>
+        <span><a href="#">Privacy Policy</a><a href="#">Terms of Use</a></span>
       </div>
     </div>
-    <div class="foot-bottom">
-      <span>&copy; <span id="year"></span> Shosta Bazar BD. All rights reserved.</span>
-      <span><a href="#">Privacy Policy</a><a href="#">Terms of Use</a></span>
-    </div>
-  </div>
-</footer>
+  </footer>
 
-<button class="to-top" id="toTop" aria-label="Back to top">
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
-</button>
+  <button class="to-top" id="toTop" aria-label="Back to top">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+  </button>
 
+  <script>
+    // ==========================================
+    // API CONFIGURATION
+    // ==========================================
+    const API_BASE = 'https://shosta-bazar-bd.onrender.com/api';
+    console.log('🔗 API_BASE:', API_BASE);
 
-<script>
-// ==========================================
-<<<<<<< HEAD
-// API CONFIGURATION
-=======
-// API CONFIGURATION - DIRECT HARDCODE
->>>>>>> 4dbb591fc23a835749ba972a5ab2be809e7d3fdb
-// ==========================================
-const API_BASE = 'https://shosta-bazar-bd.onrender.com/api';
-console.log('🔗 API_BASE:', API_BASE);
+    // ==========================================
+    // CART SYSTEM
+    // ==========================================
+    let cart = [];
+    const DELIVERY_CHARGE = 100;
 
-// ==========================================
-// CART SYSTEM
-// ==========================================
-let cart = [];
-const DELIVERY_CHARGE = 100;
-
-function loadCart() {
-  const saved = localStorage.getItem('shostaCart');
-  if (saved) {
-    try {
-      cart = JSON.parse(saved);
-      updateCartUI();
-    } catch (e) {
-      cart = [];
+    function loadCart() {
+      const saved = localStorage.getItem('shostaCart');
+      if (saved) {
+        try {
+          cart = JSON.parse(saved);
+          updateCartUI();
+        } catch (e) {
+          cart = [];
+        }
+      }
     }
-  }
-}
 
-function saveCart() {
-  localStorage.setItem('shostaCart', JSON.stringify(cart));
-}
+    function saveCart() {
+      localStorage.setItem('shostaCart', JSON.stringify(cart));
+    }
 
-function addToCart(product) {
-  const existing = cart.find(item => item.id === product.id);
-  if (existing) {
-    existing.quantity += 1;
-  } else {
-    cart.push({ ...product, quantity: 1 });
-  }
-  saveCart();
-  updateCartUI();
-  showToast('✅ Added to cart!');
-}
+    function addToCart(product) {
+      const existing = cart.find(item => item.id === product.id);
+      if (existing) {
+        existing.quantity += 1;
+      } else {
+        cart.push({ ...product, quantity: 1 });
+      }
+      saveCart();
+      updateCartUI();
+      showToast('✅ Added to cart!');
+    }
 
-function removeFromCart(productId) {
-  cart = cart.filter(item => item.id !== productId);
-  saveCart();
-  updateCartUI();
-}
-
-function updateQuantity(productId, change) {
-  const item = cart.find(item => item.id === productId);
-  if (item) {
-    item.quantity += change;
-    if (item.quantity <= 0) {
-      removeFromCart(productId);
-    } else {
+    function removeFromCart(productId) {
+      cart = cart.filter(item => item.id !== productId);
       saveCart();
       updateCartUI();
     }
-  }
-}
 
-function updateCartUI() {
-  const cartItems = document.getElementById('cartItems');
-  const cartCount = document.getElementById('cartCount');
-  const subtotalEl = document.getElementById('cartSubtotal');
-  const deliveryEl = document.getElementById('cartDelivery');
-  const totalEl = document.getElementById('cartTotal');
-  
-  const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-  if (cartCount) cartCount.textContent = totalItems;
-  
-  if (!cartItems) return;
-  
-  if (cart.length === 0) {
-    cartItems.innerHTML = '<p style="text-align:center; color:#888; padding:40px 0;">Your cart is empty</p>';
-    if (subtotalEl) subtotalEl.textContent = '৳0';
-    if (deliveryEl) deliveryEl.textContent = '৳0';
-    if (totalEl) totalEl.textContent = '৳0';
-    return;
-  }
-  
-  cartItems.innerHTML = cart.map(item => `
-    <div style="display:flex; align-items:center; gap:12px; padding:12px 0; border-bottom:1px solid #f0f0f0;">
-      <div style="width:60px; height:60px; border-radius:4px; overflow:hidden; flex-shrink:0; background:#f0f0f0;">
-        <img src="${item.image || 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=800'}" style="width:100%; height:100%; object-fit:cover;" onerror="this.style.display='none'">
-      </div>
-      <div style="flex:1;">
-        <div style="font-weight:600; font-size:0.9rem;">${item.name}</div>
-        <div style="font-size:0.8rem; color:#888;">৳${item.price}</div>
-      </div>
-      <div style="display:flex; align-items:center; gap:8px;">
-        <button onclick="updateQuantity('${item.id}', -1)" style="width:28px; height:28px; border:1px solid #ddd; border-radius:4px; background:none; cursor:pointer;">-</button>
-        <span style="min-width:20px; text-align:center;">${item.quantity}</span>
-        <button onclick="updateQuantity('${item.id}', 1)" style="width:28px; height:28px; border:1px solid #ddd; border-radius:4px; background:none; cursor:pointer;">+</button>
-      </div>
-      <button onclick="removeFromCart('${item.id}')" style="background:none; border:none; color:#dc3545; cursor:pointer; font-size:18px;">✕</button>
-    </div>
-  `).join('');
-  
-  const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-  const delivery = cart.length > 0 ? DELIVERY_CHARGE : 0;
-  const total = subtotal + delivery;
-  
-  if (subtotalEl) subtotalEl.textContent = `৳${subtotal.toLocaleString()}`;
-  if (deliveryEl) deliveryEl.textContent = `৳${delivery.toLocaleString()}`;
-  if (totalEl) totalEl.textContent = `৳${total.toLocaleString()}`;
-}
-
-function toggleCart() {
-  const sidebar = document.getElementById('cartSidebar');
-  const overlay = document.getElementById('cartOverlay');
-  
-  if (!sidebar) return;
-  
-  if (sidebar.style.right === '0px') {
-    sidebar.style.right = '-420px';
-    if (overlay) overlay.style.display = 'none';
-  } else {
-    sidebar.style.right = '0px';
-    if (overlay) overlay.style.display = 'block';
-  }
-}
-
-function openCheckout() {
-  if (cart.length === 0) {
-    alert('Your cart is empty!');
-    return;
-  }
-  
-  const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0) + DELIVERY_CHARGE;
-  document.getElementById('checkoutTotal').textContent = `৳${total.toLocaleString()}`;
-  document.getElementById('checkoutModal').style.display = 'flex';
-  toggleCart();
-}
-
-function closeCheckout() {
-  document.getElementById('checkoutModal').style.display = 'none';
-}
-
-function showToast(message) {
-  const toast = document.createElement('div');
-  toast.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#333;color:#fff;padding:12px 24px;border-radius:8px;font-size:14px;z-index:9999;animation:fadeIn 0.3s ease;box-shadow:0 4px 12px rgba(0,0,0,0.2);';
-  toast.textContent = message;
-  document.body.appendChild(toast);
-  setTimeout(() => toast.remove(), 3000);
-}
-
-window.toggleCart = toggleCart;
-window.openCheckout = openCheckout;
-window.closeCheckout = closeCheckout;
-window.addToCart = addToCart;
-window.removeFromCart = removeFromCart;
-window.updateQuantity = updateQuantity;
-
-// ==========================================
-<<<<<<< HEAD
-// PRODUCT DETAIL MODAL
-// ==========================================
-let currentProductImages = [];
-let currentImageIndex = 0;
-let currentProductData = null;
-
-function openProductDetail(product) {
-  currentProductData = product;
-  currentProductImages = product.images || [product.image || 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=800'];
-  currentImageIndex = 0;
-  
-  const modal = document.getElementById('productDetailModal');
-  modal.classList.add('active');
-  document.body.style.overflow = 'hidden';
-  
-  updateProductDetail();
-}
-
-function closeProductDetail() {
-  document.getElementById('productDetailModal').classList.remove('active');
-  document.body.style.overflow = '';
-}
-
-function updateProductDetail() {
-  const data = currentProductData;
-  const images = currentProductImages;
-  const idx = currentImageIndex;
-  
-  document.getElementById('pdMainImage').src = images[idx] || 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=800';
-  document.getElementById('pdCategory').textContent = data.category || 'Bridal Wear';
-  document.getElementById('pdName').textContent = data.name || 'Product';
-  
-  const priceEl = document.getElementById('pdPrice');
-  if (data.oldPrice) {
-    priceEl.innerHTML = `<span class="old">৳${data.oldPrice.toLocaleString()}</span> ৳${data.price.toLocaleString()}`;
-  } else {
-    priceEl.textContent = `৳${data.price.toLocaleString()}`;
-  }
-  
-  document.getElementById('pdFabric').innerHTML = `<strong>Fabric:</strong> ${data.fabric || 'Premium Silk'}`;
-  document.getElementById('pdDescription').textContent = data.description || 'Exquisite handcrafted bridal wear with intricate embroidery and premium quality fabric. Perfect for your special day.';
-  
-  // Update dots
-  const dotsContainer = document.getElementById('pdDots');
-  dotsContainer.innerHTML = images.map((_, i) => 
-    `<span class="${i === idx ? 'active' : ''}" data-index="${i}"></span>`
-  ).join('');
-  
-  // Dot click listeners
-  dotsContainer.querySelectorAll('span').forEach(dot => {
-    dot.addEventListener('click', function() {
-      currentImageIndex = parseInt(this.dataset.index);
-      updateProductDetail();
-    });
-  });
-  
-  // Update add to bag button
-  const addBtn = document.getElementById('pdAddBtn');
-  addBtn.onclick = function() {
-    addToCart({
-      id: data._id || 'bridal-' + Date.now(),
-      name: data.name,
-      price: data.price,
-      image: images[0]
-    });
-  };
-}
-
-// Product Detail Navigation
-document.getElementById('pdPrev').addEventListener('click', function(e) {
-  e.stopPropagation();
-  if (currentProductImages.length > 1) {
-    currentImageIndex = (currentImageIndex - 1 + currentProductImages.length) % currentProductImages.length;
-    updateProductDetail();
-  }
-});
-
-document.getElementById('pdNext').addEventListener('click', function(e) {
-  e.stopPropagation();
-  if (currentProductImages.length > 1) {
-    currentImageIndex = (currentImageIndex + 1) % currentProductImages.length;
-    updateProductDetail();
-  }
-});
-
-document.getElementById('pdClose').addEventListener('click', closeProductDetail);
-document.getElementById('productDetailModal').addEventListener('click', function(e) {
-  if (e.target === this) closeProductDetail();
-});
-
-// Keyboard navigation for modal
-document.addEventListener('keydown', function(e) {
-  if (document.getElementById('productDetailModal').classList.contains('active')) {
-    if (e.key === 'Escape') closeProductDetail();
-    if (e.key === 'ArrowLeft') document.getElementById('pdPrev').click();
-    if (e.key === 'ArrowRight') document.getElementById('pdNext').click();
-  }
-});
-
-// ==========================================
-// FETCH PRODUCTS
-// ==========================================
-let allProducts = [];
-
-// ==========================================
-// CATEGORIES + PRODUCT PAGE
-// ==========================================
-let allCategories = [];
-
-const categoryGrid = document.getElementById('categoryGrid');
-const productPage = document.getElementById('productPage');
-const productPageGrid = document.getElementById('productPageGrid');
-const productPageTitle = document.getElementById('productPageTitle');
-const productPageCategoryLabel = document.getElementById('productPageCategoryLabel');
-const backToHome = document.getElementById('backToHome');
-
-async function fetchCategories() {
-  try {
-    categoryGrid.innerHTML = `<div class="loading-spinner"><div class="spinner"></div></div>`;
-    const response = await fetch(`${API_BASE}/categories`);
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-    allCategories = await response.json();
-    console.log('✅ Categories loaded:', allCategories.length);
-    if (!allCategories || allCategories.length === 0) {
-      categoryGrid.innerHTML = `<div class="no-products"><h3>No categories available</h3></div>`;
-      return;
+    function updateQuantity(productId, change) {
+      const item = cart.find(item => item.id === productId);
+      if (item) {
+        item.quantity += change;
+        if (item.quantity <= 0) {
+          removeFromCart(productId);
+        } else {
+          saveCart();
+          updateCartUI();
+        }
+      }
     }
-    const defaultImages = [
-      'https://images.unsplash.com/photo-1596462502278-27bfdc4033c8?q=80&w=1200',
-      'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=1200',
-      'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=1200',
-      'https://images.unsplash.com/photo-1566174053879-31528523f8ae?q=80&w=1200',
-      'https://images.unsplash.com/photo-1631233839294-f06077977469?q=80&w=1200',
-      'https://images.unsplash.com/photo-1617146053554-e991129b015b?q=80&w=1200'
-    ];
-    categoryGrid.innerHTML = allCategories.map((cat, index) => {
-      const imageUrl = cat.image || defaultImages[index % defaultImages.length];
-      return `
-        <div class="cat-card reveal" data-category="${cat.name}">
-          <div class="swatch" style="--ar:3/4; background: url('${imageUrl}') center/cover no-repeat;"></div>
-          <div class="overlay"><h3>${cat.name}</h3><span class="count">${cat.designsCount || '0 Designs'}</span></div>
-        </div>
-      `;
-    }).join('');
-    
-    document.querySelectorAll('.cat-card').forEach(el => {
-      el.addEventListener('click', function() {
-        const catName = this.dataset.category;
-        openCategoryPage(catName);
+
+    function updateCartUI() {
+      const cartItems = document.getElementById('cartItems');
+      const cartCount = document.getElementById('cartCount');
+      const subtotalEl = document.getElementById('cartSubtotal');
+      const deliveryEl = document.getElementById('cartDelivery');
+      const totalEl = document.getElementById('cartTotal');
+
+      const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+      if (cartCount) cartCount.textContent = totalItems;
+
+      if (!cartItems) return;
+
+      if (cart.length === 0) {
+        cartItems.innerHTML = '<p style="text-align:center; color:#888; padding:40px 0;">Your cart is empty</p>';
+        if (subtotalEl) subtotalEl.textContent = '৳0';
+        if (deliveryEl) deliveryEl.textContent = '৳0';
+        if (totalEl) totalEl.textContent = '৳0';
+        return;
+      }
+
+      cartItems.innerHTML = cart.map(item => `
+          <div style="display:flex; align-items:center; gap:12px; padding:12px 0; border-bottom:1px solid #f0f0f0;">
+            <div style="width:60px; height:60px; border-radius:4px; overflow:hidden; flex-shrink:0; background:#f0f0f0;">
+              <img src="${item.image || 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=800'}" style="width:100%; height:100%; object-fit:cover;" onerror="this.style.display='none'">
+            </div>
+            <div style="flex:1;">
+              <div style="font-weight:600; font-size:0.9rem;">${item.name}</div>
+              <div style="font-size:0.8rem; color:#888;">৳${item.price}</div>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <button onclick="updateQuantity('${item.id}', -1)" style="width:28px; height:28px; border:1px solid #ddd; border-radius:4px; background:none; cursor:pointer;">-</button>
+              <span style="min-width:20px; text-align:center;">${item.quantity}</span>
+              <button onclick="updateQuantity('${item.id}', 1)" style="width:28px; height:28px; border:1px solid #ddd; border-radius:4px; background:none; cursor:pointer;">+</button>
+            </div>
+            <button onclick="removeFromCart('${item.id}')" style="background:none; border:none; color:#dc3545; cursor:pointer; font-size:18px;">✕</button>
+          </div>
+        `).join('');
+
+      const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+      const delivery = cart.length > 0 ? DELIVERY_CHARGE : 0;
+      const total = subtotal + delivery;
+
+      if (subtotalEl) subtotalEl.textContent = `৳${subtotal.toLocaleString()}`;
+      if (deliveryEl) deliveryEl.textContent = `৳${delivery.toLocaleString()}`;
+      if (totalEl) totalEl.textContent = `৳${total.toLocaleString()}`;
+    }
+
+    function toggleCart() {
+      const sidebar = document.getElementById('cartSidebar');
+      const overlay = document.getElementById('cartOverlay');
+
+      if (!sidebar) return;
+
+      if (sidebar.style.right === '0px') {
+        sidebar.style.right = '-420px';
+        if (overlay) overlay.style.display = 'none';
+      } else {
+        sidebar.style.right = '0px';
+        if (overlay) overlay.style.display = 'block';
+      }
+    }
+
+    function openCheckout() {
+      if (cart.length === 0) {
+        alert('Your cart is empty!');
+        return;
+      }
+
+      const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0) + DELIVERY_CHARGE;
+      document.getElementById('checkoutTotal').textContent = `৳${total.toLocaleString()}`;
+      document.getElementById('checkoutModal').style.display = 'flex';
+      toggleCart();
+    }
+
+    function closeCheckout() {
+      document.getElementById('checkoutModal').style.display = 'none';
+    }
+
+    function showToast(message) {
+      const toast = document.createElement('div');
+      toast.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#333;color:#fff;padding:12px 24px;border-radius:8px;font-size:14px;z-index:9999;animation:fadeIn 0.3s ease;box-shadow:0 4px 12px rgba(0,0,0,0.2);';
+      toast.textContent = message;
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 3000);
+    }
+
+    window.toggleCart = toggleCart;
+    window.openCheckout = openCheckout;
+    window.closeCheckout = closeCheckout;
+    window.addToCart = addToCart;
+    window.removeFromCart = removeFromCart;
+    window.updateQuantity = updateQuantity;
+
+    // ==========================================
+    // PRODUCT DETAIL MODAL
+    // ==========================================
+    let currentProductImages = [];
+    let currentImageIndex = 0;
+    let currentProductData = null;
+
+    function openProductDetail(product) {
+      currentProductData = product;
+      currentProductImages = product.images || [product.image || 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=800'];
+      currentImageIndex = 0;
+
+      const modal = document.getElementById('productDetailModal');
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+
+      updateProductDetail();
+    }
+
+    function closeProductDetail() {
+      document.getElementById('productDetailModal').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    function updateProductDetail() {
+      const data = currentProductData;
+      const images = currentProductImages;
+      const idx = currentImageIndex;
+
+      document.getElementById('pdMainImage').src = images[idx] || 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=800';
+      document.getElementById('pdCategory').textContent = data.category || 'Bridal Wear';
+      document.getElementById('pdName').textContent = data.name || 'Product';
+
+      const priceEl = document.getElementById('pdPrice');
+      if (data.oldPrice) {
+        priceEl.innerHTML = `<span class="old">৳${data.oldPrice.toLocaleString()}</span> ৳${data.price.toLocaleString()}`;
+      } else {
+        priceEl.textContent = `৳${data.price.toLocaleString()}`;
+      }
+
+      document.getElementById('pdFabric').innerHTML = `<strong>Fabric:</strong> ${data.fabric || 'Premium Silk'}`;
+      document.getElementById('pdDescription').textContent = data.description || 'Exquisite handcrafted bridal wear with intricate embroidery and premium quality fabric. Perfect for your special day.';
+
+      // Update dots
+      const dotsContainer = document.getElementById('pdDots');
+      dotsContainer.innerHTML = images.map((_, i) =>
+        `<span class="${i === idx ? 'active' : ''}" data-index="${i}"></span>`
+      ).join('');
+
+      // Dot click listeners
+      dotsContainer.querySelectorAll('span').forEach(dot => {
+        dot.addEventListener('click', function() {
+          currentImageIndex = parseInt(this.dataset.index);
+          updateProductDetail();
+        });
       });
-    });
-    
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add('in'); observer.unobserve(en.target); } });
-    }, { threshold: .15 });
-    document.querySelectorAll('#categoryGrid .reveal').forEach(el => observer.observe(el));
-  } catch (error) {
-    console.error('❌ Error fetching categories:', error);
-    categoryGrid.innerHTML = `<div class="no-products"><h3>⚠️ Could not load categories</h3><button onclick="fetchCategories()" style="margin-top:16px;padding:10px 24px;background:var(--maroon-800);color:var(--ivory-50);border:none;cursor:pointer;border-radius:4px;">Retry</button></div>`;
-  }
-}
 
-async function fetchProducts() {
-  try {
-    const response = await fetch(`${API_BASE}/products`);
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-    allProducts = await response.json();
-    console.log('✅ Products loaded:', allProducts.length);
-  } catch (error) {
-    console.error('❌ Error fetching products:', error);
-    allProducts = [];
-  }
-}
-
-function openCategoryPage(categoryName) {
-  document.getElementById('categories').style.display = 'none';
-  productPage.style.display = 'block';
-  productPageTitle.textContent = categoryName + ' Collection';
-  productPageCategoryLabel.textContent = categoryName;
-  productPage.scrollIntoView({ behavior: 'smooth' });
-  
-  const filtered = allProducts.filter(p => p.category === categoryName);
-  renderProductPageProducts(filtered);
-}
-
-function renderProductPageProducts(products) {
-  const fmt = n => '৳ ' + Number(n).toLocaleString('en-IN');
-  
-  if (!products || products.length === 0) {
-    productPageGrid.innerHTML = `<div class="no-products"><h3>No products in this category</h3><p>Check back later.</p></div>`;
-    return;
-  }
-  
-  productPageGrid.innerHTML = products.map((p, i) => {
-=======
-// FETCH PRODUCTS
-// ==========================================
-let allProducts = [];
-const productGrid = document.getElementById("productGrid");
-const fmt = n => "৳ " + Number(n).toLocaleString("en-IN");
-
-function renderProducts(filter = "All") {
-  const filtered = filter === "All" ? allProducts : allProducts.filter(p => p.category === filter);
-  if (filtered.length === 0) {
-    productGrid.innerHTML = `<div class="no-products"><h3>No products found</h3><p>Check back later.</p></div>`;
-    return;
-  }
-  productGrid.innerHTML = filtered.map((p, i) => {
->>>>>>> 4dbb591fc23a835749ba972a5ab2be809e7d3fdb
-    const tag = p.status === 'ACTIVE' ? 'New' : '';
-    return `
-      <div class="product-card reveal in" data-cat="${p.category || 'General'}" data-product='${JSON.stringify(p).replace(/'/g,"&#39;")}'>
-        <div class="product-media">
-          <div class="swatch" style="--ar:3/4; background: url('${p.image || 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=800'}') center/cover no-repeat;"></div>
-          ${tag ? `<span class="tag">${tag}</span>` : ''}
-          ${p.oldPrice ? `<span class="tag" style="left:auto;right:14px;background:var(--maroon-800);color:var(--gold-300);">Sale</span>` : ''}
-          <div class="quick-add" data-id="${p._id}" data-name="${p.name}" data-price="${p.price}" data-image="${p.image || ''}">Add to Bag</div>
-        </div>
-        <div class="product-info">
-          <div class="p-cat">${p.category || 'General'}</div>
-          <h3>${p.name}</h3>
-          <div class="price">${p.oldPrice ? `<span class="old">${fmt(p.oldPrice)}</span>` : ''}${fmt(p.price)}</div>
-        </div>
-      </div>
-    `;
-  }).join('');
-<<<<<<< HEAD
-  
-  // Quick-add listeners
-  document.querySelectorAll('#productPageGrid .quick-add').forEach(btn => {
-=======
-  document.querySelectorAll('.quick-add').forEach(btn => {
->>>>>>> 4dbb591fc23a835749ba972a5ab2be809e7d3fdb
-    btn.addEventListener('click', function(e) {
-      e.stopPropagation();
-      const product = {
-        id: this.dataset.id || 'prod-' + Date.now(),
-        name: this.dataset.name,
-        price: parseInt(this.dataset.price),
-        image: this.dataset.image
+      // Update add to bag button
+      const addBtn = document.getElementById('pdAddBtn');
+      addBtn.onclick = function() {
+        addToCart({
+          id: data._id || 'bridal-' + Date.now(),
+          name: data.name,
+          price: data.price,
+          image: images[0]
+        });
       };
-      addToCart(product);
-      this.textContent = 'Added ✓';
-      setTimeout(() => this.textContent = 'Add to Bag', 1200);
-    });
-  });
-  
-  // Click on product card to open detail
-  document.querySelectorAll('#productPageGrid .product-card').forEach(card => {
-    card.addEventListener('click', function() {
-      try {
-        const product = JSON.parse(this.dataset.product);
-        openProductDetail(product);
-      } catch(e) {
-        console.error('Error parsing product data:', e);
+    }
+
+    // Product Detail Navigation
+    document.getElementById('pdPrev').addEventListener('click', function(e) {
+      e.stopPropagation();
+      if (currentProductImages.length > 1) {
+        currentImageIndex = (currentImageIndex - 1 + currentProductImages.length) % currentProductImages.length;
+        updateProductDetail();
       }
     });
-  });
-}
 
-backToHome.addEventListener('click', function() {
-  productPage.style.display = 'none';
-  document.getElementById('categories').style.display = 'block';
-  window.scrollTo({ top: document.getElementById('categories').offsetTop - 80, behavior: 'smooth' });
-});
+    document.getElementById('pdNext').addEventListener('click', function(e) {
+      e.stopPropagation();
+      if (currentProductImages.length > 1) {
+        currentImageIndex = (currentImageIndex + 1) % currentProductImages.length;
+        updateProductDetail();
+      }
+    });
 
-// ==========================================
-// BRIDAL SLIDER
-// ==========================================
-let bridalSlides = [];
-let currentBridalIdx = 0;
-let bridalTimer = null;
+    document.getElementById('pdClose').addEventListener('click', closeProductDetail);
+    document.getElementById('productDetailModal').addEventListener('click', function(e) {
+      if (e.target === this) closeProductDetail();
+    });
 
-async function fetchBridalSlides() {
-  try {
-<<<<<<< HEAD
-    const response = await fetch(`${API_BASE}/bridal-slides`);
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-    const slides = await response.json();
-    console.log('✅ Bridal slides loaded:', slides.length);
-    bridalSlides = slides.filter(s => s.status === 'ACTIVE');
-    if (bridalSlides.length === 0) bridalSlides = getDefaultBridalSlides();
-    initBridalSlider();
-  } catch (error) {
-    console.error('❌ Error fetching bridal slides:', error);
-    bridalSlides = getDefaultBridalSlides();
-    initBridalSlider();
-  }
-}
+    // Keyboard navigation for modal
+    document.addEventListener('keydown', function(e) {
+      if (document.getElementById('productDetailModal').classList.contains('active')) {
+        if (e.key === 'Escape') closeProductDetail();
+        if (e.key === 'ArrowLeft') document.getElementById('pdPrev').click();
+        if (e.key === 'ArrowRight') document.getElementById('pdNext').click();
+      }
+    });
 
-function getDefaultBridalSlides() {
-  return [
-    { image: 'https://images.unsplash.com/photo-1596462502278-27bfdc4033c8?q=80&w=1200', title: 'Bridal Lehenga', description: 'Hand-embroidered with intricate details' },
-    { image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=1200', title: 'Designer Saree', description: 'Pure silk with gold zari work' },
-    { image: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=1200', title: 'Bridal Gown', description: 'Luxurious velvet with pearl embellishments' },
-    { image: 'https://images.unsplash.com/photo-1566174053879-31528523f8ae?q=80&w=1200', title: 'Wedding Collection', description: 'Exclusive bridal edit for your special day' }
-  ];
-}
+    // ==========================================
+    // FETCH PRODUCTS
+    // ==========================================
+    let allProducts = [];
 
-function initBridalSlider() {
-  const track = document.getElementById('bridalSliderTrack');
-  const dots = document.getElementById('bridalDots');
-  if (!track) return;
-  
-  track.innerHTML = '';
-  bridalSlides.forEach((slide, index) => {
-    const slideDiv = document.createElement('div');
-    slideDiv.className = 'bridal-slide';
-    slideDiv.style.backgroundImage = `url('${slide.image || 'https://images.unsplash.com/photo-1596462502278-27bfdc4033c8?q=80&w=1200'}')`;
-    slideDiv.style.backgroundSize = 'cover';
-    slideDiv.style.backgroundPosition = 'center';
-    track.appendChild(slideDiv);
-  });
-  
-  // Dots
-  dots.innerHTML = bridalSlides.map((_, i) => 
-    `<span class="${i === 0 ? 'active' : ''}" data-index="${i}"></span>`
-  ).join('');
-  
-  dots.querySelectorAll('span').forEach(dot => {
-    dot.addEventListener('click', function() {
-      currentBridalIdx = parseInt(this.dataset.index);
+    // ==========================================
+    // CATEGORIES + PRODUCT PAGE
+    // ==========================================
+    let allCategories = [];
+
+    const categoryGrid = document.getElementById('categoryGrid');
+    const productPage = document.getElementById('productPage');
+    const productPageGrid = document.getElementById('productPageGrid');
+    const productPageTitle = document.getElementById('productPageTitle');
+    const productPageCategoryLabel = document.getElementById('productPageCategoryLabel');
+    const backToHome = document.getElementById('backToHome');
+
+    async function fetchCategories() {
+      try {
+        categoryGrid.innerHTML = `<div class="loading-spinner"><div class="spinner"></div></div>`;
+        const response = await fetch(`${API_BASE}/categories`);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        allCategories = await response.json();
+        console.log('✅ Categories loaded:', allCategories.length);
+        if (!allCategories || allCategories.length === 0) {
+          categoryGrid.innerHTML = `<div class="no-products"><h3>No categories available</h3></div>`;
+          return;
+        }
+        const defaultImages = [
+          'https://images.unsplash.com/photo-1596462502278-27bfdc4033c8?q=80&w=1200',
+          'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=1200',
+          'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=1200',
+          'https://images.unsplash.com/photo-1566174053879-31528523f8ae?q=80&w=1200',
+          'https://images.unsplash.com/photo-1631233839294-f06077977469?q=80&w=1200',
+          'https://images.unsplash.com/photo-1617146053554-e991129b015b?q=80&w=1200'
+        ];
+        categoryGrid.innerHTML = allCategories.map((cat, index) => {
+          const imageUrl = cat.image || defaultImages[index % defaultImages.length];
+          return `
+              <div class="cat-card reveal" data-category="${cat.name}">
+                <div class="swatch" style="--ar:3/4; background: url('${imageUrl}') center/cover no-repeat;"></div>
+                <div class="overlay"><h3>${cat.name}</h3><span class="count">${cat.designsCount || '0 Designs'}</span></div>
+              </div>
+            `;
+        }).join('');
+
+        document.querySelectorAll('.cat-card').forEach(el => {
+          el.addEventListener('click', function() {
+            const catName = this.dataset.category;
+            openCategoryPage(catName);
+          });
+        });
+
+        const observer = new IntersectionObserver(entries => {
+          entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add('in');
+              observer.unobserve(en.target); } });
+        }, { threshold: .15 });
+        document.querySelectorAll('#categoryGrid .reveal').forEach(el => observer.observe(el));
+      } catch (error) {
+        console.error('❌ Error fetching categories:', error);
+        categoryGrid.innerHTML =
+          `<div class="no-products"><h3>⚠️ Could not load categories</h3><button onclick="fetchCategories()" style="margin-top:16px;padding:10px 24px;background:var(--maroon-800);color:var(--ivory-50);border:none;cursor:pointer;border-radius:4px;">Retry</button></div>`;
+      }
+    }
+
+    async function fetchProducts() {
+      try {
+        const response = await fetch(`${API_BASE}/products`);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        allProducts = await response.json();
+        console.log('✅ Products loaded:', allProducts.length);
+      } catch (error) {
+        console.error('❌ Error fetching products:', error);
+        allProducts = [];
+      }
+    }
+
+    function openCategoryPage(categoryName) {
+      document.getElementById('categories').style.display = 'none';
+      productPage.style.display = 'block';
+      productPageTitle.textContent = categoryName + ' Collection';
+      productPageCategoryLabel.textContent = categoryName;
+      productPage.scrollIntoView({ behavior: 'smooth' });
+
+      const filtered = allProducts.filter(p => p.category === categoryName);
+      renderProductPageProducts(filtered);
+    }
+
+    function renderProductPageProducts(products) {
+      const fmt = n => '৳ ' + Number(n).toLocaleString('en-IN');
+
+      if (!products || products.length === 0) {
+        productPageGrid.innerHTML = `<div class="no-products"><h3>No products in this category</h3><p>Check back later.</p></div>`;
+        return;
+      }
+
+      productPageGrid.innerHTML = products.map((p, i) => {
+        const tag = p.status === 'ACTIVE' ? 'New' : '';
+        return `
+            <div class="product-card reveal in" data-cat="${p.category || 'General'}" data-product='${JSON.stringify(p).replace(/'/g, "&#39;")}'>
+              <div class="product-media">
+                <div class="swatch" style="--ar:3/4; background: url('${p.image || 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=800'}') center/cover no-repeat;"></div>
+                ${tag ? `<span class="tag">${tag}</span>` : ''}
+                ${p.oldPrice ? `<span class="tag" style="left:auto;right:14px;background:var(--maroon-800);color:var(--gold-300);">Sale</span>` : ''}
+                <div class="quick-add" data-id="${p._id}" data-name="${p.name}" data-price="${p.price}" data-image="${p.image || ''}">Add to Bag</div>
+              </div>
+              <div class="product-info">
+                <div class="p-cat">${p.category || 'General'}</div>
+                <h3>${p.name}</h3>
+                <div class="price">${p.oldPrice ? `<span class="old">${fmt(p.oldPrice)}</span>` : ''}${fmt(p.price)}</div>
+              </div>
+            </div>
+          `;
+      }).join('');
+
+      // Quick-add listeners
+      document.querySelectorAll('#productPageGrid .quick-add').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          const product = {
+            id: this.dataset.id || 'prod-' + Date.now(),
+            name: this.dataset.name,
+            price: parseInt(this.dataset.price),
+            image: this.dataset.image
+          };
+          addToCart(product);
+          this.textContent = 'Added ✓';
+          setTimeout(() => this.textContent = 'Add to Bag', 1200);
+        });
+      });
+
+      // Click on product card to open detail
+      document.querySelectorAll('#productPageGrid .product-card').forEach(card => {
+        card.addEventListener('click', function() {
+          try {
+            const product = JSON.parse(this.dataset.product);
+            openProductDetail(product);
+          } catch (e) {
+            console.error('Error parsing product data:', e);
+          }
+        });
+      });
+    }
+
+    backToHome.addEventListener('click', function() {
+      productPage.style.display = 'none';
+      document.getElementById('categories').style.display = 'block';
+      window.scrollTo({ top: document.getElementById('categories').offsetTop - 80, behavior: 'smooth' });
+    });
+
+    // ==========================================
+    // BRIDAL SLIDER
+    // ==========================================
+    let bridalSlides = [];
+    let currentBridalIdx = 0;
+    let bridalTimer = null;
+
+    async function fetchBridalSlides() {
+      try {
+        const response = await fetch(`${API_BASE}/bridal-slides`);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const slides = await response.json();
+        console.log('✅ Bridal slides loaded:', slides.length);
+        bridalSlides = slides.filter(s => s.status === 'ACTIVE');
+        if (bridalSlides.length === 0) bridalSlides = getDefaultBridalSlides();
+        initBridalSlider();
+      } catch (error) {
+        console.error('❌ Error fetching bridal slides:', error);
+        bridalSlides = getDefaultBridalSlides();
+        initBridalSlider();
+      }
+    }
+
+    function getDefaultBridalSlides() {
+      return [
+        { image: 'https://images.unsplash.com/photo-1596462502278-27bfdc4033c8?q=80&w=1200', title: 'Bridal Lehenga',
+          description: 'Hand-embroidered with intricate details' },
+        { image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=1200', title: 'Designer Saree',
+          description: 'Pure silk with gold zari work' },
+        { image: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=1200', title: 'Bridal Gown',
+          description: 'Luxurious velvet with pearl embellishments' },
+        { image: 'https://images.unsplash.com/photo-1566174053879-31528523f8ae?q=80&w=1200', title: 'Wedding Collection',
+          description: 'Exclusive bridal edit for your special day' }
+      ];
+    }
+
+    function initBridalSlider() {
+      const track = document.getElementById('bridalSliderTrack');
+      const dots = document.getElementById('bridalDots');
+      if (!track) return;
+
+      track.innerHTML = '';
+      bridalSlides.forEach((slide, index) => {
+        const slideDiv = document.createElement('div');
+        slideDiv.className = 'bridal-slide';
+        slideDiv.style.backgroundImage = `url('${slide.image || 'https://images.unsplash.com/photo-1596462502278-27bfdc4033c8?q=80&w=1200'}')`;
+        slideDiv.style.backgroundSize = 'cover';
+        slideDiv.style.backgroundPosition = 'center';
+        track.appendChild(slideDiv);
+      });
+
+      // Dots
+      dots.innerHTML = bridalSlides.map((_, i) =>
+        `<span class="${i === 0 ? 'active' : ''}" data-index="${i}"></span>`
+      ).join('');
+
+      dots.querySelectorAll('span').forEach(dot => {
+        dot.addEventListener('click', function() {
+          currentBridalIdx = parseInt(this.dataset.index);
+          updateBridalSlider();
+          restartBridalTimer();
+        });
+      });
+
+      currentBridalIdx = 0;
+      updateBridalSlider();
+      if (bridalSlides.length > 1) startBridalTimer();
+    }
+
+    function updateBridalSlider() {
+      const track = document.getElementById('bridalSliderTrack');
+      const dots = document.getElementById('bridalDots');
+      if (!track) return;
+
+      const slideWidth = 100 / bridalSlides.length;
+      track.style.transform = `translateX(-${currentBridalIdx * slideWidth}%)`;
+
+      dots.querySelectorAll('span').forEach((dot, i) => {
+        dot.classList.toggle('active', i === currentBridalIdx);
+      });
+    }
+
+    function moveBridalSlide(direction) {
+      if (!bridalSlides || bridalSlides.length === 0) return;
+      const count = bridalSlides.length;
+      currentBridalIdx = (currentBridalIdx + direction + count) % count;
       updateBridalSlider();
       restartBridalTimer();
-    });
-  });
-  
-  currentBridalIdx = 0;
-  updateBridalSlider();
-  if (bridalSlides.length > 1) startBridalTimer();
-}
-
-function updateBridalSlider() {
-  const track = document.getElementById('bridalSliderTrack');
-  const dots = document.getElementById('bridalDots');
-  if (!track) return;
-  
-  const slideWidth = 100 / bridalSlides.length;
-  track.style.transform = `translateX(-${currentBridalIdx * slideWidth}%)`;
-  
-  dots.querySelectorAll('span').forEach((dot, i) => {
-    dot.classList.toggle('active', i === currentBridalIdx);
-  });
-}
-
-function moveBridalSlide(direction) {
-  if (!bridalSlides || bridalSlides.length === 0) return;
-  const count = bridalSlides.length;
-  currentBridalIdx = (currentBridalIdx + direction + count) % count;
-  updateBridalSlider();
-  restartBridalTimer();
-}
-
-function startBridalTimer() {
-  clearInterval(bridalTimer);
-  if (bridalSlides.length > 1) {
-    bridalTimer = setInterval(() => moveBridalSlide(1), 4000);
-=======
-    productGrid.innerHTML = `<div class="loading-spinner"><div class="spinner"></div></div>`;
-    const response = await fetch(`${API_BASE}/products`);
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-    allProducts = await response.json();
-    console.log('✅ Products loaded:', allProducts.length);
-    const activeFilter = document.querySelector('#filterTabs .active');
-    renderProducts(activeFilter ? activeFilter.dataset.filter : 'All');
-  } catch (error) {
-    console.error('❌ Error fetching products:', error);
-    productGrid.innerHTML = `<div class="no-products"><h3>⚠️ Could not load products</h3><p>Make sure backend is running.</p><button onclick="fetchProducts()" style="margin-top:16px;padding:10px 24px;background:var(--maroon-800);color:var(--ivory-50);border:none;cursor:pointer;border-radius:4px;">Retry</button></div>`;
-  }
-}
-// ==========================================
-// FETCH CATEGORIES
-// ==========================================
-async function fetchCategories() {
-  const categoryGrid = document.getElementById('categoryGrid');
-  try {
-    categoryGrid.innerHTML = `<div class="loading-spinner"><div class="spinner"></div></div>`;
-    const response = await fetch(`${API_BASE}/categories`);
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-    const categories = await response.json();
-    console.log('✅ Categories loaded:', categories.length);
-    if (!categories || categories.length === 0) {
-      categoryGrid.innerHTML = `<div class="no-products"><h3>No categories available</h3></div>`;
-      return;
     }
-    const defaultImages = [
-      'https://images.unsplash.com/photo-1596462502278-27bfdc4033c8?q=80&w=1200',
-      'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=1200',
-      'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=1200',
-      'https://images.unsplash.com/photo-1566174053879-31528523f8ae?q=80&w=1200',
-      'https://images.unsplash.com/photo-1631233839294-f06077977469?q=80&w=1200',
-      'https://images.unsplash.com/photo-1617146053554-e991129b015b?q=80&w=1200'
-    ];
-    categoryGrid.innerHTML = categories.map((cat, index) => {
-      const imageUrl = cat.image || defaultImages[index % defaultImages.length];
-      return `
-        <div class="cat-card reveal" data-cat="${cat.name}">
-          <div class="swatch" style="--ar:3/4; background: url('${imageUrl}') center/cover no-repeat;"></div>
-          <div class="overlay"><h3>${cat.name}</h3><span class="count">${cat.designsCount || '0 Designs'}</span></div>
-        </div>
-      `;
-    }).join('');
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add('in'); observer.unobserve(en.target); } });
-    }, { threshold: .15 });
-    document.querySelectorAll('#categoryGrid .reveal').forEach(el => observer.observe(el));
-  } catch (error) {
-    console.error('❌ Error fetching categories:', error);
-    categoryGrid.innerHTML = `<div class="no-products"><h3>⚠️ Could not load categories</h3><button onclick="fetchCategories()" style="margin-top:16px;padding:10px 24px;background:var(--maroon-800);color:var(--ivory-50);border:none;cursor:pointer;border-radius:4px;">Retry</button></div>`;
->>>>>>> 4dbb591fc23a835749ba972a5ab2be809e7d3fdb
-  }
-}
 
-function restartBridalTimer() {
-  clearInterval(bridalTimer);
-  if (bridalSlides.length > 1) {
-    bridalTimer = setInterval(() => moveBridalSlide(1), 4000);
-  }
-}
+    function startBridalTimer() {
+      clearInterval(bridalTimer);
+      if (bridalSlides.length > 1) {
+        bridalTimer = setInterval(() => moveBridalSlide(1), 4000);
+      }
+    }
 
-document.getElementById('bridalNext')?.addEventListener('click', () => moveBridalSlide(1));
-document.getElementById('bridalPrev')?.addEventListener('click', () => moveBridalSlide(-1));
+    function restartBridalTimer() {
+      clearInterval(bridalTimer);
+      if (bridalSlides.length > 1) {
+        bridalTimer = setInterval(() => moveBridalSlide(1), 4000);
+      }
+    }
 
-// ==========================================
-<<<<<<< HEAD
-// EXPLORE BRIDAL BUTTON
-// ==========================================
-document.getElementById('exploreBridalBtn').addEventListener('click', function(e) {
-  e.preventDefault();
-  const bridalProducts = allProducts.filter(p => p.category === 'Bridal' || p.category === 'Bridal Wear');
-  if (bridalProducts.length > 0) {
-    openCategoryPage('Bridal');
-  } else {
-    // If no bridal products in API, create sample bridal products
-    const sampleBridal = [
-      { _id: 'bridal1', name: 'Red Bridal Lehenga', category: 'Bridal', price: 25000, oldPrice: 30000, image: 'https://images.unsplash.com/photo-1596462502278-27bfdc4033c8?q=80&w=800', fabric: 'Silk with Zari', description: 'Stunning red bridal lehenga with intricate gold zari work and hand-embroidered sequins. Perfect for your wedding day.', images: ['https://images.unsplash.com/photo-1596462502278-27bfdc4033c8?q=80&w=800', 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=800', 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=800'] },
-      { _id: 'bridal2', name: 'Gold Bridal Saree', category: 'Bridal', price: 18000, oldPrice: 22000, image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=800', fabric: 'Pure Silk', description: 'Exquisite gold bridal saree with traditional zari work and handcrafted borders.', images: ['https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=800', 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=800'] },
-      { _id: 'bridal3', name: 'Velvet Bridal Gown', category: 'Bridal', price: 32000, oldPrice: null, image: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=800', fabric: 'Velvet with Pearl', description: 'Luxurious velvet bridal gown with pearl embellishments and delicate lace work.', images: ['https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=800', 'https://images.unsplash.com/photo-1566174053879-31528523f8ae?q=80&w=800'] },
-      { _id: 'bridal4', name: 'Pastel Bridal Lehenga', category: 'Bridal', price: 28000, oldPrice: 35000, image: 'https://images.unsplash.com/photo-1566174053879-31528523f8ae?q=80&w=800', fabric: 'Silk with Mirror Work', description: 'Beautiful pastel bridal lehenga with mirror work and floral embroidery.', images: ['https://images.unsplash.com/photo-1566174053879-31528523f8ae?q=80&w=800', 'https://images.unsplash.com/photo-1596462502278-27bfdc4033c8?q=80&w=800'] }
-    ];
-    // Temporarily add to allProducts for display
-    allProducts = [...allProducts, ...sampleBridal];
-    openCategoryPage('Bridal');
-  }
-});
+    document.getElementById('bridalNext')?.addEventListener('click', () => moveBridalSlide(1));
+    document.getElementById('bridalPrev')?.addEventListener('click', () => moveBridalSlide(-1));
 
-// ==========================================
-=======
->>>>>>> 4dbb591fc23a835749ba972a5ab2be809e7d3fdb
-// FETCH HERO SLIDES
-// ==========================================
-let heroSlides = [];
-let currentHeroIdx = 0;
-let heroTimer = null;
-
-async function fetchHeroSlides() {
-  try {
-    const response = await fetch(`${API_BASE}/slides`);
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-    const slides = await response.json();
-    console.log('✅ Hero slides loaded:', slides.length);
-    heroSlides = slides.filter(s => s.status === 'ACTIVE');
-    if (heroSlides.length === 0) heroSlides = getDefaultSlides();
-    initHeroSlider();
-  } catch (error) {
-    console.error('❌ Error fetching hero slides:', error);
-    heroSlides = getDefaultSlides();
-    initHeroSlider();
-  }
-}
-
-function getDefaultSlides() {
-  return [
-    { image: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=1920', title: 'Feel the joy of<br>presenting yourself', subtitle: 'Welcome to Shosta Bazar BD.', buttonText: 'Shop Now', buttonLink: '#categories', eyebrow: 'Designer Wear' },
-    { image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=1920', title: 'Luxurious &<br>Exclusive Designer Wear', subtitle: 'Discover our latest collection.', buttonText: 'View Collection', buttonLink: '#shop', eyebrow: 'New Collection' },
-    { image: 'https://images.unsplash.com/photo-1594465911080-dd025b7e0744?q=80&w=1920', title: 'Bridal Collection<br>2026', subtitle: 'Hand-embroidered lehengas.', buttonText: 'Explore Bridal', buttonLink: '#bridal', eyebrow: 'Bridal Wear' }
-  ];
-}
-
-function initHeroSlider() {
-  const track = document.getElementById('heroTrack');
-  if (!track) return;
-  track.innerHTML = '';
-  heroSlides.forEach((slide, index) => {
-    const slideDiv = document.createElement('div');
-    slideDiv.className = 'hero-slide';
-    slideDiv.style.backgroundImage = `url('${slide.image || 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=1920'}')`;
-    slideDiv.style.backgroundSize = 'cover';
-    slideDiv.style.backgroundPosition = 'center';
-    slideDiv.style.width = `${100 / heroSlides.length}%`;
-    slideDiv.style.flexShrink = '0';
-    track.appendChild(slideDiv);
-  });
-  track.style.width = `${heroSlides.length * 100}%`;
-  currentHeroIdx = 0;
-  updateHeroContent(0);
-  if (heroSlides.length > 1) startHeroTimer();
-}
-
-function updateHeroContent(index) {
-  const slide = heroSlides[index % heroSlides.length];
-  if (!slide) return;
-<<<<<<< HEAD
-  document.getElementById('heroTitle').innerHTML = slide.title || 'Feel the joy of<br>presenting yourself';
-  document.getElementById('heroSubtitle').textContent = slide.subtitle || 'Welcome to Shosta Bazar BD.';
-  document.getElementById('heroEyebrow').textContent = slide.eyebrow || 'Designer Wear';
-  document.getElementById('heroBtn1').textContent = slide.buttonText || 'Shop Now';
-  document.getElementById('heroBtn1').href = slide.buttonLink || '#categories';
-=======
-  
-  document.getElementById('heroTitle').innerHTML = slide.title || 'Feel the joy of<br>presenting yourself';
-  document.getElementById('heroSubtitle').textContent = slide.subtitle || 'Welcome to Shosta Bazar BD.';
-  document.getElementById('heroEyebrow').textContent = slide.eyebrow || 'Designer Wear';
-  
-  // Shop Now button
-  const btn1 = document.getElementById('heroBtn1');
-  if (btn1) {
-    btn1.textContent = slide.buttonText || 'Shop Now';
-    btn1.href = slide.buttonLink || '#categories';
-    // Remove any existing onclick and use click event
-    btn1.onclick = function(e) {
+    // ==========================================
+    // EXPLORE BRIDAL BUTTON
+    // ==========================================
+    document.getElementById('exploreBridalBtn').addEventListener('click', function(e) {
       e.preventDefault();
-      const target = document.querySelector('#categories');
-      if (target) {
-        target.scrollIntoView({ behavior: 'smooth' });
+      const bridalProducts = allProducts.filter(p => p.category === 'Bridal' || p.category === 'Bridal Wear');
+      if (bridalProducts.length > 0) {
+        openCategoryPage('Bridal');
+      } else {
+        // If no bridal products in API, create sample bridal products
+        const sampleBridal = [
+          { _id: 'bridal1', name: 'Red Bridal Lehenga', category: 'Bridal', price: 25000, oldPrice: 30000,
+            image: 'https://images.unsplash.com/photo-1596462502278-27bfdc4033c8?q=80&w=800', fabric: 'Silk with Zari',
+            description: 'Stunning red bridal lehenga with intricate gold zari work and hand-embroidered sequins. Perfect for your wedding day.',
+            images: ['https://images.unsplash.com/photo-1596462502278-27bfdc4033c8?q=80&w=800',
+              'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=800',
+              'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=800'
+            ] },
+          { _id: 'bridal2', name: 'Gold Bridal Saree', category: 'Bridal', price: 18000, oldPrice: 22000,
+            image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=800', fabric: 'Pure Silk',
+            description: 'Exquisite gold bridal saree with traditional zari work and handcrafted borders.',
+            images: ['https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=800',
+              'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=800'
+            ] },
+          { _id: 'bridal3', name: 'Velvet Bridal Gown', category: 'Bridal', price: 32000, oldPrice: null,
+            image: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=800', fabric: 'Velvet with Pearl',
+            description: 'Luxurious velvet bridal gown with pearl embellishments and delicate lace work.',
+            images: ['https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=800',
+              'https://images.unsplash.com/photo-1566174053879-31528523f8ae?q=80&w=800'
+            ] },
+          { _id: 'bridal4', name: 'Pastel Bridal Lehenga', category: 'Bridal', price: 28000, oldPrice: 35000,
+            image: 'https://images.unsplash.com/photo-1566174053879-31528523f8ae?q=80&w=800', fabric: 'Silk with Mirror Work',
+            description: 'Beautiful pastel bridal lehenga with mirror work and floral embroidery.',
+            images: ['https://images.unsplash.com/photo-1566174053879-31528523f8ae?q=80&w=800',
+              'https://images.unsplash.com/photo-1596462502278-27bfdc4033c8?q=80&w=800'
+            ] }
+        ];
+        // Temporarily add to allProducts for display
+        allProducts = [...allProducts, ...sampleBridal];
+        openCategoryPage('Bridal');
       }
-    };
-  }
-  
-  // Bridal Collection button
-  const btn2 = document.getElementById('heroBtn2');
-  if (btn2) {
-    btn2.textContent = slide.buttonText2 || 'Bridal Collection';
-    btn2.href = slide.buttonLink2 || '#bridal';
-    btn2.onclick = function(e) {
+    });
+
+    // ==========================================
+    // FETCH HERO SLIDES
+    // ==========================================
+    let heroSlides = [];
+    let currentHeroIdx = 0;
+    let heroTimer = null;
+
+    async function fetchHeroSlides() {
+      try {
+        const response = await fetch(`${API_BASE}/slides`);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const slides = await response.json();
+        console.log('✅ Hero slides loaded:', slides.length);
+        heroSlides = slides.filter(s => s.status === 'ACTIVE');
+        if (heroSlides.length === 0) heroSlides = getDefaultSlides();
+        initHeroSlider();
+      } catch (error) {
+        console.error('❌ Error fetching hero slides:', error);
+        heroSlides = getDefaultSlides();
+        initHeroSlider();
+      }
+    }
+
+    function getDefaultSlides() {
+      return [
+        { image: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=1920', title: 'Feel the joy of<br>presenting yourself',
+          subtitle: 'Welcome to Shosta Bazar BD.', buttonText: 'Shop Now', buttonLink: '#categories',
+          eyebrow: 'Designer Wear' },
+        { image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=1920',
+          title: 'Luxurious &<br>Exclusive Designer Wear', subtitle: 'Discover our latest collection.',
+          buttonText: 'View Collection', buttonLink: '#shop', eyebrow: 'New Collection' },
+        { image: 'https://images.unsplash.com/photo-1594465911080-dd025b7e0744?q=80&w=1920',
+          title: 'Bridal Collection<br>2026', subtitle: 'Hand-embroidered lehengas.', buttonText: 'Explore Bridal',
+          buttonLink: '#bridal', eyebrow: 'Bridal Wear' }
+      ];
+    }
+
+    function initHeroSlider() {
+      const track = document.getElementById('heroTrack');
+      if (!track) return;
+      track.innerHTML = '';
+      heroSlides.forEach((slide, index) => {
+        const slideDiv = document.createElement('div');
+        slideDiv.className = 'hero-slide';
+        slideDiv.style.backgroundImage = `url('${slide.image || 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=1920'}')`;
+        slideDiv.style.backgroundSize = 'cover';
+        slideDiv.style.backgroundPosition = 'center';
+        slideDiv.style.width = `${100 / heroSlides.length}%`;
+        slideDiv.style.flexShrink = '0';
+        track.appendChild(slideDiv);
+      });
+      track.style.width = `${heroSlides.length * 100}%`;
+      currentHeroIdx = 0;
+      updateHeroContent(0);
+      if (heroSlides.length > 1) startHeroTimer();
+    }
+
+    function updateHeroContent(index) {
+      const slide = heroSlides[index % heroSlides.length];
+      if (!slide) return;
+      document.getElementById('heroTitle').innerHTML = slide.title || 'Feel the joy of<br>presenting yourself';
+      document.getElementById('heroSubtitle').textContent = slide.subtitle || 'Welcome to Shosta Bazar BD.';
+      document.getElementById('heroEyebrow').textContent = slide.eyebrow || 'Designer Wear';
+
+      // Shop Now button
+      const btn1 = document.getElementById('heroBtn1');
+      if (btn1) {
+        btn1.textContent = slide.buttonText || 'Shop Now';
+        btn1.href = slide.buttonLink || '#categories';
+        btn1.onclick = function(e) {
+          e.preventDefault();
+          const target = document.querySelector('#categories');
+          if (target) {
+            target.scrollIntoView({ behavior: 'smooth' });
+          }
+        };
+      }
+
+      // Bridal Collection button
+      const btn2 = document.getElementById('heroBtn2');
+      if (btn2) {
+        btn2.textContent = slide.buttonText2 || 'Bridal Collection';
+        btn2.href = slide.buttonLink2 || '#bridal';
+        btn2.onclick = function(e) {
+          e.preventDefault();
+          const target = document.querySelector('#bridal');
+          if (target) {
+            target.scrollIntoView({ behavior: 'smooth' });
+          }
+        };
+      }
+    }
+
+    function moveHeroSlide(direction) {
+      if (!heroSlides || heroSlides.length === 0) return;
+      const slideCount = heroSlides.length;
+      currentHeroIdx = (currentHeroIdx + direction + slideCount) % slideCount;
+      const track = document.getElementById('heroTrack');
+      if (track) track.style.transform = `translateX(-${currentHeroIdx * (100 / slideCount)}%)`;
+      updateHeroContent(currentHeroIdx);
+      restartHeroTimer();
+    }
+
+    function startHeroTimer() {
+      clearInterval(heroTimer);
+      if (heroSlides.length > 1) heroTimer = setInterval(() => moveHeroSlide(1), 4000);
+    }
+
+    function restartHeroTimer() {
+      clearInterval(heroTimer);
+      if (heroSlides.length > 1) heroTimer = setInterval(() => moveHeroSlide(1), 4000);
+    }
+
+    // Hero navigation buttons
+    document.getElementById('heroNext')?.addEventListener('click', () => moveHeroSlide(1));
+    document.getElementById('heroPrev')?.addEventListener('click', () => moveHeroSlide(-1));
+
+    // ==========================================
+    // FETCH GALLERY
+    // ==========================================
+    async function fetchGallery() {
+      const galleryGrid = document.getElementById('galleryGrid');
+      if (!galleryGrid) return;
+      try {
+        galleryGrid.innerHTML = `<div class="loading-spinner" style="grid-column: 1 / -1;"><div class="spinner"></div></div>`;
+        const response = await fetch(`${API_BASE}/gallery`);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const images = await response.json();
+        console.log('✅ Gallery images loaded:', images.length);
+        if (!images || images.length === 0) {
+          galleryGrid.innerHTML =
+            `<div class="no-products" style="grid-column: 1 / -1; padding: 40px 0;"><h3>No gallery images yet</h3></div>`;
+          return;
+        }
+        galleryGrid.innerHTML = images.map(img => `
+            <a href="#" class="reveal" onclick="return false;">
+              <div class="swatch" style="--ar:1/1; background: url('${img.imageUrl || 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=800'}') center/cover no-repeat;"></div>
+              <div class="ig-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.4"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></div>
+            </a>
+          `).join('');
+        const observer = new IntersectionObserver(entries => {
+          entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add('in');
+              observer.unobserve(en.target); } });
+        }, { threshold: .15 });
+        document.querySelectorAll('#galleryGrid .reveal').forEach(el => observer.observe(el));
+      } catch (error) {
+        console.error('❌ Error fetching gallery:', error);
+        galleryGrid.innerHTML =
+          `<div class="no-products" style="grid-column: 1 / -1; padding: 40px 0;"><h3>⚠️ Could not load gallery</h3><button onclick="fetchGallery()" style="margin-top:16px;padding:10px 24px;background:var(--maroon-800);color:var(--ivory-50);border:none;cursor:pointer;border-radius:4px;">Retry</button></div>`;
+      }
+    }
+
+    // ==========================================
+    // HEADER SCROLL
+    // ==========================================
+    const header = document.getElementById("siteHeader");
+    const toTop = document.getElementById("toTop");
+    window.addEventListener("scroll", () => {
+      const y = window.scrollY;
+      header.classList.toggle("scrolled", y > 40);
+      toTop.classList.toggle("show", y > 600);
+    });
+    toTop.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+
+    // ==========================================
+    // MOBILE NAV
+    // ==========================================
+    const mobileNav = document.getElementById("mobileNav");
+    const scrim = document.getElementById("scrim");
+
+    function openMn() { mobileNav.classList.add("open");
+      scrim.classList.add("show"); }
+
+    function closeMn() { mobileNav.classList.remove("open");
+      scrim.classList.remove("show"); }
+    document.getElementById("burgerBtn").addEventListener("click", openMn);
+    document.getElementById("closeMn").addEventListener("click", closeMn);
+    scrim.addEventListener("click", closeMn);
+    mobileNav.querySelectorAll("a").forEach(a => a.addEventListener("click", closeMn));
+
+    // ==========================================
+    // NEWSLETTER
+    // ==========================================
+    document.getElementById("nlForm").addEventListener("submit", e => {
       e.preventDefault();
-      const target = document.querySelector('#bridal');
-      if (target) {
-        target.scrollIntoView({ behavior: 'smooth' });
-      }
-    };
-  }
->>>>>>> 4dbb591fc23a835749ba972a5ab2be809e7d3fdb
-}
-
-function moveHeroSlide(direction) {
-  if (!heroSlides || heroSlides.length === 0) return;
-  const slideCount = heroSlides.length;
-  currentHeroIdx = (currentHeroIdx + direction + slideCount) % slideCount;
-  const track = document.getElementById('heroTrack');
-  if (track) track.style.transform = `translateX(-${currentHeroIdx * (100 / slideCount)}%)`;
-  updateHeroContent(currentHeroIdx);
-  restartHeroTimer();
-}
-
-function startHeroTimer() {
-  clearInterval(heroTimer);
-  if (heroSlides.length > 1) heroTimer = setInterval(() => moveHeroSlide(1), 4000);
-}
-
-function restartHeroTimer() {
-  clearInterval(heroTimer);
-  if (heroSlides.length > 1) heroTimer = setInterval(() => moveHeroSlide(1), 4000);
-<<<<<<< HEAD
-}
-
-document.getElementById('heroNext')?.addEventListener('click', () => moveHeroSlide(1));
-document.getElementById('heroPrev')?.addEventListener('click', () => moveHeroSlide(-1));
-
-// ==========================================
-// FETCH GALLERY
-// ==========================================
-async function fetchGallery() {
-  const galleryGrid = document.getElementById('galleryGrid');
-  if (!galleryGrid) return;
-  try {
-    galleryGrid.innerHTML = `<div class="loading-spinner" style="grid-column: 1 / -1;"><div class="spinner"></div></div>`;
-    const response = await fetch(`${API_BASE}/gallery`);
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-    const images = await response.json();
-    console.log('✅ Gallery images loaded:', images.length);
-    if (!images || images.length === 0) {
-      galleryGrid.innerHTML = `<div class="no-products" style="grid-column: 1 / -1; padding: 40px 0;"><h3>No gallery images yet</h3></div>`;
-      return;
-    }
-    galleryGrid.innerHTML = images.map(img => `
-      <a href="#" class="reveal" onclick="return false;">
-        <div class="swatch" style="--ar:1/1; background: url('${img.imageUrl || 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=800'}') center/cover no-repeat;"></div>
-        <div class="ig-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.4"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></div>
-      </a>
-    `).join('');
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add('in'); observer.unobserve(en.target); } });
-    }, { threshold: .15 });
-    document.querySelectorAll('#galleryGrid .reveal').forEach(el => observer.observe(el));
-  } catch (error) {
-    console.error('❌ Error fetching gallery:', error);
-    galleryGrid.innerHTML = `<div class="no-products" style="grid-column: 1 / -1; padding: 40px 0;"><h3>⚠️ Could not load gallery</h3><button onclick="fetchGallery()" style="margin-top:16px;padding:10px 24px;background:var(--maroon-800);color:var(--ivory-50);border:none;cursor:pointer;border-radius:4px;">Retry</button></div>`;
-  }
-}
-=======
-}
-
-// Hero navigation buttons
-document.getElementById('heroNext')?.addEventListener('click', () => moveHeroSlide(1));
-document.getElementById('heroPrev')?.addEventListener('click', () => moveHeroSlide(-1));
-// ==========================================
-// FETCH GALLERY
-// ==========================================
-async function fetchGallery() {
-  const galleryGrid = document.getElementById('galleryGrid');
-  if (!galleryGrid) return;
-  try {
-    galleryGrid.innerHTML = `<div class="loading-spinner" style="grid-column: 1 / -1;"><div class="spinner"></div></div>`;
-    const response = await fetch(`${API_BASE}/gallery`);
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-    const images = await response.json();
-    console.log('✅ Gallery images loaded:', images.length);
-    if (!images || images.length === 0) {
-      galleryGrid.innerHTML = `<div class="no-products" style="grid-column: 1 / -1; padding: 40px 0;"><h3>No gallery images yet</h3></div>`;
-      return;
-    }
-    galleryGrid.innerHTML = images.map(img => `
-      <a href="#" class="reveal" onclick="return false;">
-        <div class="swatch" style="--ar:1/1; background: url('${img.imageUrl || 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=800'}') center/cover no-repeat;"></div>
-        <div class="ig-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.4"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></div>
-      </a>
-    `).join('');
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add('in'); observer.unobserve(en.target); } });
-    }, { threshold: .15 });
-    document.querySelectorAll('#galleryGrid .reveal').forEach(el => observer.observe(el));
-  } catch (error) {
-    console.error('❌ Error fetching gallery:', error);
-    galleryGrid.innerHTML = `<div class="no-products" style="grid-column: 1 / -1; padding: 40px 0;"><h3>⚠️ Could not load gallery</h3><button onclick="fetchGallery()" style="margin-top:16px;padding:10px 24px;background:var(--maroon-800);color:var(--ivory-50);border:none;cursor:pointer;border-radius:4px;">Retry</button></div>`;
-  }
-}
-
-// ==========================================
-// FILTER TABS
-// ==========================================
-document.getElementById("filterTabs").addEventListener("click", e => {
-  const btn = e.target.closest("button");
-  if (!btn) return;
-  document.querySelectorAll("#filterTabs button").forEach(b => b.classList.remove("active"));
-  btn.classList.add("active");
-  if (allProducts.length > 0) renderProducts(btn.dataset.filter);
-});
->>>>>>> 4dbb591fc23a835749ba972a5ab2be809e7d3fdb
-
-// ==========================================
-// HEADER SCROLL
-// ==========================================
-const header = document.getElementById("siteHeader");
-const toTop = document.getElementById("toTop");
-window.addEventListener("scroll", () => {
-  const y = window.scrollY;
-  header.classList.toggle("scrolled", y > 40);
-  toTop.classList.toggle("show", y > 600);
-});
-toTop.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
-
-// ==========================================
-// MOBILE NAV
-// ==========================================
-const mobileNav = document.getElementById("mobileNav");
-const scrim = document.getElementById("scrim");
-function openMn() { mobileNav.classList.add("open"); scrim.classList.add("show"); }
-function closeMn() { mobileNav.classList.remove("open"); scrim.classList.remove("show"); }
-document.getElementById("burgerBtn").addEventListener("click", openMn);
-document.getElementById("closeMn").addEventListener("click", closeMn);
-scrim.addEventListener("click", closeMn);
-mobileNav.querySelectorAll("a").forEach(a => a.addEventListener("click", closeMn));
-
-// ==========================================
-// NEWSLETTER
-// ==========================================
-document.getElementById("nlForm").addEventListener("submit", e => {
-  e.preventDefault();
-  document.getElementById("nlNote").textContent = `Thank you — ${document.getElementById("nlEmail").value} has been added to our list.`;
-  e.target.reset();
-});
-
-// ==========================================
-// SCROLL REVEAL
-// ==========================================
-const io = new IntersectionObserver(entries => {
-  entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add("in"); io.unobserve(en.target); } });
-}, { threshold: .15 });
-document.querySelectorAll(".reveal").forEach(el => io.observe(el));
-
-// ==========================================
-// YEAR
-// ==========================================
-document.getElementById("year").textContent = new Date().getFullYear();
-
-// ==========================================
-// CHECKOUT FORM
-// ==========================================
-document.getElementById('checkoutForm')?.addEventListener('submit', async function(e) {
-  e.preventDefault();
-  const customerName = document.getElementById('checkoutName').value.trim();
-  const customerPhone = document.getElementById('checkoutPhone').value.trim();
-  const customerEmail = document.getElementById('checkoutEmail').value.trim();
-  const customerAddress = document.getElementById('checkoutAddress').value.trim();
-  const paymentMethod = document.getElementById('checkoutPayment').value;
-  const notes = document.getElementById('checkoutNotes').value.trim();
-  if (!customerName || !customerPhone || !customerAddress) {
-    alert('Please fill in all required fields.');
-    return;
-  }
-  const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-  const total = subtotal + DELIVERY_CHARGE;
-  const orderData = { customerName, customerPhone, customerEmail, customerAddress, items: cart.map(item => ({ productId: item.id || '', name: item.name, price: item.price, quantity: item.quantity, image: item.image || '' })), subtotal, deliveryCharge: DELIVERY_CHARGE, total, paymentMethod, notes };
-  const submitBtn = this.querySelector('button[type="submit"]');
-  const originalText = submitBtn.textContent;
-  submitBtn.textContent = 'Placing Order...';
-  submitBtn.disabled = true;
-  try {
-    const response = await fetch(`${API_BASE}/orders`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(orderData)
+      document.getElementById("nlNote").textContent = `Thank you — ${document.getElementById("nlEmail").value} has been added to our list.`;
+      e.target.reset();
     });
-    if (response.ok) {
-      const order = (await response.json()).order;
-      const itemsList = order.items.map(item => `  • ${item.name} x${item.quantity} = ৳${(item.price * item.quantity).toLocaleString()}`).join('\n');
-      const message = `🛍️ *NEW ORDER*\n\n📋 *Order ID:* ${order.orderId}\n👤 *Name:* ${order.customerName}\n📞 *Phone:* ${order.customerPhone}\n📧 *Email:* ${order.customerEmail || 'N/A'}\n📍 *Address:* ${order.customerAddress}\n📦 *Items:*\n${itemsList}\n💰 *Subtotal:* ৳${order.subtotal.toLocaleString()}\n🚚 *Delivery:* ৳${order.deliveryCharge.toLocaleString()}\n💵 *Total:* ৳${order.total.toLocaleString()}\n💳 *Payment:* ${order.paymentMethod}\n${order.notes ? `📝 *Notes:* ${order.notes}` : ''}\n\n✅ Order placed successfully!`;
-      await fetch(`${API_BASE}/orders/${order._id}/whatsapp`, { method: 'PUT' });
-      window.open(`https://wa.me/8801234567890?text=${encodeURIComponent(message)}`, '_blank');
-      alert('✅ Order placed successfully! WhatsApp will open for confirmation.');
-      cart = [];
-      saveCart();
-      updateCartUI();
-      closeCheckout();
-    } else {
-      const err = await response.json();
-      alert(`❌ Error: ${err.error || 'Failed to place order'}`);
-    }
-  } catch (err) {
-    console.error('Order error:', err);
-    alert('❌ Failed to place order. Please try again.');
-  } finally {
-    submitBtn.textContent = originalText;
-    submitBtn.disabled = false;
-  }
-});
 
-document.getElementById('checkoutModal')?.addEventListener('click', function(e) {
-  if (e.target === this) closeCheckout();
-});
+    // ==========================================
+    // SCROLL REVEAL
+    // ==========================================
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add("in");
+          io.unobserve(en.target); } });
+    }, { threshold: .15 });
+    document.querySelectorAll(".reveal").forEach(el => io.observe(el));
 
-// ==========================================
-// LOAD CART & INITIALIZE
-// ==========================================
-loadCart();
+    // ==========================================
+    // YEAR
+    // ==========================================
+    document.getElementById("year").textContent = new Date().getFullYear();
 
-document.addEventListener('DOMContentLoaded', () => {
-  console.log('🚀 Initializing website...');
-  console.log('🔗 API_BASE:', API_BASE);
-  fetchProducts();
-  fetchCategories();
-  fetchHeroSlides();
-  fetchBridalSlides();
-  fetchGallery();
-});
-  // ==========================================
-// SMOOTH SCROLL FOR ALL NAVIGATION LINKS
-// ==========================================
-document.addEventListener('DOMContentLoaded', function() {
-  // Handle all links that start with #
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function(e) {
-      const targetId = this.getAttribute('href');
-      if (targetId === '#') return;
-      
-      const targetElement = document.querySelector(targetId);
-      if (targetElement) {
-        e.preventDefault();
-        targetElement.scrollIntoView({ behavior: 'smooth' });
+    // ==========================================
+    // CHECKOUT FORM
+    // ==========================================
+    document.getElementById('checkoutForm')?.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const customerName = document.getElementById('checkoutName').value.trim();
+      const customerPhone = document.getElementById('checkoutPhone').value.trim();
+      const customerEmail = document.getElementById('checkoutEmail').value.trim();
+      const customerAddress = document.getElementById('checkoutAddress').value.trim();
+      const paymentMethod = document.getElementById('checkoutPayment').value;
+      const notes = document.getElementById('checkoutNotes').value.trim();
+      if (!customerName || !customerPhone || !customerAddress) {
+        alert('Please fill in all required fields.');
+        return;
+      }
+      const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+      const total = subtotal + DELIVERY_CHARGE;
+      const orderData = { customerName, customerPhone, customerEmail, customerAddress, items: cart.map(item => ({
+          productId: item.id || '',
+          name: item.name,
+          price: item.price,
+          quantity: item.quantity,
+          image: item.image || ''
+        })), subtotal, deliveryCharge: DELIVERY_CHARGE, total, paymentMethod, notes };
+      const submitBtn = this.querySelector('button[type="submit"]');
+      const originalText = submitBtn.textContent;
+      submitBtn.textContent = 'Placing Order...';
+      submitBtn.disabled = true;
+      try {
+        const response = await fetch(`${API_BASE}/orders`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(orderData)
+        });
+        if (response.ok) {
+          const order = (await response.json()).order;
+          const itemsList = order.items.map(item =>
+            `  • ${item.name} x${item.quantity} = ৳${(item.price * item.quantity).toLocaleString()}`).join('\n');
+          const message =
+            `🛍️ *NEW ORDER*\n\n📋 *Order ID:* ${order.orderId}\n👤 *Name:* ${order.customerName}\n📞 *Phone:* ${order.customerPhone}\n📧 *Email:* ${order.customerEmail || 'N/A'}\n📍 *Address:* ${order.customerAddress}\n📦 *Items:*\n${itemsList}\n💰 *Subtotal:* ৳${order.subtotal.toLocaleString()}\n🚚 *Delivery:* ৳${order.deliveryCharge.toLocaleString()}\n💵 *Total:* ৳${order.total.toLocaleString()}\n💳 *Payment:* ${order.paymentMethod}\n${order.notes ? `📝 *Notes:* ${order.notes}` : ''}\n\n✅ Order placed successfully!`;
+          await fetch(`${API_BASE}/orders/${order._id}/whatsapp`, { method: 'PUT' });
+          window.open(`https://wa.me/8801234567890?text=${encodeURIComponent(message)}`, '_blank');
+          alert('✅ Order placed successfully! WhatsApp will open for confirmation.');
+          cart = [];
+          saveCart();
+          updateCartUI();
+          closeCheckout();
+        } else {
+          const err = await response.json();
+          alert(`❌ Error: ${err.error || 'Failed to place order'}`);
+        }
+      } catch (err) {
+        console.error('Order error:', err);
+        alert('❌ Failed to place order. Please try again.');
+      } finally {
+        submitBtn.textContent = originalText;
+        submitBtn.disabled = false;
       }
     });
-  });
-});
-</script>
+
+    document.getElementById('checkoutModal')?.addEventListener('click', function(e) {
+      if (e.target === this) closeCheckout();
+    });
+
+    // ==========================================
+    // LOAD CART & INITIALIZE
+    // ==========================================
+    loadCart();
+
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log('🚀 Initializing website...');
+      console.log('🔗 API_BASE:', API_BASE);
+      fetchProducts();
+      fetchCategories();
+      fetchHeroSlides();
+      fetchBridalSlides();
+      fetchGallery();
+    });
+
+    // ==========================================
+    // SMOOTH SCROLL FOR ALL NAVIGATION LINKS
+    // ==========================================
+    document.addEventListener('DOMContentLoaded', function() {
+      // Handle all links that start with #
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+          const targetId = this.getAttribute('href');
+          if (targetId === '#') return;
+
+          const targetElement = document.querySelector(targetId);
+          if (targetElement) {
+            e.preventDefault();
+            targetElement.scrollIntoView({ behavior: 'smooth' });
+          }
+        });
+      });
+    });
+  </script>
 </body>
 </html>
