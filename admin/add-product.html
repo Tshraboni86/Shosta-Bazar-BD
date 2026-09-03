@@ -252,9 +252,7 @@
       <header class="admin-navbar">
         <div class="nav-left" style="display:flex; align-items:center; gap:12px;">
           <!-- Three-dot menu button for mobile -->
-          <button class="sidebar-toggle-mobile" id="sidebarToggle" onclick="toggleSidebar()">
-            &#8942;
-          </button>
+          <button class="sidebar-toggle-mobile" id="sidebarToggle" onclick="toggleSidebar()">☰</button>
           <h2>Add New Product</h2>
         </div>
         <a href="products.html" class="btn-admin-secondary">← Back to Products</a>
@@ -305,7 +303,7 @@
               </div>
             </div>
             
-            <!-- Fabric & Tag Row (NEW) -->
+            <!-- Fabric & Tag Row -->
             <div class="form-row">
               <div class="form-group">
                 <label for="productFabric">Fabric Type</label>
@@ -346,7 +344,7 @@
               </div>
             </div>
             
-            <!-- Multiple Images Upload (NEW) -->
+            <!-- Multiple Images Upload -->
             <div class="form-group">
               <label>Multiple Images (for product detail slider)</label>
               <div class="image-upload-grid" id="imageUploadGrid">
@@ -371,7 +369,7 @@
               <textarea id="productDescription" class="form-control" rows="4" placeholder="Enter detailed product description including design, craftsmanship, and special features" required></textarea>
             </div>
             
-            <!-- Fabric Care Instructions (NEW) -->
+            <!-- Fabric Care Instructions -->
             <div class="form-group">
               <label for="productCare">Care Instructions</label>
               <textarea id="productCare" class="form-control" rows="2" placeholder="e.g. Dry clean only, Store in a cool dry place"></textarea>
@@ -387,16 +385,6 @@
     </div>
   </div>
 
-<<<<<<< HEAD
-=======
-<script src="js/config.js"></script>
-<script src="js/mock-data.js"></script>
-<script src="js/auth.js"></script>
-<script src="js/admin.js"></script>
-<script src="js/products.js"></script>
-<script src="js/categories.js"></script>
-
->>>>>>> 4dbb591fc23a835749ba972a5ab2be809e7d3fdb
   <script>
     // ==========================================
     // SIDEBAR TOGGLE FOR MOBILE
@@ -555,7 +543,7 @@
     const preview = document.getElementById('imagePreview');
 
     if (imageUrlInput) {
-      imageUrlInput.addEventListener('input', (e) => {
+      imageUrlInput.addEventListener('input', function(e) {
         const url = e.target.value.trim();
         if (url) {
           preview.src = url;
@@ -671,9 +659,5 @@
       }
     });
   </script>
-
-  <script src="js/auth.js"></script>
-  <script src="js/products.js"></script>
-  <script src="js/api.js"></script>
 </body>
 </html>

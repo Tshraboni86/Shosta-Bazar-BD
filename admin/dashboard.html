@@ -7,7 +7,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/admin.css">
   <style>
-<<<<<<< HEAD
     /* Additional styles for new features and mobile responsiveness */
     .stats-grid {
       display: grid;
@@ -115,33 +114,43 @@
       opacity: 0.8;
     }
 
-    /* Mobile Sidebar Toggle */
+    /* ====== MOBILE SIDEBAR TOGGLE - FIXED ====== */
     .sidebar-toggle-mobile {
       display: none;
       background: none;
       border: none;
-      font-size: 24px;
+      font-size: 28px;
       color: #320e17;
       cursor: pointer;
-      padding: 8px;
+      padding: 8px 10px;
       line-height: 1;
+      font-weight: 700;
+      border-radius: 4px;
+      transition: background 0.2s;
     }
     .sidebar-toggle-mobile:hover {
+      background: rgba(50, 14, 23, 0.08);
       color: #a9812f;
     }
 
-    /* Mobile Responsive */
+    .sidebar-close {
+      display: none;
+      margin-left: auto;
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: #320e17;
+      padding: 4px 8px;
+      border-radius: 4px;
+      transition: background 0.2s;
+    }
+    .sidebar-close:hover {
+      background: rgba(50, 14, 23, 0.08);
+    }
+
+    /* ====== MOBILE RESPONSIVE ====== */
     @media (max-width: 992px) {
-      .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 15px;
-      }
-      .quick-actions {
-        grid-template-columns: repeat(2, 1fr);
-      }
-      .bridal-stats {
-        grid-template-columns: repeat(2, 1fr);
-      }
       .sidebar-toggle-mobile {
         display: block;
       }
@@ -156,9 +165,33 @@
       .admin-navbar h2 {
         font-size: 18px;
       }
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+      }
+      .quick-actions {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .bridal-stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
     }
 
     @media (max-width: 576px) {
+      .sidebar-toggle-mobile {
+        display: block;
+        font-size: 24px;
+        padding: 6px 8px;
+      }
+      .admin-navbar {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 8px;
+        padding: 10px 12px;
+      }
+      .admin-navbar h2 {
+        font-size: 16px;
+      }
       .stats-grid {
         grid-template-columns: 1fr 1fr;
         gap: 10px;
@@ -190,9 +223,6 @@
       .bridal-stat-card .number {
         font-size: 20px;
       }
-      .admin-navbar h2 {
-        font-size: 16px;
-      }
       .card {
         padding: 16px;
       }
@@ -206,6 +236,8 @@
       .admin-table td {
         padding: 8px 6px;
       }
+      
+      /* ====== FIXED MOBILE SIDEBAR ====== */
       .admin-sidebar {
         transform: translateX(-100%);
         transition: transform 0.3s ease;
@@ -215,13 +247,18 @@
         bottom: 0;
         width: 280px;
         z-index: 1000;
-        background: #fff;
+        background: #320e17;
+        border-right: 1px solid #e0e0e0;
         box-shadow: 2px 0 10px rgba(0,0,0,0.1);
         overflow-y: auto;
       }
       .admin-sidebar.open {
         transform: translateX(0);
       }
+      .admin-sidebar.open .sidebar-close {
+        display: block;
+      }
+      
       .sidebar-overlay {
         display: none;
         position: fixed;
@@ -285,171 +322,20 @@
       .admin-table th,
       .admin-table td {
         padding: 6px 4px;
-=======
-    /* ==========================================
-       MOBILE SIDEBAR TOGGLE - FIXED
-       ========================================== */
-
-    /* Mobile styles */
-    @media (max-width: 768px) {
-      .admin-sidebar {
-        position: fixed;
-        top: 0;
-        left: -280px;
-        width: 280px;
-        height: 100vh;
-        z-index: 1000;
-        transition: left 0.3s ease;
-        overflow-y: auto;
-        background: #201315;
-        box-shadow: 2px 0 10px rgba(0,0,0,0.2);
-      }
-
-      .admin-sidebar.show {
-        left: 0;
-      }
-
-      /* Overlay when sidebar is open */
-      .sidebar-overlay {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(0,0,0,0.5);
-        z-index: 999;
-      }
-
-      .sidebar-overlay.show {
-        display: block;
-      }
-
-      .admin-main {
-        width: 100%;
-        padding: 15px;
-      }
-
-      .admin-navbar {
-        flex-wrap: wrap;
-        gap: 10px;
-      }
-
-      .admin-navbar h2 {
-        font-size: 1.2rem;
-      }
-
-      .toggle-sidebar-btn {
-        display: block !important;
-        background: none;
-        border: none;
-        font-size: 24px;
-        cursor: pointer;
-        padding: 8px 12px;
-        border-radius: 4px;
-        color: #333;
-      }
-
-      .toggle-sidebar-btn:hover {
-        background: rgba(0,0,0,0.05);
-      }
-
-      .nav-left {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-      }
-
-      /* Stats grid responsive */
-      .stats-grid {
-        grid-template-columns: repeat(2, 1fr) !important;
-        gap: 12px !important;
-      }
-
-      .stat-card {
-        padding: 12px !important;
-      }
-
-      .stat-card .value {
-        font-size: 20px !important;
-      }
-
-      .stat-card .label {
-        font-size: 10px !important;
-      }
-
-      /* Recent orders table responsive */
-      .table-responsive {
-        overflow-x: auto;
-      }
-
-      .admin-table {
-        font-size: 0.8rem;
-      }
-
-      .admin-table th,
-      .admin-table td {
-        padding: 8px 10px;
-        white-space: nowrap;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .stats-grid {
-        grid-template-columns: 1fr 1fr !important;
-        gap: 8px !important;
-      }
-
-      .stat-card {
-        padding: 10px !important;
-      }
-
-      .stat-card .value {
-        font-size: 16px !important;
-      }
-
-      .admin-main {
-        padding: 10px;
-      }
-
-      .admin-navbar h2 {
-        font-size: 1rem;
-      }
-
-      .admin-table {
-        font-size: 0.7rem;
-      }
-
-      .admin-table th,
-      .admin-table td {
-        padding: 4px 6px;
-      }
-    }
-
-    /* Desktop - hide toggle button */
-    @media (min-width: 769px) {
-      .toggle-sidebar-btn {
-        display: none !important;
->>>>>>> 4dbb591fc23a835749ba972a5ab2be809e7d3fdb
       }
     }
   </style>
 </head>
 <body>
   <div class="admin-layout">
-<<<<<<< HEAD
     <!-- Sidebar Overlay for Mobile -->
-    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
     
     <aside class="admin-sidebar" id="adminSidebar">
-=======
-    <!-- Sidebar -->
-   <aside class="admin-sidebar" id="adminSidebar">
->>>>>>> 4dbb591fc23a835749ba972a5ab2be809e7d3fdb
       <div class="sidebar-header">
         <svg width="32" height="32" viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="#320e17" stroke="#c8a24a" stroke-width="2"/><text x="32" y="40" text-anchor="middle" font-family="serif" font-style="italic" font-size="23" fill="#e6cd93">SB</text></svg>
         <b>Shosta Bazar Admin</b>
-        <button class="sidebar-close" onclick="toggleSidebar()" style="display:none; background:none; border:none; font-size:24px; cursor:pointer; color:#320e17; margin-left:auto;">✕</button>
+        <button class="sidebar-close" id="closeSidebarBtn">✕</button>
       </div>
       <ul class="sidebar-menu">
         <li class="active"><a href="dashboard.html">Dashboard</a></li>
@@ -474,16 +360,11 @@
       </div>
     </aside>
 
-    <!-- Sidebar Overlay (for mobile) -->
-  <!-- Sidebar Overlay (for mobile) -->
-<div class="sidebar-overlay" id="sidebarOverlay"></div>
-
-    <!-- Main Content -->
     <div class="admin-main">
       <header class="admin-navbar">
         <div class="nav-left">
           <!-- Three-dot menu button for mobile -->
-          <button class="sidebar-toggle-mobile" id="sidebarToggle" onclick="toggleSidebar()">☰</button>
+          <button class="sidebar-toggle-mobile" id="sidebarToggle">☰</button>
           <h2>Dashboard Overview</h2>
         </div>
         <div class="nav-right">
@@ -670,34 +551,49 @@
   </div>
 
   <script>
-<<<<<<< HEAD
-    // Sidebar toggle for mobile
-    function toggleSidebar() {
+    // ==========================================
+    // SIDEBAR TOGGLE - FIXED WITH EVENT LISTENERS
+    // ==========================================
+    document.addEventListener('DOMContentLoaded', function() {
       const sidebar = document.getElementById('adminSidebar');
       const overlay = document.getElementById('sidebarOverlay');
-      sidebar.classList.toggle('open');
-      overlay.classList.toggle('show');
-      
-      const closeBtn = sidebar.querySelector('.sidebar-close');
-      if (sidebar.classList.contains('open')) {
-        closeBtn.style.display = 'block';
-      } else {
-        closeBtn.style.display = 'none';
-      }
-    }
-
-    // Close sidebar when clicking outside on mobile
-    document.addEventListener('click', function(e) {
-      const sidebar = document.getElementById('adminSidebar');
       const toggleBtn = document.getElementById('sidebarToggle');
-      if (window.innerWidth <= 576) {
-        if (!sidebar.contains(e.target) && !toggleBtn.contains(e.target)) {
-          sidebar.classList.remove('open');
-          document.getElementById('sidebarOverlay').classList.remove('show');
-          const closeBtn = sidebar.querySelector('.sidebar-close');
-          closeBtn.style.display = 'none';
-        }
+      const closeBtn = document.getElementById('closeSidebarBtn');
+
+      // Open sidebar
+      if (toggleBtn) {
+        toggleBtn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          sidebar.classList.toggle('open');
+          overlay.classList.toggle('show');
+        });
       }
+
+      // Close sidebar
+      if (closeBtn) {
+        closeBtn.addEventListener('click', function() {
+          sidebar.classList.remove('open');
+          overlay.classList.remove('show');
+        });
+      }
+
+      // Close sidebar when clicking overlay
+      if (overlay) {
+        overlay.addEventListener('click', function() {
+          sidebar.classList.remove('open');
+          overlay.classList.remove('show');
+        });
+      }
+
+      // Close sidebar when clicking outside on mobile
+      document.addEventListener('click', function(e) {
+        if (window.innerWidth <= 576) {
+          if (!sidebar.contains(e.target) && e.target !== toggleBtn) {
+            sidebar.classList.remove('open');
+            overlay.classList.remove('show');
+          }
+        }
+      });
     });
 
     // Profile dropdown toggle
@@ -726,8 +622,6 @@
         const overlay = document.getElementById('sidebarOverlay');
         sidebar.classList.remove('open');
         overlay.classList.remove('show');
-        const closeBtn = sidebar.querySelector('.sidebar-close');
-        closeBtn.style.display = 'none';
       }
     });
   </script>
@@ -793,138 +687,6 @@
     #profileDropdownToggle:hover {
       color: #a9812f;
     }
-    .sidebar-close {
-      display: none;
-    }
-    @media (max-width: 576px) {
-      .sidebar-close {
-        display: none;
-      }
-      .admin-sidebar.open .sidebar-close {
-        display: block;
-      }
-    }
   </style>
-=======
-    // ==========================================
-    // MOBILE SIDEBAR TOGGLE
-    // ==========================================
-    document.addEventListener('DOMContentLoaded', function() {
-      const toggleBtn = document.getElementById('sidebarToggle');
-      const sidebar = document.getElementById('adminSidebar');
-      const overlay = document.getElementById('sidebarOverlay');
-
-      function toggleSidebar() {
-        sidebar.classList.toggle('show');
-        overlay.classList.toggle('show');
-        document.body.classList.toggle('sidebar-open');
-      }
-
-      function closeSidebar() {
-        sidebar.classList.remove('show');
-        overlay.classList.remove('show');
-        document.body.classList.remove('sidebar-open');
-      }
-
-      if (toggleBtn) {
-        toggleBtn.addEventListener('click', function(e) {
-          e.stopPropagation();
-          toggleSidebar();
-        });
-      }
-
-      // Close sidebar when clicking overlay
-      if (overlay) {
-        overlay.addEventListener('click', function() {
-          closeSidebar();
-        });
-      }
-
-      // Close sidebar when clicking outside on mobile
-      document.addEventListener('click', function(e) {
-        if (window.innerWidth <= 768) {
-          const isClickInsideSidebar = sidebar && sidebar.contains(e.target);
-          const isClickOnToggle = toggleBtn && toggleBtn.contains(e.target);
-          
-          if (!isClickInsideSidebar && !isClickOnToggle && sidebar && sidebar.classList.contains('show')) {
-            closeSidebar();
-          }
-        }
-      });
-
-      // Close sidebar when window is resized to desktop
-      window.addEventListener('resize', function() {
-        if (window.innerWidth > 768 && sidebar) {
-          closeSidebar();
-        }
-      });
-    });
-
-    // ==========================================
-    // PROFILE DROPDOWN
-    // ==========================================
-    document.addEventListener('DOMContentLoaded', function() {
-      const profileDropdown = document.getElementById('profileDropdownToggle');
-      const profileMenu = document.getElementById('profileDropdownMenu');
-
-      if (profileDropdown && profileMenu) {
-        profileDropdown.addEventListener('click', function(e) {
-          e.stopPropagation();
-          profileMenu.classList.toggle('show');
-        });
-
-        document.addEventListener('click', function() {
-          profileMenu.classList.remove('show');
-        });
-      }
-    });
-
-    // ==========================================
-    // LOGOUT FUNCTION
-    // ==========================================
-    function logout() {
-      if (confirm('Are you sure you want to logout?')) {
-        localStorage.removeItem('adminLoggedIn');
-        window.location.href = 'login.html';
-      }
-    }
-    <script>
-// ==========================================
-// MOBILE SIDEBAR TOGGLE
-// ==========================================
-document.addEventListener('DOMContentLoaded', function() {
-  const toggleBtn = document.getElementById('sidebarToggle');
-  const sidebar = document.getElementById('adminSidebar');
-  const overlay = document.getElementById('sidebarOverlay');
-
-  if (toggleBtn && sidebar) {
-    toggleBtn.addEventListener('click', function(e) {
-      e.stopPropagation();
-      sidebar.classList.toggle('show');
-      if (overlay) overlay.classList.toggle('show');
-    });
-  }
-
-  if (overlay) {
-    overlay.addEventListener('click', function() {
-      sidebar.classList.remove('show');
-      overlay.classList.remove('show');
-    });
-  }
-
-  window.addEventListener('resize', function() {
-    if (window.innerWidth > 768 && sidebar) {
-      sidebar.classList.remove('show');
-      if (overlay) overlay.classList.remove('show');
-    }
-  });
-});
-</script>
-  </script>
-
-  <script src="js/mock-data.js"></script>
-  <script src="js/auth.js"></script>
-  <script src="js/admin.js"></script>
->>>>>>> 4dbb591fc23a835749ba972a5ab2be809e7d3fdb
 </body>
 </html>
