@@ -267,28 +267,25 @@
               <input type="text" id="productName" class="form-control" placeholder="Enter product name" required>
             </div>
             
-            <!-- Category & Status Row -->
-            <div class="form-row">
-              <div class="form-group">
-                <label for="productCategory">Category *</label>
-                <select id="productCategory" class="form-control" required>
-                  <option value="">Select Category</option>
-                  <option value="Sarees">Sarees</option>
-                  <option value="Lehenga">Lehenga</option>
-                  <option value="Gowns">Gowns</option>
-                  <option value="Salwar Kameez">Salwar Kameez</option>
-                  <option value="Bridal">Bridal</option>
-                  <option value="Accessories">Accessories</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="productStatus">Status</label>
-                <select id="productStatus" class="form-control">
-                  <option value="ACTIVE">Active</option>
-                  <option value="DRAFT">Draft</option>
-                  <option value="INACTIVE">Inactive</option>
-                </select>
-              </div>
+            <!-- Category - DYNAMIC FROM DATABASE -->
+            <div class="form-group">
+              <label for="productCategory">Category *</label>
+              <select id="productCategory" class="form-control" required>
+                <option value="">Loading categories...</option>
+              </select>
+              <small style="color:#888; font-size:0.75rem; display:block; margin-top:4px;">
+                Categories are loaded from the database. Add categories in the Category Management section.
+              </small>
+            </div>
+            
+            <!-- Status -->
+            <div class="form-group">
+              <label for="productStatus">Status</label>
+              <select id="productStatus" class="form-control">
+                <option value="ACTIVE">Active</option>
+                <option value="DRAFT">Draft</option>
+                <option value="INACTIVE">Inactive</option>
+              </select>
             </div>
             
             <!-- Price & Old Price Row -->
@@ -386,8 +383,12 @@
   </div>
 
   <script>
-      const API_BASE = 'https://shosta-bazar-bd.onrender.com/api';
+    // ==========================================
+    // API CONFIGURATION
+    // ==========================================
+    const API_BASE = 'https://shosta-bazar-bd.onrender.com/api';
     console.log('🔗 API_BASE:', API_BASE);
+
     // ==========================================
     // SIDEBAR TOGGLE FOR MOBILE
     // ==========================================
@@ -432,6 +433,31 @@
     });
 
     // ==========================================
+    // LOAD CATEGORIES FROM DATABASE
+    // ==========================================
+    async function loadCategories() {
+      const select = document.getElementById('productCategory');
+      try {
+        const response = await fetch(`${API_BASE}/categories?_=${Date.now()}`);
+        if (!response.ok) throw new Error('Failed to fetch categories');
+        const categories = await response.json();
+        console.log('✅ Categories loaded for product form:', categories.length);
+        
+        select.innerHTML = '<option value="">Select Category</option>';
+        categories.forEach(cat => {
+          const option = document.createElement('option');
+          option.value = cat.name;
+          option.textContent = cat.name;
+          select.appendChild(option);
+        });
+      } catch (error) {
+        console.error('❌ Error loading categories:', error);
+        select.innerHTML = '<option value="">Error loading categories</option>';
+        showToast('⚠️ Could not load categories. Please refresh the page.');
+      }
+    }
+
+    // ==========================================
     // IMAGE UPLOAD HANDLING
     // ==========================================
     let uploadedImages = [];
@@ -443,29 +469,24 @@
       
       const reader = new FileReader();
       reader.onload = function(e) {
-        // Add to uploaded images array
         uploadedImages.push({
           id: Date.now(),
           data: e.target.result,
           file: file
         });
         
-        // Update the upload slot with preview
         const slot = document.getElementById('uploadSlot' + slotId);
         slot.innerHTML = `
           <img src="${e.target.result}" alt="Uploaded image">
           <button type="button" class="remove-btn" onclick="removeImage(${uploadedImages.length - 1}, ${slotId})">✕</button>
         `;
         
-        // Add new upload slot if needed
         if (uploadedImages.length < 10) {
           addNewUploadSlot();
         }
         
-        // Update info
         updateImageInfo();
         
-        // Preview main image if first image
         if (uploadedImages.length === 1) {
           document.getElementById('imagePreview').src = e.target.result;
           document.getElementById('imagePreview').style.display = 'block';
@@ -492,14 +513,10 @@
 
     function removeImage(index, slotId) {
       uploadedImages.splice(index, 1);
-      
-      // Remove the slot
       const slot = document.getElementById('uploadSlot' + slotId);
       if (slot) {
         slot.remove();
       }
-      
-      // Rebuild the grid
       rebuildImageGrid();
     }
 
@@ -508,7 +525,6 @@
       grid.innerHTML = '';
       imageCounter = 1;
       
-      // Re-add existing images
       uploadedImages.forEach((img, idx) => {
         const slot = document.createElement('div');
         slot.className = 'image-upload-item';
@@ -521,7 +537,6 @@
         imageCounter++;
       });
       
-      // Add new upload slot if less than 10
       if (uploadedImages.length < 10) {
         addNewUploadSlot();
       }
@@ -557,12 +572,11 @@
     }
 
     // ==========================================
-    // FORM SUBMISSION
+    // SAVE PRODUCT
     // ==========================================
-    function saveProduct(e) {
+    async function saveProduct(e) {
       e.preventDefault();
       
-      // Get form values
       const name = document.getElementById('productName').value.trim();
       const category = document.getElementById('productCategory').value;
       const price = document.getElementById('productPrice').value;
@@ -574,14 +588,12 @@
       const care = document.getElementById('productCare').value.trim();
       const mainImage = document.getElementById('productImage').value.trim();
       
-      // Validation
-      if (!name) { alert('Please enter product name'); return; }
-      if (!category) { alert('Please select a category'); return; }
-      if (!price) { alert('Please enter price'); return; }
-      if (!description) { alert('Please enter description'); return; }
+      if (!name) { showToast('Please enter product name'); return; }
+      if (!category) { showToast('Please select a category'); return; }
+      if (!price) { showToast('Please enter price'); return; }
+      if (!description) { showToast('Please enter description'); return; }
       
-      // Build product object
-      const product = {
+      const productData = {
         name: name,
         category: category,
         price: parseFloat(price),
@@ -595,13 +607,20 @@
         images: uploadedImages.map(img => img.data)
       };
       
-      console.log('📦 Product to save:', product);
-      
-      // Show success message
-      showToast('✅ Product saved successfully!');
-      
-      // Reset form after 2 seconds
-      setTimeout(() => {
+      try {
+        const response = await fetch(`${API_BASE}/products`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(productData)
+        });
+        
+        if (!response.ok) throw new Error('Failed to save product');
+        
+        const result = await response.json();
+        console.log('✅ Product saved:', result);
+        showToast('✅ Product saved successfully!');
+        
+        // Reset form
         document.getElementById('addProductForm').reset();
         document.getElementById('imagePreview').style.display = 'none';
         uploadedImages = [];
@@ -609,7 +628,17 @@
         imageCounter = 1;
         addNewUploadSlot();
         document.getElementById('uploadedImagesInfo').textContent = '';
-      }, 2000);
+        
+        // Reload categories to refresh
+        loadCategories();
+        
+        setTimeout(() => {
+          window.location.href = 'products.html';
+        }, 2000);
+      } catch (error) {
+        console.error('❌ Error saving product:', error);
+        showToast('❌ Failed to save product. Please try again.');
+      }
     }
 
     // ==========================================
@@ -619,12 +648,14 @@
       const toast = document.createElement('div');
       toast.style.cssText = `
         position: fixed; bottom: 20px; right: 20px; 
-        background: #28a745; color: #fff; 
-        padding: 14px 28px; border-radius: 8px; 
+        background: ${message.includes('❌') ? '#dc3545' : '#28a745'}; 
+        color: #fff; 
+        padding: 12px 24px; border-radius: 8px; 
         font-size: 14px; z-index: 9999;
         box-shadow: 0 4px 12px rgba(0,0,0,0.3);
         animation: slideIn 0.3s ease;
         font-family: 'Jost', sans-serif;
+        max-width: 400px;
       `;
       toast.textContent = message;
       document.body.appendChild(toast);
@@ -653,13 +684,41 @@
       window.location.href = 'login.html';
     }
 
-    // Initialize with one upload slot
+    // ==========================================
+    // INITIALIZE
+    // ==========================================
     document.addEventListener('DOMContentLoaded', function() {
+      loadCategories();
+      
       // Add initial upload slot if empty
       if (document.getElementById('imageUploadGrid').children.length === 0) {
         addNewUploadSlot();
       }
     });
+    // Load categories from database
+async function loadCategories() {
+  const select = document.getElementById('productCategory');
+  try {
+    const response = await fetch(`${API_BASE}/categories?_=${Date.now()}`);
+    if (!response.ok) throw new Error('Failed to fetch categories');
+    const categories = await response.json();
+    
+    select.innerHTML = '';
+    categories.forEach(cat => {
+      const option = document.createElement('option');
+      option.value = cat.name;
+      option.textContent = cat.name;
+      select.appendChild(option);
+    });
+    
+    // Set selected category if editing
+    if (currentProduct && currentProduct.category) {
+      select.value = currentProduct.category;
+    }
+  } catch (error) {
+    console.error('Error loading categories:', error);
+  }
+}
   </script>
 </body>
 </html>
